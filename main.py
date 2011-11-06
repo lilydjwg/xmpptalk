@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
+# vim:fileencoding=utf-8
 
 '''
 An 'echo bot' – simple client that just confirms any presence subscriptions
