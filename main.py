@@ -17,7 +17,7 @@ from pyxmpp2.message import Message
 from pyxmpp2.presence import Presence
 from pyxmpp2.client import Client
 from pyxmpp2.settings import XMPPSettings
-from pyxmpp2.interfaces import EventHandler, event_handler, QUIT
+from pyxmpp2.interfaces import EventHandler, event_handler, QUIT, NO_CHANGE
 from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
@@ -120,7 +120,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     if stanza.body.startswith('-nick '):
       nick = stanza.body.split(None, 1)[1]
       old_nick = self.get_name(sender)
-      self.client.roster_client.update_item(bare, nick)
+      self.update_roster(bare, nick)
       self.send_message(sender, '昵称更新成功！')
       msg = '%s 的昵称已更新为 %s。' % (old_nick, nick)
       for u in self.get_online_users():
@@ -156,16 +156,19 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
         self.send_message(u.jid, msg)
 
   def send_message(self, receiver, msg):
-      m = Message(
-        stanza_type = 'chat',
-        from_jid = self.jid,
-        to_jid = receiver,
-        body = msg,
-      )
-      self.send(m)
+    m = Message(
+      stanza_type = 'chat',
+      from_jid = self.jid,
+      to_jid = receiver,
+      body = msg,
+    )
+    self.send(m)
 
   def send(self, stanza):
     self.client.stream.send(stanza)
+
+  def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
+    self.client.roster_client.update_item(jid, name, groups)
 
   def get_name(self, jid):
     if isinstance(jid, str):
