@@ -107,6 +107,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       logging.info('%s[unavailable]', jid)
     except KeyError:
       pass
+    return True
 
   @message_stanza_handler()
   def handle_message(self, stanza):
@@ -146,7 +147,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
   def get_online_users(self):
     ret = [x for x in self.roster if x.subscription == 'both' and \
            self.presence[x.jid]]
-    logging.debug('online buddies: %r', ret)
+    logging.info('online buddies: %r', [x.jid for x in ret])
     return ret
 
   def send_to_all(self, sender, msg):
@@ -184,10 +185,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
 def main():
   logging.basicConfig(level=logging.DEBUG)
 
-  settings = XMPPSettings({
-    'software_name': 'ChatBot',
-    'password': config.password,
-  })
+  settings = XMPPSettings(config.settings)
 
   if config.trace:
     logging.info('enabling trace')
