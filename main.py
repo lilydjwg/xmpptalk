@@ -118,7 +118,9 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     sender = stanza.from_jid
     bare = sender.bare()
 
-    if stanza.body.startswith('-nick '):
+    if stanza.body == 'ping':
+      self.send_message(bare, 'pong')
+    elif stanza.body.startswith('-nick '):
       nick = stanza.body.split(None, 1)[1]
       old_nick = self.get_name(sender)
       self.update_roster(bare, nick)
@@ -127,11 +129,8 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       for u in self.get_online_users():
         if u.jid != bare:
           self.send_message(u.jid, msg)
-      return True
-
-    # from cli import repl
-    # repl(locals(), 'cmd.txt')
-    self.send_to_all(bare, stanza.body)
+    else:
+      self.send_to_all(bare, stanza.body)
     return True
 
   @event_handler(DisconnectedEvent)
