@@ -185,16 +185,19 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
 def main():
   logging.basicConfig(level=logging.DEBUG)
 
-  settings = XMPPSettings(config.settings)
+  settings = dict(
+    software_name = 'ChatBot',
+    # deliver here even if the admin logs in
+    initial_presence = Presence(priority=30),
+  )
+  settings.update(config.settings)
+  settings = XMPPSettings(settings)
 
   if config.trace:
     logging.info('enabling trace')
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.DEBUG)
     for logger in ('pyxmpp2.IN', 'pyxmpp2.OUT'):
       logger = logging.getLogger(logger)
       logger.setLevel(logging.DEBUG)
-      logger.addHandler(handler)
 
   for logger in (
     'pyxmpp2.mainloop.base', 'pyxmpp2.expdict',
