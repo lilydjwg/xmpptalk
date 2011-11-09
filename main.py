@@ -185,7 +185,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     return self.client.roster
 
 def main():
-  logging.basicConfig(level=logging.DEBUG)
+  logging.basicConfig(level=config.logging_level)
 
   settings = dict(
     software_name = 'ChatBot',
