@@ -118,6 +118,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     sender = stanza.from_jid
     bare = sender.bare()
 
+    logging.info('[%s] %s', bare, stanza.body)
     if stanza.body == 'ping':
       self.send_message(bare, 'pong')
     elif stanza.body.startswith('-nick '):
@@ -175,14 +176,17 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       jid = JID(jid)
     else:
       jid = jid.bare()
-    return self.roster[jid].name or hashjid(jid)
+    try:
+      return self.roster[jid].name or hashjid(jid)
+    except KeyError:
+      return hashjid(jid)
 
   @property
   def roster(self):
     return self.client.roster
 
 def main():
-  logging.basicConfig(level=logging.DEBUG)
+  logging.basicConfig(level=config.logging_level)
 
   settings = dict(
     software_name = 'ChatBot',
@@ -196,7 +200,7 @@ def main():
     logging.info('enabling trace')
     for logger in ('pyxmpp2.IN', 'pyxmpp2.OUT'):
       logger = logging.getLogger(logger)
-      logger.setLevel(logging.DEBUG)
+      logger.setLevel(config.logging_level)
 
   for logger in (
     'pyxmpp2.mainloop.base', 'pyxmpp2.expdict',
@@ -204,7 +208,7 @@ def main():
     'pyxmpp2.transport', 'pyxmpp2.mainloop.events',
   ):
       logger = logging.getLogger(logger)
-      logger.setLevel(logging.INFO)
+      logger.setLevel(max((logging.INFO, config.logging_level)))
 
   bot = ChatBot(JID(config.jid), settings)
   try:
