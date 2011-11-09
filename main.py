@@ -199,7 +199,7 @@ def main():
     logging.info('enabling trace')
     for logger in ('pyxmpp2.IN', 'pyxmpp2.OUT'):
       logger = logging.getLogger(logger)
-      logger.setLevel(logging.DEBUG)
+      logger.setLevel(config.logging_level)
 
   for logger in (
     'pyxmpp2.mainloop.base', 'pyxmpp2.expdict',
@@ -207,7 +207,7 @@ def main():
     'pyxmpp2.transport', 'pyxmpp2.mainloop.events',
   ):
       logger = logging.getLogger(logger)
-      logger.setLevel(logging.INFO)
+      logger.setLevel(max((logging.INFO, config.logging_level)))
 
   bot = ChatBot(JID(config.jid), settings)
   try:
