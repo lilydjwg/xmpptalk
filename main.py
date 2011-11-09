@@ -175,7 +175,10 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       jid = JID(jid)
     else:
       jid = jid.bare()
-    return self.roster[jid].name or hashjid(jid)
+    try:
+      return self.roster[jid].name or hashjid(jid)
+    except KeyError:
+      return hashjid(jid)
 
   @property
   def roster(self):
