@@ -118,6 +118,7 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     sender = stanza.from_jid
     bare = sender.bare()
 
+    logging.info('[%s] %s', bare, stanza.body)
     if stanza.body == 'ping':
       self.send_message(bare, 'pong')
     elif stanza.body.startswith('-nick '):
