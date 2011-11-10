@@ -121,6 +121,8 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     logging.info('[%s] %s', bare, stanza.body)
     if stanza.body == 'ping':
       self.send_message(bare, 'pong')
+    elif stanza.body.startswith('?OTR'):
+      self.send_message(sender, '不支持 OTR 加密！')
     elif stanza.body.startswith('-nick '):
       nick = stanza.body.split(None, 1)[1]
       old_nick = self.get_name(sender)
