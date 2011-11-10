@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# vim:fileencoding=utf-8
-
 from functools import wraps
 
 from misc import *
@@ -21,6 +18,22 @@ class MessageMixin:
 
   def command(self, msg):
     return self.handle_command(msg)
+
+  def handle_message(self, sender, msg):
+    q = self.message_queue
+    if q and not q.empty():
+      q.put((sender, msg))
+      for i in range(min(MAX_MESSAGE_A_TIME, q.qsize())):
+        self._handle_message(*q.get())
+      if q.empty():
+        self.message_queue = None
+    else:
+      self._handle_message(sender, msg)
+
+  def _handle_message(self, sender, msg):
+    # set self.current_user here
+    raise NotImplementedError
+
 
   message_handler_register(pingpong)
   message_handler_register(command)

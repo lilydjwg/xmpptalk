@@ -9,6 +9,7 @@ and echoes incoming messages.
 import sys
 import logging
 import hashlib
+import queue
 from functools import lru_cache
 from collections import defaultdict
 
@@ -17,6 +18,7 @@ from pyxmpp2.message import Message
 from pyxmpp2.presence import Presence
 from pyxmpp2.client import Client
 from pyxmpp2.settings import XMPPSettings
+from pyxmpp2.roster import RosterReceivedEvent
 from pyxmpp2.interfaces import EventHandler, event_handler, QUIT, NO_CHANGE
 from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
@@ -24,6 +26,7 @@ from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
 
 import config
+from messages import MessageMixin
 
 @lru_cache()
 def hashjid(jid):
@@ -38,15 +41,15 @@ def hashjid(jid):
   domain = m.hexdigest()[:6]
   return '%s@%s' % (jid.local, domain)
 
-class ChatBot(EventHandler, XMPPFeatureHandler):
-  '''Echo Bot implementation.'''
-  def __init__(self, my_jid, settings):
+class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
+  def __init__(self, jid, settings):
     version_provider = VersionProvider(settings)
-    self.client = Client(my_jid, [self, version_provider], settings)
+    self.client = Client(jid, [self, version_provider], settings)
     self.presence = defaultdict(dict)
+    self.got_roster = False
+    self.message_queue = None
 
   def run(self):
-    '''Request client connection and start the main loop.'''
     self.client.connect()
     self.jid = self.client.jid
     self.client.run()
@@ -57,6 +60,66 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     self.client.disconnect()
     self.client.run(timeout = 2)
 
+  @event_handler(RosterReceivedEvent)
+  def roster_received(self, stanze):
+    self.got_roster = True
+    return True
+
+  @message_stanza_handler()
+  def message_received(self, stanza):
+    if stanza.body is None:
+      # She's typing
+      return False
+
+    sender = stanza.from_jid
+    body = stanza.body
+    self.current_jid = sender
+
+    logging.info('[%s] %s', bare, stanza.body)
+
+    if not self.got_roster:
+      if not self.message_queue:
+        self.message_queue = Queue()
+      self.message_queue.put((sender, body))
+    else:
+      self.handle_message(sender, body)
+
+    return True
+
+  def send_message(self, receiver, msg):
+    m = Message(
+      stanza_type = 'chat',
+      from_jid = self.jid,
+      to_jid = receiver,
+      body = msg,
+    )
+    self.send(m)
+
+  def reply(self, msg):
+    self.send_message(self.current_jid, msg)
+
+  def send(self, stanza):
+    self.client.stream.send(stanza)
+
+  @event_handler(DisconnectedEvent)
+  def handle_disconnected(self, event):
+    #TODO: notify admins
+    return QUIT
+
+  @property
+  def roster(self):
+    return self.client.roster
+
+  def get_online_users(self):
+    ret = [x for x in self.roster if x.subscription == 'both' and \
+           self.presence[x.jid]]
+    logging.info('%d online buddies: %r', len(ret), [x.jid for x in ret])
+    return ret
+
+  def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
+    self.client.roster_client.update_item(jid, name, groups)
+
+  #TODO: below
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
     logging.info('{0} requested presence subscription'
@@ -109,67 +172,16 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       pass
     return True
 
-  @message_stanza_handler()
-  def handle_message(self, stanza):
-    if stanza.body is None:
-      # She's typing
-      return True
-
-    sender = stanza.from_jid
-    bare = sender.bare()
-
-    logging.info('[%s] %s', bare, stanza.body)
-    if stanza.body == 'ping':
-      self.send_message(bare, 'pong')
-    elif stanza.body.startswith('-nick '):
-      nick = stanza.body.split(None, 1)[1]
-      old_nick = self.get_name(sender)
-      self.update_roster(bare, nick)
-      self.send_message(sender, '昵称更新成功！')
-      msg = '%s 的昵称已更新为 %s。' % (old_nick, nick)
-      for u in self.get_online_users():
-        if u.jid != bare:
-          self.send_message(u.jid, msg)
-    else:
-      self.send_to_all(bare, stanza.body)
-    return True
-
-  @event_handler(DisconnectedEvent)
-  def handle_disconnected(self, event):
-    '''Quit the main loop upon disconnection.'''
-    return QUIT
-
   @event_handler()
   def handle_all(self, event):
     '''Log all events.'''
     logging.info('-- {0}'.format(event))
-
-  def get_online_users(self):
-    ret = [x for x in self.roster if x.subscription == 'both' and \
-           self.presence[x.jid]]
-    logging.info('%d online buddies: %r', len(ret), [x.jid for x in ret])
-    return ret
 
   def send_to_all(self, sender, msg):
     msg = '[%s] %s' % (self.get_name(sender), msg)
     for u in self.get_online_users():
       if u.jid != sender:
         self.send_message(u.jid, msg)
-
-  def send_message(self, receiver, msg):
-    m = Message(
-      stanza_type = 'chat',
-      from_jid = self.jid,
-      to_jid = receiver,
-      body = msg,
-    )
-    self.send(m)
-
-  def send(self, stanza):
-    self.client.stream.send(stanza)
-
-  def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
-    self.client.roster_client.update_item(jid, name, groups)
 
   def get_name(self, jid):
     if isinstance(jid, str):
@@ -180,10 +192,6 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       return self.roster[jid].name or hashjid(jid)
     except KeyError:
       return hashjid(jid)
-
-  @property
-  def roster(self):
-    return self.client.roster
 
 def main():
   logging.basicConfig(level=config.logging_level)
