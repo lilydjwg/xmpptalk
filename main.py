@@ -9,6 +9,7 @@ and echoes incoming messages.
 import sys
 import logging
 import hashlib
+import re
 from functools import lru_cache
 from collections import defaultdict
 
@@ -24,6 +25,8 @@ from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
 
 import config
+
+re_help = re.compile(r'^.{,3}help\s*$')
 
 @lru_cache()
 def hashjid(jid):
@@ -123,6 +126,8 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       self.send_message(bare, 'pong')
     elif stanza.body.startswith('?OTR'):
       self.send_message(sender, '不支持 OTR 加密！')
+    elif re_help.match(stanza.body):
+      self.send_message(sender, '当前唯一支持的命令是 -nick')
     elif stanza.body.startswith('-nick '):
       nick = stanza.body.split(None, 1)[1]
       old_nick = self.get_name(sender)
