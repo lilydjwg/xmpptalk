@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# vim:fileencoding=utf-8
+import re
 
 # for i18n support
 _ = lambda s: s
@@ -7,3 +6,7 @@ _ = lambda s: s
 PERM_USER = 0b1
 PERM_GPADMIN = 0b11
 PERM_SYSADMIN = 0b101
+
+re_jid = re.compile(r'[^@ ]+@(?:\w+\.)+\w{2,4}')
+
+__all__ = list(globals().keys())

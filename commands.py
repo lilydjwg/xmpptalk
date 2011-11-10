@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# vim:fileencoding=utf-8
-
 from functools import wraps, partial
 
 from misc import *
@@ -15,7 +12,7 @@ def command(name, flags=PERM_USER):
     @wraps(func)
     def innerwrap(self, arg):
       # TODO
-      # if self.user['flags'] & flags:
+      # if self.user.flag & flags:
       if True:
         nonlocal s
         s = self
@@ -32,13 +29,13 @@ class CommandMixin:
     print(new)
 
   def handle_command(self, msg):
-    prefix = self.user['prefix']
+    prefix = self.user.prefix
     if not msg.startswith(prefix):
       return False
 
     cmds = msg[len(prefix):].split(None, 1)
     cmd = cmds[0]
-    rest = len(cmds) == 2 and cmds[1] or '' 
+    rest = len(cmds) == 2 and cmds[1] or ''
     if cmd in __commands:
       if __commands[cmd](rest):
         # we handled it

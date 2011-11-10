@@ -19,4 +19,8 @@ class MessageMixin:
       return True
     return False
 
+  def command(self, msg):
+    return self.handle_command(msg)
+
   message_handler_register(pingpong)
+  message_handler_register(command)
