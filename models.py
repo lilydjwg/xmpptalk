@@ -32,6 +32,7 @@ def validate_nick(nick):
   return True
 
 class Document(Doc):
+  __database__ = config.database
   use_dot_notation = True
 
   @classmethod
@@ -61,6 +62,7 @@ class Document(Doc):
         raise DuplicateKeyError(err['err'], err['code'])
 
 class User(Document):
+  __collection__ = getattr(config, 'collection_user', 'user')
   use_schemaless = True
   structure = {
     'allow_pm': bool,
