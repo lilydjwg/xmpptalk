@@ -9,7 +9,6 @@ and echoes incoming messages.
 import sys
 import logging
 import hashlib
-import queue
 from functools import lru_cache
 from collections import defaultdict
 
@@ -63,6 +62,10 @@ class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
   @event_handler(RosterReceivedEvent)
   def roster_received(self, stanze):
     self.got_roster = True
+    q = self.message_queue
+    for i in q:
+      self.handle_message(*i)
+    self.message_queue = None
     return True
 
   @message_stanza_handler()
@@ -79,8 +82,8 @@ class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
 
     if not self.got_roster:
       if not self.message_queue:
-        self.message_queue = Queue()
-      self.message_queue.put((sender, body))
+        self.message_queue = []
+      self.message_queue.append((sender, body))
     else:
       self.handle_message(sender, body)
 
