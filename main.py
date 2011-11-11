@@ -119,33 +119,29 @@ class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
     self.client.roster_client.update_item(jid, name, groups)
 
-  #TODO: below
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
-    logging.info('{0} requested presence subscription'
-                 .format(stanza.from_jid))
+    if not self.handle_userjoin_before(stanza.from_jid):
+      return False
+
     presence = Presence(to_jid = stanza.from_jid.bare(),
                         stanza_type = 'subscribe')
     return [stanza.make_accept_response(), presence]
 
   @presence_stanza_handler('subscribed')
   def handle_presence_subscribed(self, stanza):
-    logging.info('{0!r} accepted our subscription request'
-                 .format(stanza.from_jid))
+    self.handle_userjoin(stanza.from_jid())
     return True
 
   @presence_stanza_handler('unsubscribe')
   def handle_presence_unsubscribe(self, stanza):
-    logging.info('{0} canceled presence subscription'
-                 .format(stanza.from_jid))
     presence = Presence(to_jid = stanza.from_jid.bare(),
                         stanza_type = 'unsubscribe')
     return [stanza.make_accept_response(), presence]
 
   @presence_stanza_handler('unsubscribed')
   def handle_presence_unsubscribed(self, stanza):
-    logging.info('{0!r} acknowledged our subscrption cancelation'
-                 .format(stanza.from_jid))
+    self.handle_userleave(stanza.from_jid)
     return True
 
   @presence_stanza_handler()
