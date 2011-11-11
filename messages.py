@@ -1,7 +1,9 @@
+import logging
 from functools import wraps
 
 from misc import *
 
+logger = logging.getLogger(__name__)
 __message_handles = []
 
 def message_handler_register(func):
@@ -10,6 +12,8 @@ def message_handler_register(func):
   __message_handles.append(func)
 
 class MessageMixin:
+  message_queue = None
+
   def pingpong(self, msg):
     if msg == 'ping':
       self.reply('pong')
@@ -20,9 +24,10 @@ class MessageMixin:
     return self.handle_command(msg)
 
   def handle_message(self, sender, msg):
-    # set self.current_user here
-    raise NotImplementedError
-
+    logger.warn(self.current_user)
+    if msg == 'cli':
+      from cli import repl
+      repl(locals(), 'cmd.txt')
 
   message_handler_register(pingpong)
   message_handler_register(command)

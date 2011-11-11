@@ -26,6 +26,8 @@ from pyxmpp2.ext.version import VersionProvider
 
 import config
 from messages import MessageMixin
+from presence import PresenceMixin
+from user import UserMixin
 
 @lru_cache()
 def hashjid(jid):
@@ -40,13 +42,14 @@ def hashjid(jid):
   domain = m.hexdigest()[:6]
   return '%s@%s' % (jid.local, domain)
 
-class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
+class ChatBot(MessageMixin, PresenceMixin, UserMixin,
+              EventHandler, XMPPFeatureHandler):
+  got_roster = False
+
   def __init__(self, jid, settings):
     version_provider = VersionProvider(settings)
     self.client = Client(jid, [self, version_provider], settings)
     self.presence = defaultdict(dict)
-    self.got_roster = False
-    self.message_queue = None
 
   def run(self):
     self.client.connect()
@@ -63,9 +66,10 @@ class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
   def roster_received(self, stanze):
     self.got_roster = True
     q = self.message_queue
-    for i in q:
-      self.handle_message(*i)
-    self.message_queue = None
+    if q:
+      for i in q:
+        self.handle_message(*i)
+      self.message_queue = None
     return True
 
   @message_stanza_handler()
@@ -78,7 +82,7 @@ class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
     body = stanza.body
     self.current_jid = sender
 
-    logging.info('[%s] %s', bare, stanza.body)
+    logging.info('[%s] %s', sender, stanza.body)
 
     if not self.got_roster:
       if not self.message_queue:
@@ -125,27 +129,37 @@ class ChatBot(MessageMixin, EventHandler, XMPPFeatureHandler):
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
     if not self.handle_userjoin_before(stanza.from_jid):
-      return False
+      return stanza.make_deny_response()
 
-    presence = Presence(to_jid = stanza.from_jid.bare(),
-                        stanza_type = 'subscribe')
+    self.handle_userjoin(stanza.from_jid, action=stanza.stanza_type)
+
+    if stanza.stanza_type.endswith('ed'):
+      return True
+
+    presence = Presence(to_jid=stanza.from_jid.bare(),
+                        stanza_type='subscribe')
     return [stanza.make_accept_response(), presence]
 
   @presence_stanza_handler('subscribed')
   def handle_presence_subscribed(self, stanza):
-    self.handle_userjoin(stanza.from_jid())
-    return True
+    # use the same function
+    return self.handle_presence_subscribe(stanza)
 
   @presence_stanza_handler('unsubscribe')
   def handle_presence_unsubscribe(self, stanza):
-    presence = Presence(to_jid = stanza.from_jid.bare(),
-                        stanza_type = 'unsubscribe')
+    self.handle_userleave(stanza.from_jid, action=stanza.stanza_type)
+
+    if stanza.stanza_type.endswith('ed'):
+      return True
+
+    presence = Presence(to_jid=stanza.from_jid.bare(),
+                        stanza_type='unsubscribe')
     return [stanza.make_accept_response(), presence]
 
-  @presence_stanza_handler('unsubscribed')
+  presence_stanza_handler('unsubscribed')
   def handle_presence_unsubscribed(self, stanza):
-    self.handle_userleave(stanza.from_jid)
-    return True
+    # use the same function
+    return self.handle_presence_unsubscribe(stanza)
 
   @presence_stanza_handler()
   def handle_presence_available(self, stanza):
@@ -199,6 +213,7 @@ def main():
     software_name = 'ChatBot',
     # deliver here even if the admin logs in
     initial_presence = Presence(priority=30),
+    poll_interval = 3,
   )
   settings.update(config.settings)
   settings = XMPPSettings(settings)
