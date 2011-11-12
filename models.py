@@ -74,6 +74,7 @@ class User(Document):
     'msg_count': int,
     'name': str,
     'nick_changes': int,
+    'nick_lastchange': datetime.datetime,
     'prefix': str,
   }
   indexes = [{

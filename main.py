@@ -26,10 +26,11 @@ from pyxmpp2.ext.version import VersionProvider
 
 import config
 from messages import MessageMixin
-from presence import PresenceMixin
 from user import UserMixin
 
 __version__ = 'pre-alpha'
+
+#TODO: subscription 部分的处理顺序
 
 @lru_cache()
 def hashjid(jid):
@@ -44,7 +45,7 @@ def hashjid(jid):
   domain = m.hexdigest()[:6]
   return '%s@%s' % (jid.local, domain)
 
-class ChatBot(MessageMixin, PresenceMixin, UserMixin,
+class ChatBot(MessageMixin, UserMixin,
               EventHandler, XMPPFeatureHandler):
   got_roster = False
 
@@ -134,10 +135,12 @@ class ChatBot(MessageMixin, PresenceMixin, UserMixin,
 
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
-    if not self.handle_userjoin_before(stanza.from_jid):
+    sender = stanza.from_jid
+    self.current_jid = sender
+    if not self.handle_userjoin_before():
       return stanza.make_deny_response()
 
-    self.handle_userjoin(stanza.from_jid, action=stanza.stanza_type)
+    self.handle_userjoin(action=stanza.stanza_type)
 
     if stanza.stanza_type.endswith('ed'):
       return True
@@ -153,7 +156,9 @@ class ChatBot(MessageMixin, PresenceMixin, UserMixin,
 
   @presence_stanza_handler('unsubscribe')
   def handle_presence_unsubscribe(self, stanza):
-    self.handle_userleave(stanza.from_jid, action=stanza.stanza_type)
+    sender = stanza.from_jid
+    self.current_jid = sender
+    self.handle_userleave(action=stanza.stanza_type)
 
     if stanza.stanza_type.endswith('ed'):
       return True
