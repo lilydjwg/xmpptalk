@@ -29,6 +29,8 @@ from messages import MessageMixin
 from presence import PresenceMixin
 from user import UserMixin
 
+__version__ = 'pre-alpha'
+
 @lru_cache()
 def hashjid(jid):
   '''
@@ -47,6 +49,10 @@ class ChatBot(MessageMixin, PresenceMixin, UserMixin,
   got_roster = False
 
   def __init__(self, jid, settings):
+    if 'software_name' not in settings:
+      settings['software_name'] = self.__class__.__name__
+    if 'software_version' not in settings:
+      settings['software_version'] = __version__
     version_provider = VersionProvider(settings)
     self.client = Client(jid, [self, version_provider], settings)
     self.presence = defaultdict(dict)
@@ -210,7 +216,6 @@ def main():
   logging.basicConfig(level=config.logging_level)
 
   settings = dict(
-    software_name = 'ChatBot',
     # deliver here even if the admin logs in
     initial_presence = Presence(priority=30),
     poll_interval = 3,
