@@ -13,7 +13,7 @@ class CommandMixinMixin:
     command = lexer.get_token()
     body = lexer.instream.read().strip()
     try:
-      meth = getattr(self, command, None)
+      meth = getattr(self, 'do_'+command, None)
       meth(body)
     except TypeError:
       self.unknown(command)
