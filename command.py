@@ -97,7 +97,7 @@ class ManagerCommandMixin(BaseHandler):
     """Edit description of the group"""
 
 
-class SysCommandMixin(ManagerCommandMixin):
+class SuCommandMixin(ManagerCommandMixin):
   def do_top(self):
     """Display system tasks"""
     pass
