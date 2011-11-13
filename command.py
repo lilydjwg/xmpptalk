@@ -31,12 +31,12 @@ class UserInfo:
     """The number of online people"""
     pass
 
-  def do_Listing(self):
-    """Listing all users in the group"""
+  def do_List(self):
+    """List all users in the group"""
     pass
 
   def do_admin(self):
-    """Listing all administrators"""
+    """List all administrators"""
     pass
 
   def do_seek(self, body):
@@ -44,13 +44,13 @@ class UserInfo:
     pass
 
   def do_stats(self):
-    """Listing statistics"""
+    """List statistics"""
     pass
 
 
 class UserSetting:
   def do_opendm(self, body):
-    """Accepting direct message or not"""
+    """Accept direct message or not"""
     pass
 
   def do_prevent(self, body):
@@ -60,7 +60,7 @@ class UserSetting:
 
 class UserCommandMixin(BaseHandler, UserInfo, UserSetting):
   def do_nick(self, body):
-    """Changing user's nick"""
+    """Change user's nick"""
     pass
 
   def do_dm(self, body):
@@ -77,7 +77,24 @@ class UserCommandMixin(BaseHandler, UserInfo, UserSetting):
 
 
 class ManagerCommandMixin(BaseHandler):
-  pass
+  def do_invite(self, body):
+    """Invite someone"""
+    pass
+
+  def do_block(self, body):
+    """Forbid one's permission of chatting"""
+    pass
+
+  def do_kick(self, body):
+    """Ban member"""
+    pass
+
+  def do_suadd(self, body):
+    """Add/remove new administrator"""
+    pass
+
+  def do_desc(self, body):
+    """Edit description of the group"""
 
 
 class SysCommandMixin(BaseHandler):
