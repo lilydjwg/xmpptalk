@@ -97,5 +97,11 @@ class ManagerCommandMixin(BaseHandler):
     """Edit description of the group"""
 
 
-class SysCommandMixin(BaseHandler):
-  pass
+class SysCommandMixin(ManagerCommandMixin):
+  def do_top(self):
+    """Display system tasks"""
+    pass
+
+  def do_restart(self):
+    """Restart program"""
+    pass
