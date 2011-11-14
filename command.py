@@ -18,24 +18,24 @@ class BaseHandler:
     except TypeError:
       self.unknown(command)
 
-  def do_help(self):
+  def do_help(self, body):
     pass
 
 
 class UserInfo:
-  def do_history(self):
+  def do_history(self, body):
     """Chatting history"""
     pass
 
-  def do_online(self):
+  def do_online(self, body):
     """The number of online people"""
     pass
 
-  def do_List(self):
+  def do_List(self, body):
     """List all users in the group"""
     pass
 
-  def do_admin(self):
+  def do_admin(self, body):
     """List all administrators"""
     pass
 
@@ -43,7 +43,7 @@ class UserInfo:
     """Get one's information"""
     pass
 
-  def do_stats(self):
+  def do_stats(self, body):
     """List statistics"""
     pass
 
@@ -71,7 +71,7 @@ class UserCommandMixin(BaseHandler, UserInfo, UserSetting):
     """Suspending the account"""
     pass
 
-  def do_quit(self):
+  def do_quit(self, body):
     """Quiting group"""
     pass
 
@@ -98,10 +98,10 @@ class ManagerCommandMixin(BaseHandler):
 
 
 class SuCommandMixin(ManagerCommandMixin):
-  def do_top(self):
+  def do_top(self, body):
     """Display system tasks"""
     pass
 
-  def do_restart(self):
+  def do_restart(self, body):
     """Restart program"""
     pass
