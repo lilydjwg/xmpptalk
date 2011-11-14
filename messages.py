@@ -1,6 +1,7 @@
 import logging
 from functools import wraps
 
+import commands
 from misc import *
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class MessageMixin:
     return False
 
   def command(self, msg):
-    return self.handle_command(msg)
+    return commands.handle_command(self, msg)
 
   def handle_message(self, sender, msg):
     logger.warn(self.current_user)
