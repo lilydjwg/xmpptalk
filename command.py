@@ -9,7 +9,11 @@ class BaseHandler:
     pass
 
   def handle(self, message):
-    lexer = shlex.shlex(message)
+    prefix = self.current_user.prefix
+    if not message.startswith(prefix):
+      return False
+
+    lexer = shlex.shlex(message[len(prefix):])
     command = lexer.get_token()
     body = lexer.instream.read().strip()
     try:
