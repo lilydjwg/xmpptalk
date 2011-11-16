@@ -1,6 +1,10 @@
-from functools import wraps, partial
+from functools import wraps
 
 from misc import *
+
+'''
+command handling, should be called from messages.py
+'''
 
 __commands = {}
 

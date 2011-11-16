@@ -65,7 +65,9 @@ class User(Document):
   __collection__ = getattr(config, 'collection_user', 'user')
   use_schemaless = True
   structure = {
+    # name it 'pm' as it's why it exists
     'allow_pm': bool,
+    # accept pm except these people:
     'badpeople': [str],
     'flag': int,
     'jid': str,
@@ -85,7 +87,7 @@ class User(Document):
     'unique': True,
   }]
   default_values = {
-    'flag': 1,
+    'flag': PERM_USER,
     'join_date': datetime.datetime.utcnow,
     'msg_bytes': 0,
     'msg_count': 0,
@@ -100,5 +102,25 @@ class User(Document):
     'prefix': lambda x: 0 < len(x) < 3,
   }
 
+class MessageLog(Document):
+  __collection__ = getattr(config, 'collection_log', 'log')
+  structure = {
+    'time': datetime.datetime,
+    'sender': str,
+    'message': str,
+  }
+  validators = {
+    'sender': validate_jid,
+  }
+  default_values = {
+    'time': datetime.datetime.utcnow,
+  }
+
+  def find(self, n=20):
+    '''find n recent messages in chronological order, n defaults to 20'''
+    l = list(super().find(sort=[('$natural', -1)]).limit(n))
+    l.reverse()
+    return l
+
 connection = Connection()
-connection.register([User])
+connection.register([User, MessageLog])
