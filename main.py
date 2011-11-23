@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 # vim:fileencoding=utf-8
 
-'''
-An 'echo bot' – simple client that just confirms any presence subscriptions
-and echoes incoming messages.
-'''
-
 import sys
 import logging
 import hashlib
