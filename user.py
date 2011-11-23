@@ -5,6 +5,7 @@ from models import connection, User
 logger = logging.getLogger(__name__)
 
 class UserMixin:
+  # _cached_jid: the corresponding jid cached in _cached_user
   _cached_jid = _cached_user = None
   current_jid = current_user = None
 

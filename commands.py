@@ -14,9 +14,7 @@ def command(name, flags=PERM_USER):
   def outerwrap(func):
     @wraps(func)
     def innerwrap(self, arg):
-      # TODO
-      # if self.current_user.flag & flags:
-      if True:
+      if self.current_user.flag & flags:
         return func(self, arg)
       else:
         return False

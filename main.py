@@ -69,8 +69,10 @@ class ChatBot(MessageMixin, UserMixin,
     self.got_roster = True
     q = self.message_queue
     if q:
-      for i in q:
-        self.handle_message(*i)
+      for sender, msg in q:
+        self.current_jid = sender
+        self._cached_jid = None
+        self.handle_message(msg)
       self.message_queue = None
     return True
 
@@ -91,7 +93,7 @@ class ChatBot(MessageMixin, UserMixin,
         self.message_queue = []
       self.message_queue.append((sender, body))
     else:
-      self.handle_message(sender, body)
+      self.handle_message(body)
 
     return True
 
@@ -240,7 +242,7 @@ def main():
   bot = ChatBot(JID(config.jid), settings)
   try:
     bot.run()
-  except KeyboardInterrupt:
+  except (KeyboardInterrupt, SystemExit):
     bot.disconnect()
 
 if __name__ == '__main__':
