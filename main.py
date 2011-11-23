@@ -7,6 +7,7 @@ import hashlib
 from functools import lru_cache
 from collections import defaultdict
 
+import pyxmpp2.exceptions
 from pyxmpp2.jid import JID
 from pyxmpp2.message import Message
 from pyxmpp2.presence import Presence
@@ -18,7 +19,6 @@ from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
-import pyxmpp2.exceptions
 
 import config
 from messages import MessageMixin
@@ -69,9 +69,7 @@ class ChatBot(MessageMixin, UserMixin,
       # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
       pass
 
-  @event_handler(RosterReceivedEvent)
-  def roster_received(self, stanze):
-    #FIXME: set a timeout
+  def handle_early_message(self):
     self.got_roster = True
     q = self.message_queue
     if q:
@@ -80,6 +78,10 @@ class ChatBot(MessageMixin, UserMixin,
         self._cached_jid = None
         self.handle_message(msg)
       self.message_queue = None
+
+  @event_handler(RosterReceivedEvent)
+  def roster_received(self, stanze):
+    self.client.main_loop.delayed_call(2, self.handle_early_message)
     return True
 
   @message_stanza_handler()
