@@ -32,6 +32,7 @@ class MessageMixin:
       self.dispatch_message(msg)
 
   def dispatch_message(self, msg):
+    #TODO logging
     curbare = self.current_jid.bare()
     for u in self.get_online_users():
       if u != curbare:

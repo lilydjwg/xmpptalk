@@ -103,19 +103,32 @@ class User(Document):
     'prefix': lambda x: 0 < len(x) < 3,
   }
 
-class MessageLog(Document):
+def validate_logtype(t):
+  '''
+  msg: conversation log
+  nick: nick change
+  sys: system up/down
+  '''
+  #TODO: use these types
+  return t in ('msg', 'nick', 'sys')
+
+class Log(Document):
   __collection__ = getattr(config, 'collection_log', 'log')
   structure = {
     'time': datetime.datetime,
-    'sender': str,
-    'message': str,
+    'type': str,
+    'jid': str,
+    # This should contain the nickname in case of type == 'msg'
+    'msg': str,
   }
   validators = {
     'sender': validate_jid,
   }
   default_values = {
     'time': datetime.datetime.utcnow,
+    'type': validate_logtype,
   }
+  required_fields = ['type']
 
   def find(self, n=20):
     '''find n recent messages in chronological order, n defaults to 20'''
@@ -124,4 +137,4 @@ class MessageLog(Document):
     return l
 
 connection = Connection()
-connection.register([User, MessageLog])
+connection.register([User, Log])
