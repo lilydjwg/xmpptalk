@@ -1,6 +1,9 @@
 import logging
 
+import pymongo.errors
+
 from models import connection, User
+import config
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +22,10 @@ class UserMixin:
 
     plainjid = str(self.current_jid.bare())
     user = connection.User.one({'jid': plainjid})
+
+    # not registered
+    user = self.db_add_user(plainjid)
+
     self._cached_jid = self.current_jid
     self._cached_user = user
     return user
@@ -28,14 +35,25 @@ class UserMixin:
     # may invoke twice
     return True
 
+  def db_add_user(self, plainjid):
+    '''
+    add new user to database, return the added user; if alreadly exists, query
+    and return it
+    '''
+    u = connection.User()
+    u.jid = plainjid
+    try:
+      u.save()
+    except pymongo.errors.DuplicateKeyError:
+      u = connection.User.one({'jid': plainjid})
+    return u
+
   def handle_userjoin(self, action):
     # TODO: 邀请好友成功的区别处理
     plainjid = str(self.current_jid.bare())
 
     self._cached_jid = None
-    u = connection.User()
-    u.jid = plainjid
-    u.save()
+    u = self.db_add_user(plainjid)
 
     self.send_message(self.current_jid, config.welcome)
     logger.info('%s joined', plainjid)

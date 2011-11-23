@@ -84,7 +84,8 @@ class User(Document):
     'unique': True,
   }, {
     'fields': 'name',
-    'unique': True,
+    # we can have a lot user without nicknames
+    'unique': False,
   }]
   default_values = {
     'flag': PERM_USER,

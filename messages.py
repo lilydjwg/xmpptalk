@@ -28,7 +28,16 @@ class MessageMixin:
     for h in _message_handles:
       if h(self, msg):
         break
-    # self.dispatch_message(msg)
+    else:
+      self.dispatch_message(msg)
+
+  def dispatch_message(self, msg):
+    curbare = self.current_jid.bare()
+    for u in self.get_online_users():
+      if u != curbare:
+        s = '[%s] ' % self.get_name(self.current_jid)
+        self.send_message(u, s+msg)
+    return True
 
   def debug(self, msg):
     if msg == 'cli':

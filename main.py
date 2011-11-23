@@ -18,6 +18,7 @@ from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
+import pyxmpp2.exceptions
 
 import config
 from messages import MessageMixin
@@ -62,10 +63,15 @@ class ChatBot(MessageMixin, UserMixin,
     '''Request disconnection and let the main loop run for a 2 more
     seconds for graceful disconnection.'''
     self.client.disconnect()
-    self.client.run(timeout = 2)
+    try:
+      self.client.run(timeout = 2)
+    except pyxmpp2.exceptions.StreamParseError:
+      # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
+      pass
 
   @event_handler(RosterReceivedEvent)
   def roster_received(self, stanze):
+    #FIXME: set a timeout
     self.got_roster = True
     q = self.message_queue
     if q:
@@ -122,9 +128,9 @@ class ChatBot(MessageMixin, UserMixin,
     return self.client.roster
 
   def get_online_users(self):
-    ret = [x for x in self.roster if x.subscription == 'both' and \
+    ret = [x.jid for x in self.roster if x.subscription == 'both' and \
            self.presence[x.jid]]
-    logging.info('%d online buddies: %r', len(ret), [x.jid for x in ret])
+    logging.info('%d online buddies: %r', len(ret), ret)
     return ret
 
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
@@ -243,6 +249,8 @@ def main():
   try:
     bot.run()
   except (KeyboardInterrupt, SystemExit):
+    pass
+  finally:
     bot.disconnect()
 
 if __name__ == '__main__':
