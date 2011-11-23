@@ -122,7 +122,6 @@ class ChatBot(MessageMixin, UserMixin,
 
   @event_handler(DisconnectedEvent)
   def handle_disconnected(self, event):
-    #TODO: notify admins
     return QUIT
 
   @property
