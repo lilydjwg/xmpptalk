@@ -27,6 +27,9 @@ from pyxmpp2.ext.version import VersionProvider
 import config
 
 re_help = re.compile(r'^.{,3}help\s*$')
+forbidden_msg = [
+  '你好，我现在有事情不在，一会再和您联系',
+]
 
 @lru_cache()
 def hashjid(jid):
@@ -126,6 +129,8 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       self.send_message(bare, 'pong')
     elif stanza.body.startswith('?OTR'):
       self.send_message(sender, '不支持 OTR 加密！')
+    elif stanza.body in forbidden_msg:
+      self.send_message(sender, '请不要自动回复！')
     elif re_help.match(stanza.body):
       self.send_message(sender, '当前唯一支持的命令是 -nick')
     elif stanza.body.startswith('-nick '):
