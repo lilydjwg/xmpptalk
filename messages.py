@@ -39,6 +39,13 @@ class MessageMixin:
     else:
       return False
 
+  def give_help(self, msg):
+    '''special handling for help messages'''
+    if config.help_regex.match(msg):
+      return commands.handle_command(self, 'help')
+    else:
+      return False
+
   def handle_message(self, msg):
     for h in _message_handles:
       if h(self, msg):
@@ -65,6 +72,7 @@ class MessageMixin:
 
   message_handler_register(debug)
   message_handler_register(pingpong)
+  message_handler_register(give_help)
   message_handler_register(command)
   message_handler_register(filter_autoreply)
   message_handler_register(filter_otr)

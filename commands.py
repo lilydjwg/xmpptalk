@@ -35,6 +35,14 @@ def do_nick(self, new):
   pass
 
 def handle_command(self, msg):
+  # handle help message first; it is special since it need no prefix
+  if msg == 'help':
+    try:
+      __commands[msg](self, '')
+    except KeyError:
+      self.reply(_('No help yet.'))
+    return True
+
   prefix = self.current_user.prefix
   if not msg.startswith(prefix):
     return False
