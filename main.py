@@ -67,7 +67,7 @@ class ChatBot(MessageMixin, UserMixin,
       self.client.run(timeout = 2)
     except pyxmpp2.exceptions.StreamParseError:
       # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
-      pass
+      self.client.run(timeout = 2)
 
   def handle_early_message(self):
     self.got_roster = True
