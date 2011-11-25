@@ -122,7 +122,7 @@ class Log(Document):
     'msg': str,
   }
   validators = {
-    'sender': validate_jid,
+    'jid': validate_jid,
   }
   default_values = {
     'time': datetime.datetime.utcnow,

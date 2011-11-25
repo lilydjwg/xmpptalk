@@ -2,6 +2,7 @@ import logging
 from functools import wraps
 
 import commands
+import config
 from misc import *
 
 logger = logging.getLogger(__name__)
@@ -23,6 +24,20 @@ class MessageMixin:
 
   def command(self, msg):
     return commands.handle_command(self, msg)
+
+  def filter_otr(self, msg):
+    if msg.startswith('?OTR'):
+      self.reply(_('你的客户端正在尝试使用 OTR 加密，但本群并不支持。'))
+      return True
+    else:
+      return False
+
+  def filter_autoreply(self, msg):
+    if msg in config.filtered_message:
+      self.reply(_('请不要设置自动回复。'))
+      return True
+    else:
+      return False
 
   def handle_message(self, msg):
     for h in _message_handles:
@@ -51,3 +66,5 @@ class MessageMixin:
   message_handler_register(debug)
   message_handler_register(pingpong)
   message_handler_register(command)
+  message_handler_register(filter_autoreply)
+  message_handler_register(filter_otr)
