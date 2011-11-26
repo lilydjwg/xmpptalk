@@ -30,6 +30,5 @@ class Welcome(greenlet):
         nick, config.user_default_prefix
       )
     s.send_message(jid, msg)
-    old = s.set_user_nick(str(jid.bare()), nick)
-    logger.warn('find_and_modify returned %s.', old)
+    s.set_user_nick(str(jid.bare()), nick)
     logger.info('%s joined with nick %s', jid, nick)
