@@ -24,6 +24,9 @@ def command(name, flags=PERM_USER):
 
 @command('nick')
 def do_nick(self, new):
+  # TODO: nick 命令
+  # 注意：需要检查 nick_changes，如果为 0 则不要给出原昵称
+
   # nick = stanza.body.split(None, 1)[1]
   # old_nick = self.get_name(sender)
   # self.update_roster(bare, nick)
