@@ -72,6 +72,8 @@ class User(Document):
     'flag': int,
     'jid': str,
     'join_date': datetime.datetime,
+    'stop_until': datetime.datetime,
+    'mute_until': datetime.datetime,
     'msg_bytes': int,
     'msg_count': int,
     'name': str,
@@ -90,6 +92,8 @@ class User(Document):
   default_values = {
     'flag': PERM_USER,
     'join_date': datetime.datetime.utcnow,
+    'stop_until': datetime.datetime.utcnow,
+    'mute_until': datetime.datetime.utcnow,
     'msg_bytes': 0,
     'msg_count': 0,
     'nick_changes': 0,
