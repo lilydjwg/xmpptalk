@@ -19,6 +19,7 @@ def validate_jid(jid):
   return True
 
 def validate_nick(nick):
+  '''`nick` should be already stripped if you only allow spaces in between'''
   if len(nick) > config.nick_maxlen:
     raise ValidationError(_('nickname too long (%d characters), max is %d') \
                          % (len(nick), config.nick_maxlen))
@@ -27,7 +28,7 @@ def validate_nick(nick):
     # Lt & Lm are special chars
     if (not (cat.startswith('L') or cat.startswith('N')) or cat in ('Lm', 'Lt')) \
        and i not in config.nick_allowed_symbol:
-      raise ValidationError(_("nickname `%s' contains disallowed character: %c") \
+      raise ValidationError(_("nickname `%s' contains disallowed character: '%c'") \
                             % (nick, i))
   return True
 
