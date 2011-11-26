@@ -81,7 +81,7 @@ class UserMixin:
     This will reset the nick cache.
     '''
     models.validate_nick(nick)
-    if connection.User.find_one({'nick': nick}, {}) is not None:
+    if self.nick_exists(nick):
       raise ValueError(_('duplicate nick name'))
 
     self.user_get_nick.cache_clear()
@@ -103,6 +103,9 @@ class UserMixin:
   def user_get_nick(self, plainjid):
     u = connection.User.one({'jid': plainjid})
     return u.nick
+
+  def nick_exists(self, nick):
+    return connection.User.find_one({'nick': nick}, {}) is not None
 
   def handle_userjoin(self, action):
     # TODO: 根据 action 区别处理
