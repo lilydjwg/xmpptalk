@@ -31,5 +31,5 @@ class Welcome(greenlet):
         nick, config.user_default_prefix
       )
     s.send_message(jid, msg)
-    s.set_user_nick(str(jid.bare()), nick)
+    s.set_user_nick(str(jid.bare()), nick, increase=False)
     logger.info('%s joined with nick %s', jid, nick)

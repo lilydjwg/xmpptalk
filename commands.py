@@ -1,5 +1,7 @@
 from functools import wraps
 
+from mongokit.schema_document import ValidationError
+
 from misc import *
 
 '''
@@ -14,7 +16,7 @@ def command(name, flags=PERM_USER):
   def outerwrap(func):
     @wraps(func)
     def innerwrap(self, arg):
-      if self.current_user.flag & flags:
+      if int(self.current_user.flag) & flags:
         return func(self, arg)
       else:
         return False
@@ -24,18 +26,29 @@ def command(name, flags=PERM_USER):
 
 @command('nick')
 def do_nick(self, new):
-  # TODO: nick 命令
-  # 注意：需要检查 nick_changes，如果为 0 则不要给出原昵称
+  new_nick = new.strip()
+  if not new_nick:
+    old_nick = self.current_user.nick
+    self.reply(_('Your current nick is: %s') % old_nick)
+    return True
 
-  # nick = stanza.body.split(None, 1)[1]
-  # old_nick = self.get_name(sender)
-  # self.update_roster(bare, nick)
-  # self.send_message(sender, '昵称更新成功！')
-  # msg = '%s 的昵称已更新为 %s。' % (old_nick, nick)
-  # for u in self.get_online_users():
-  #   if u.jid != bare:
-  #     self.send_message(u.jid, msg)
-  pass
+  try:
+    old_nick = self.set_self_nick(new_nick)
+  except (ValueError, ValidationError) as e:
+    self.reply(_('Error: %s') % e)
+    return True
+
+  bare = self.current_jid.bare()
+  self.update_roster(bare, new_nick)
+  self.reply(_('Your nick name has changed to "%s"!') % new_nick)
+
+  if old_nick is not None:
+    msg = _('%s 的昵称已更新为 %s。') % (old_nick, new_nick)
+    for u in self.get_online_users():
+      if u != bare:
+        self.send_message(u, msg)
+
+  return True
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix

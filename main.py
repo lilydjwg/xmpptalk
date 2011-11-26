@@ -210,12 +210,6 @@ class ChatBot(MessageMixin, UserMixin,
     '''Log all events.'''
     logging.info('-- {0}'.format(event))
 
-  def send_to_all(self, sender, msg):
-    msg = '[%s] %s' % (self.get_name(sender), msg)
-    for u in self.get_online_users():
-      if u.jid != sender:
-        self.send_message(u.jid, msg)
-
   def get_name(self, jid):
     if isinstance(jid, str):
       jid = JID(jid)

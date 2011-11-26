@@ -1,11 +1,14 @@
 import logging
 from functools import lru_cache
+import datetime
 
 import pymongo.errors
 
+import models
 from models import connection
 import config
 from greenlets import Welcome
+from misc import *
 
 logger = logging.getLogger(__name__)
 
@@ -50,17 +53,49 @@ class UserMixin:
       u = connection.User.one({'jid': plainjid})
     return u
 
-  def set_user_nick(self, plainjid, nick):
+  def set_user_nick(self, *args, **kwargs):
     '''
     return the old nick or None
     This will reset the nick cache.
     '''
+    return self._set_user_nick(*args, **kwargs)['nick']
+
+  def set_self_nick(self, nick):
+    '''
+    return the old nick or None
+    This will reset the nick cache.
+    '''
+    jid = str(self.current_jid.bare())
+    user = self._set_user_nick(jid, nick)
+    if user['nick_changes'] == 0:
+      old_nick = None
+    else:
+      old_nick = user['nick']
+    return old_nick
+
+  def _set_user_nick(self, plainjid, nick, increase=True):
+    '''
+    return the old `User` document, raise ValueError if duplicate
+    This will reset the nick cache.
+    '''
+    models.validate_nick(nick)
+    if connection.User.find_one({'nick': nick}, {}) is not None:
+      raise ValueError(_('duplicate nick name'))
+
     self.user_get_nick.cache_clear()
+    update = {
+      '$set': {
+        'nick': nick,
+        'nick_lastchange': datetime.datetime.utcnow(),
+      }
+    }
+    if increase:
+      update['$inc'] = {'nick_changes': 1}
+
     # XXX: mongokit currently does not support find_and_modify
     return connection.User.collection.find_and_modify(
-      {'jid': plainjid},
-      {'$set': {'nick': nick}}
-    ).nick
+      {'jid': plainjid}, update
+    )
 
   @lru_cache()
   def user_get_nick(self, plainjid):

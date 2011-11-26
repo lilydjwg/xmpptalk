@@ -20,6 +20,8 @@ def validate_jid(jid):
 
 def validate_nick(nick):
   '''`nick` should be already stripped if you only allow spaces in between'''
+  if not nick:
+    raise ValidationError(_('no nickname provided'))
   if len(nick) > config.nick_maxlen:
     raise ValidationError(_('nickname too long (%d characters), max is %d') \
                          % (len(nick), config.nick_maxlen))
