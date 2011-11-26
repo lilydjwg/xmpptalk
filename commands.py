@@ -48,7 +48,12 @@ def handle_command(self, msg):
     return False
 
   cmds = msg[len(prefix):].split(None, 1)
-  cmd = cmds[0]
+  try:
+    cmd = cmds[0]
+  except IndexError:
+    self.reply(_('No command specified.'))
+    return True
+
   rest = len(cmds) == 2 and cmds[1] or ''
   if cmd in __commands:
     if __commands[cmd](self, rest):
