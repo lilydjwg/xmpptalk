@@ -8,9 +8,10 @@ from misc import *
 command handling, should be called from messages.py
 '''
 
+# key is the command name, value is a (func, doc) pair
 __commands = {}
 
-def command(name, flags=PERM_USER):
+def command(name, doc, flags=PERM_USER):
   if name in __commands:
     raise ValueError('duplicate command %s' % name)
   def outerwrap(func):
@@ -20,11 +21,11 @@ def command(name, flags=PERM_USER):
         return func(self, arg)
       else:
         return False
-    __commands[name] = innerwrap
+    __commands[name] = (innerwrap, doc)
     return innerwrap
   return outerwrap
 
-@command('nick')
+@command('nick', _('change your nick; show your current nick if no new nick provided'))
 def do_nick(self, new):
   new_nick = new.strip()
   if not new_nick:
@@ -54,7 +55,7 @@ def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':
     try:
-      __commands[msg](self, '')
+      __commands[msg][0](self, '')
     except KeyError:
       self.reply(_('No help yet.'))
     return True
@@ -72,7 +73,7 @@ def handle_command(self, msg):
 
   rest = len(cmds) == 2 and cmds[1] or ''
   if cmd in __commands:
-    if __commands[cmd](self, rest):
+    if __commands[cmd][0](self, rest):
       # we handled it
       return True
   self.reply(_('No such command found.'))
