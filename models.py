@@ -113,7 +113,7 @@ def validate_logtype(t):
   nick: nick change
   sys: system up/down
   '''
-  #TODO: use these types
+  #TODO: use nick and sys
   return t in ('msg', 'nick', 'sys')
 
 class Log(Document):
@@ -127,10 +127,10 @@ class Log(Document):
   }
   validators = {
     'jid': validate_jid,
+    'type': validate_logtype,
   }
   default_values = {
     'time': datetime.datetime.utcnow,
-    'type': validate_logtype,
   }
   required_fields = ['type']
 

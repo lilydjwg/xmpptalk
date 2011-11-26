@@ -3,6 +3,7 @@ from functools import wraps
 
 import commands
 import config
+import logdb
 from misc import *
 
 logger = logging.getLogger(__name__)
@@ -54,12 +55,12 @@ class MessageMixin:
       self.dispatch_message(msg)
 
   def dispatch_message(self, msg):
-    #TODO logging
     curbare = self.current_jid.bare()
+    s = '[%s] ' % self.get_name(self.current_jid) + msg
+    logdb.logmsg(self.current_jid, s)
     for u in self.get_online_users():
       if u != curbare:
-        s = '[%s] ' % self.get_name(self.current_jid)
-        self.send_message(u, s+msg)
+        self.send_message(u, s)
     return True
 
   def debug(self, msg):
