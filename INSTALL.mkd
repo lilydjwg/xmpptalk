@@ -1,0 +1,6 @@
+DEPENDENCES
+===========
+* pyxmpp2
+* pymongo
+* greenlet
+* modified mongokit
