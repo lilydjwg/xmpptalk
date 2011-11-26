@@ -28,8 +28,10 @@ class UserMixin:
     plainjid = str(self.current_jid.bare())
     user = connection.User.one({'jid': plainjid})
 
-    # not registered
-    user = self.db_add_user(plainjid)
+    # not in database
+    if user is None:
+      user = self.db_add_user(plainjid)
+      Welcome(self.current_jid, self)
 
     self._cached_jid = self.current_jid
     self._cached_user = user
@@ -103,20 +105,19 @@ class UserMixin:
     return u.nick
 
   def handle_userjoin(self, action):
-    # TODO: 邀请好友成功的区别处理
+    # TODO: 根据 action 区别处理
     plainjid = str(self.current_jid.bare())
 
     self._cached_jid = None
     u = self.db_add_user(plainjid)
 
-    wel = Welcome(self.current_jid, self)
+    Welcome(self.current_jid, self)
     logger.info('%s joined', plainjid)
 
   def handle_userleave(self, action):
-    # TODO: 删除好友成功的区别处理
+    # TODO: 根据 action 区别处理
     # for u in self.get_online_users():
     #   self.send_message(u, config.leave % self.get_name(plainjid))
-    #TODO: 从数据库删除
     ret = self.current_user.delete()
     self._cached_jid = None
 

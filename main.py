@@ -86,7 +86,7 @@ class ChatBot(MessageMixin, UserMixin,
 
   @event_handler(RosterReceivedEvent)
   def roster_received(self, stanze):
-    self.client.main_loop.delayed_call(2, self.handle_early_message)
+    self.delayed_call(2, self.handle_early_message)
     return True
 
   @message_stanza_handler()
@@ -124,6 +124,9 @@ class ChatBot(MessageMixin, UserMixin,
 
   def send(self, stanza):
     self.client.stream.send(stanza)
+
+  def delayed_call(self, seconds, func):
+    self.client.main_loop.delayed_call(seconds, func)
 
   @event_handler(DisconnectedEvent)
   def handle_disconnected(self, event):
