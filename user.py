@@ -59,13 +59,13 @@ class UserMixin:
     # XXX: mongokit currently does not support find_and_modify
     return connection.User.collection.find_and_modify(
       {'jid': plainjid},
-      {'$set': {'name': nick}}
+      {'$set': {'nick': nick}}
     ).nick
 
   @lru_cache()
   def user_get_nick(self, plainjid):
     u = connection.User.one({'jid': plainjid})
-    return u.name
+    return u.nick
 
   def handle_userjoin(self, action):
     # TODO: 邀请好友成功的区别处理

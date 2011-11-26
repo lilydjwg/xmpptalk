@@ -76,7 +76,7 @@ class User(Document):
     'mute_until': datetime.datetime,
     'msg_bytes': int,
     'msg_count': int,
-    'name': str,
+    'nick': str,
     'nick_changes': int,
     'nick_lastchange': datetime.datetime,
     'prefix': str,
@@ -85,7 +85,7 @@ class User(Document):
     'fields': 'jid',
     'unique': True,
   }, {
-    'fields': 'name',
+    'fields': 'nick',
     # we can have a lot user without nicknames
     'unique': False,
   }]
@@ -103,7 +103,7 @@ class User(Document):
   validators = {
     'badpeople': lambda x: all(validate_jid(y) for y in x),
     'jid': validate_jid,
-    'name': validate_nick,
+    'nick': validate_nick,
     'prefix': lambda x: 0 < len(x) < 3,
   }
 
