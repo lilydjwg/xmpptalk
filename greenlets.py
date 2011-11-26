@@ -24,6 +24,7 @@ class Welcome(greenlet):
         config.user_default_prefix, nick
       )
     else:
+      #FIXME: 去重
       nick = stanza.get_all_payload()[0].element.find('{vcard-temp}FN').text
       msg = _('Would you like to use "%s" as your nick, '\
               'or use "%snick your_nick" to choose another') % (
