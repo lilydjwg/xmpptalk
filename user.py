@@ -1,4 +1,5 @@
 import logging
+from functools import lru_cache
 
 import pymongo.errors
 
@@ -50,12 +51,21 @@ class UserMixin:
     return u
 
   def set_user_nick(self, plainjid, nick):
-    '''return the old nick or None'''
+    '''
+    return the old nick or None
+    This will reset the nick cache.
+    '''
+    self.user_get_nick.cache_clear()
     # XXX: mongokit currently does not support find_and_modify
     return connection.User.collection.find_and_modify(
       {'jid': plainjid},
       {'$set': {'name': nick}}
-    )
+    ).nick
+
+  @lru_cache()
+  def user_get_nick(self, plainjid):
+    u = connection.User.one({'jid': plainjid})
+    return u.name
 
   def handle_userjoin(self, action):
     # TODO: 邀请好友成功的区别处理

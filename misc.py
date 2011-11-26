@@ -1,5 +1,7 @@
 import re
 
+'''constants and simple functions'''
+
 # for i18n support
 _ = lambda s: s
 

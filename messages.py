@@ -56,7 +56,7 @@ class MessageMixin:
 
   def dispatch_message(self, msg):
     curbare = self.current_jid.bare()
-    s = '[%s] ' % self.get_name(self.current_jid) + msg
+    s = '[%s] ' % self.user_get_nick(str(curbare)) + msg
     logdb.logmsg(self.current_jid, s)
     for u in self.get_online_users():
       if u != curbare:
@@ -70,6 +70,10 @@ class MessageMixin:
       return True
     elif msg == 'quit':
       raise SystemExit
+    elif msg == 'cache_clear':
+      self.user_get_nick.cache_clear()
+      self.reply('ok.')
+      return True
 
   message_handler_register(debug)
   message_handler_register(pingpong)
