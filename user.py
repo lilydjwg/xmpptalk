@@ -2,8 +2,9 @@ import logging
 
 import pymongo.errors
 
-from models import connection, User
+from models import connection
 import config
+from greenlets import Welcome
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ class UserMixin:
     return user
 
   def handle_userjoin_before(self):
-    # do block check here
+    # TODO do block check here
     # may invoke twice
     return True
 
@@ -48,6 +49,14 @@ class UserMixin:
       u = connection.User.one({'jid': plainjid})
     return u
 
+  def set_user_nick(self, plainjid, nick):
+    '''return the old nick or None'''
+    # XXX: mongokit currently does not support find_and_modify
+    return connection.User.collection.find_and_modify(
+      {'jid': plainjid},
+      {'$set': {'name': nick}}
+    )
+
   def handle_userjoin(self, action):
     # TODO: 邀请好友成功的区别处理
     plainjid = str(self.current_jid.bare())
@@ -55,7 +64,7 @@ class UserMixin:
     self._cached_jid = None
     u = self.db_add_user(plainjid)
 
-    self.send_message(self.current_jid, config.welcome)
+    wel = Welcome(self.current_jid, self)
     logger.info('%s joined', plainjid)
 
   def handle_userleave(self, action):
@@ -64,7 +73,6 @@ class UserMixin:
     #   self.send_message(u, config.leave % self.get_name(plainjid))
     #TODO: 从数据库删除
     ret = self.current_user.delete()
-    logger.warn('User.delete returns: %r', ret)
     self._cached_jid = None
 
     logger.info('%s left', self.current_jid)

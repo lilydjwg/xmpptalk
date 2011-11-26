@@ -6,6 +6,7 @@ import logging
 import hashlib
 from functools import lru_cache
 from collections import defaultdict
+from xml.etree import ElementTree as ET
 
 import pyxmpp2.exceptions
 from pyxmpp2.jid import JID
@@ -19,6 +20,7 @@ from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
+from pyxmpp2.iq import Iq
 
 import config
 from messages import MessageMixin
@@ -63,11 +65,14 @@ class ChatBot(MessageMixin, UserMixin,
     '''Request disconnection and let the main loop run for a 2 more
     seconds for graceful disconnection.'''
     self.client.disconnect()
-    try:
-      self.client.run(timeout = 2)
-    except pyxmpp2.exceptions.StreamParseError:
-      # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
-      self.client.run(timeout = 2)
+    while True:
+      try:
+        self.client.run(timeout = 2)
+      except pyxmpp2.exceptions.StreamParseError:
+        # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
+        pass
+      else:
+        break
 
   def handle_early_message(self):
     self.got_roster = True
@@ -220,6 +225,17 @@ class ChatBot(MessageMixin, UserMixin,
       return self.roster[jid].name or hashjid(jid)
     except KeyError:
       return hashjid(jid)
+
+  def get_vcard(self, jid, callback):
+    '''callback is used as both result handler and error handler'''
+    q = Iq(
+      to_jid = jid,
+      stanza_type = 'get'
+    )
+    vc = ET.Element("{vcard-temp}vCard")
+    q.add_payload(vc)
+    self.stanza_processor.set_response_handlers(q, callback, callback)
+    self.send(q)
 
 def main():
   logging.basicConfig(level=config.logging_level)
