@@ -8,16 +8,21 @@ from misc import *
 logger = logging.getLogger(__name__)
 
 class Welcome(greenlet):
-  def __init__(self, jid, xmpp):
-    '''jid is a full `JID`, xmpp is the bot itself'''
-    super().__init__()
-    self.switch(jid, xmpp)
+  def __init__(self, jid, xmpp, use_roster_nick=False):
+    '''
+    `jid` is a full `JID`, `xmpp` is the bot itself
 
-  def run(self, jid, s):
+    `use_roster_nick` indicates if roster nick (or hashed jid) is preferred
+    because the user has alreadly joined but not in database
+    '''
+    super().__init__()
+    self.switch(jid, xmpp, use_roster_nick)
+
+  def run(self, jid, s, use_roster_nick):
     s.send_message(jid, config.welcome)
     s.get_vcard(jid, self.switch)
     stanza = self.parent.switch()
-    if stanza.stanza_type == 'error':
+    if use_roster_nick or stanza.stanza_type == 'error':
       nick = s.get_name(jid)
       msg = _('Please choose a nick name by answering "%snick your_nick", '\
               'or it will be "%s".') % (

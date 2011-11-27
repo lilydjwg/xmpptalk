@@ -31,7 +31,7 @@ class UserMixin:
     # not in database
     if user is None:
       user = self.db_add_user(plainjid)
-      Welcome(self.current_jid, self)
+      Welcome(self.current_jid, self, use_roster_nick=True)
 
     self._cached_jid = self.current_jid
     self._cached_user = user
@@ -98,7 +98,11 @@ class UserMixin:
   @lru_cache()
   def user_get_nick(self, plainjid):
     u = connection.User.one({'jid': plainjid})
-    return u.nick
+    nick = u.nick
+    if nick is None:
+      #fallback
+      nick = self.get_name(plainjid)
+    return nick
 
   def nick_exists(self, nick):
     return connection.User.find_one({'nick': nick}, {}) is not None
