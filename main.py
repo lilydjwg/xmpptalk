@@ -250,7 +250,7 @@ def main():
 
   dq = deque(maxlen=3)
   dq.append(time.time())
-  while len(dq) < max_times or time.time() - dq[0] > 60:
+  while len(dq) < 3 or time.time() - dq[0] > 60:
     try:
       bot = ChatBot(JID(config.jid), settings)
       try:
