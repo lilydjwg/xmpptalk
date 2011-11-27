@@ -108,7 +108,7 @@ def do_online(self, arg):
   text.sort()
   n = len(text)
   text.insert(0, header)
-  text.append(N_('%d users in total', '%d user in total', n) % n)
+  text.append(N_('%d user in total', '%d users in total', n) % n)
   self.reply('\n'.join(text))
 
 def handle_command(self, msg):
