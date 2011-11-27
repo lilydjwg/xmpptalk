@@ -5,6 +5,8 @@ import sys
 import logging
 from collections import defaultdict
 from xml.etree import ElementTree as ET
+import time
+from collections import deque
 
 import pyxmpp2.exceptions
 from pyxmpp2.jid import JID
@@ -246,13 +248,19 @@ def main():
       logger = logging.getLogger(logger)
       logger.setLevel(max((logging.INFO, config.logging_level)))
 
-  bot = ChatBot(JID(config.jid), settings)
-  try:
-    bot.run()
-  except (KeyboardInterrupt, SystemExit):
-    pass
-  finally:
-    bot.disconnect()
+  dq = deque(maxlen=3)
+  dq.append(time.time())
+  while len(dq) < max_times or time.time() - dq[0] > 60:
+    try:
+      bot = ChatBot(JID(config.jid), settings)
+      try:
+        bot.run()
+      except (KeyboardInterrupt, SystemExit):
+        pass
+      finally:
+        bot.disconnect()
+    except:
+      dq.append(time.time())
 
 if __name__ == '__main__':
   main()
