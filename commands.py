@@ -71,7 +71,7 @@ def do_help(self, arg):
 def do_pm(self, arg):
   lex = Lex(arg)
   nick = lex.get_token()
-  msg = lex.instream.read()
+  msg = lex.instream.read().lstrip()
   if nick and msg:
     u = self.get_user_by_nick(nick)
     if u:
