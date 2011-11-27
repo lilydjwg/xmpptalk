@@ -258,7 +258,7 @@ def main():
   if config.logging_level > logging.DEBUG:
     restart_if_failed(runit, 3, args=(settings,))
   else:
-    runit()
+    runit(settings)
 
 if __name__ == '__main__':
   main()
