@@ -3,8 +3,6 @@
 
 import sys
 import logging
-import hashlib
-from functools import lru_cache
 from collections import defaultdict
 from xml.etree import ElementTree as ET
 
@@ -29,19 +27,6 @@ from user import UserMixin
 __version__ = 'pre-alpha'
 
 #TODO: subscription 部分的处理顺序
-
-@lru_cache()
-def hashjid(jid):
-  '''
-  return a representation of the jid with least conflict but still keep
-  confidential
-  '''
-  m = hashlib.md5()
-  bare = '%s/%s' % (jid.local, jid.domain)
-  m.update(bare.encode())
-  m.update(config.salt)
-  domain = m.hexdigest()[:6]
-  return '%s@%s' % (jid.local, domain)
 
 class ChatBot(MessageMixin, UserMixin,
               EventHandler, XMPPFeatureHandler):
