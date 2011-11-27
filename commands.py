@@ -1,4 +1,5 @@
 from functools import wraps
+import logging
 
 from mongokit.schema_document import ValidationError
 
@@ -8,8 +9,9 @@ from misc import *
 command handling, should be called from messages.py
 '''
 
-# key is the command name, value is a (func, doc) pair
+# key is the command name, value is a (func, doc, flags) tuple
 __commands = {}
+logger = logging.getLogger(__name__)
 
 def command(name, doc, flags=PERM_USER):
   if name in __commands:
@@ -21,7 +23,7 @@ def command(name, doc, flags=PERM_USER):
         return func(self, arg)
       else:
         return False
-    __commands[name] = (innerwrap, doc)
+    __commands[name] = (innerwrap, doc, flags)
     return innerwrap
   return outerwrap
 
@@ -49,6 +51,20 @@ def do_nick(self, new):
       if u != bare:
         self.send_message(u, msg)
 
+  return True
+
+@command('help', _('display this help'))
+def do_help(self, arg):
+  help = []
+  for name, (__, doc, flags) in __commands.items():
+    if int(self.current_user.flag) & flags:
+      help.append((name, doc))
+  help.sort(key=lambda x: x[0])
+  prefix = self.current_user.prefix
+  text = [_('***command help***')]
+  for name, doc in help:
+    text.append('%s%s:\t%s' % (prefix, name, doc))
+  self.reply('\n'.join(text))
   return True
 
 def handle_command(self, msg):
