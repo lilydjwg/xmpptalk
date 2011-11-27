@@ -14,6 +14,10 @@ __commands = {}
 logger = logging.getLogger(__name__)
 
 def command(name, doc, flags=PERM_USER):
+  '''decorate and register a function that handles a command
+
+  return False if should be considered not handled
+  '''
   if name in __commands:
     raise ValueError('duplicate command %s' % name)
   def outerwrap(func):
@@ -33,13 +37,13 @@ def do_nick(self, new):
   if not new_nick:
     old_nick = self.current_user.nick
     self.reply(_('Your current nick is: %s') % old_nick)
-    return True
+    return
 
   try:
     old_nick = self.set_self_nick(new_nick)
   except (ValueError, ValidationError) as e:
     self.reply(_('Error: %s') % e)
-    return True
+    return
 
   bare = self.current_jid.bare()
   self.update_roster(bare, new_nick)
@@ -50,8 +54,6 @@ def do_nick(self, new):
     for u in self.get_online_users():
       if u != bare:
         self.send_message(u, msg)
-
-  return True
 
 @command('help', _('display this help'))
 def do_help(self, arg):
@@ -65,7 +67,6 @@ def do_help(self, arg):
   for name, doc in help:
     text.append('%s%s:\t%s' % (prefix, name, doc))
   self.reply('\n'.join(text))
-  return True
 
 @command('pm', _('send private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
 def do_pm(self, arg):
@@ -83,7 +84,6 @@ def do_pm(self, arg):
       self.reply(_('Nobody with the nick "%s" found.') % nick)
   else:
     self.reply(_("arguments error: please give the user's nick and the message you want to send"))
-  return True
 
 @command('online', _('show online user list; if argument given, only nicks with the argument will be shown'))
 def do_online(self, arg):
@@ -110,7 +110,6 @@ def do_online(self, arg):
   text.insert(0, header)
   text.append(N_('%d users in total', '%d user in total', n) % n)
   self.reply('\n'.join(text))
-  return True
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
@@ -134,7 +133,7 @@ def handle_command(self, msg):
 
   rest = len(cmds) == 2 and cmds[1] or ''
   if cmd in __commands:
-    if __commands[cmd][0](self, rest):
+    if __commands[cmd][0](self, rest) is not False:
       # we handled it
       return True
   self.reply(_('No such command found.'))
