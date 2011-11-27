@@ -1,4 +1,5 @@
 import re
+import io
 import unicodedata
 import hashlib
 from functools import lru_cache
@@ -51,3 +52,35 @@ def hashjid(jid):
   m.update(config.salt)
   domain = m.hexdigest()[:6]
   return '%s@%s' % (jid.local[:config.nick_maxwidth-7], domain)
+
+escape_map = {}
+
+class Lex:
+  def __init__(self, string):
+    self.instream = io.StringIO(string)
+
+  def get_token(self):
+    ins = self.instream
+    quote = None
+    token = ''
+    escaped = False
+    while True:
+      nextchar = ins.read(1)
+      if not nextchar: # stream end
+        return token
+      elif escaped:
+        token += escape_map.get(nextchar, nextchar)
+        escaped = False
+      elif nextchar == quote:
+        return token
+      elif nextchar in '\'"' and not quote:
+        quote = nextchar
+      elif nextchar == '\\':
+        escaped = True
+      elif nextchar.isspace():
+        if quote:
+          token += nextchar
+        elif token:
+          return token
+      else:
+        token += nextchar

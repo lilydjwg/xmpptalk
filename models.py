@@ -90,11 +90,12 @@ class User(Document):
     'unique': True,
   }, {
     'fields': 'nick',
-    # we can have a lot user without nicknames
+    # we can have a lot of users without nicknames
     'unique': False,
   }]
   default_values = {
     'flag': PERM_USER,
+    'allow_pm': True,
     'join_date': datetime.datetime.utcnow,
     'stop_until': datetime.datetime.utcnow,
     'mute_until': datetime.datetime.utcnow,

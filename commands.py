@@ -67,6 +67,24 @@ def do_help(self, arg):
   self.reply('\n'.join(text))
   return True
 
+@command('pm', _('send private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
+def do_pm(self, arg):
+  lex = Lex(arg)
+  nick = lex.get_token()
+  msg = lex.instream.read()
+  if nick and msg:
+    u = self.get_user_by_nick(nick)
+    if u:
+      if not u.allow_pm or str(self.current_jid.bare()) in u.badpeople:
+        self.reply(_('Sorry, %s does not accept private messages from you.') % nick)
+      else:
+        self.send_message(u.jid, _('_PM_ [%s] ') % self.current_user.nick + msg)
+    else:
+      self.reply(_('Nobody with the nick "%s" found.') % nick)
+  else:
+    self.reply(_("arguments error: please give the user's nick and the message you want to send"))
+  return True
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':

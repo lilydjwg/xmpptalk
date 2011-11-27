@@ -110,6 +110,9 @@ class UserMixin:
   def nick_exists(self, nick):
     return connection.User.find_one({'nick': nick}, {}) is not None
 
+  def get_user_by_nick(self, nick):
+    return connection.User.find_one({'nick': nick})
+
   def handle_userjoin(self, action):
     # TODO: 根据 action 区别处理
     plainjid = str(self.current_jid.bare())
