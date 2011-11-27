@@ -118,7 +118,7 @@ def validate_logtype(t):
   nick: nick change
   sys: system up/down
   '''
-  #TODO: use nick and sys
+  #TODO: use sys
   return t in ('msg', 'nick', 'sys')
 
 class Log(Document):
