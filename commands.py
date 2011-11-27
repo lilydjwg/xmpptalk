@@ -68,7 +68,7 @@ def do_help(self, arg):
     text.append('%s%s:\t%s' % (prefix, name, doc))
   self.reply('\n'.join(text))
 
-@command('pm', _('send private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
+@command('pm', _('send a private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
 def do_pm(self, arg):
   lex = Lex(arg)
   nick = lex.get_token()
