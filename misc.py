@@ -13,16 +13,32 @@ __version__ = 'pre-alpha'
 
 # for i18n support
 _ = lambda s: s
+N_ = lambda a, b, n: a if n == 1 else b
 
 # install to builtin namespace
 builtins.__version__ = __version__
 builtins._ = _
+builtins.N_ = N_
 
 PERM_USER = 1
 PERM_GPADMIN = 2
 PERM_SYSADMIN = 4
 
 re_jid = re.compile(r'[^@ ]+@(?:\w+\.)+\w{2,4}')
+
+AWAY    = _('离开')
+XAWAY   = _('离开')
+BUSY    = _('忙碌')
+ONLINE  = _('在线')
+CHAT    = _('和我说话吧')
+
+xmpp_show_map = {
+  '':     ONLINE,
+  'away': AWAY,
+  'dnd':  BUSY,
+  'xa':   XAWAY,
+  'chat': CHAT,
+}
 
 def width(s, ambiwidth=2):
   if ambiwidth == 2:

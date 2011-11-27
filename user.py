@@ -101,7 +101,7 @@ class UserMixin:
   @lru_cache()
   def user_get_nick(self, plainjid):
     u = connection.User.one({'jid': plainjid})
-    nick = u.nick
+    nick = u.nick if u else None
     if nick is None:
       #fallback
       nick = self.get_name(plainjid)

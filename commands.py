@@ -85,6 +85,33 @@ def do_pm(self, arg):
     self.reply(_("arguments error: please give the user's nick and the message you want to send"))
   return True
 
+@command('online', _('show online user list; if argument given, only nicks with the argument will be shown'))
+def do_online(self, arg):
+  header = _('online users list')
+  if arg:
+    header += _(' (with "%s" inbetween)') % arg
+  text = []
+
+  for u in self.get_online_users():
+    nick = self.user_get_nick(str(u))
+    if arg and nick.find(arg) == -1:
+      continue
+
+    st = self.get_xmpp_status(u)
+    line = '* ' + nick
+    if st['show']:
+      line += ' (%s)' % xmpp_show_map[st['show']]
+    if st['status']:
+      line += ' [%s]' % st['status']
+    text.append(line)
+
+  text.sort()
+  n = len(text)
+  text.insert(0, header)
+  text.append(N_('%d users in total', '%d user in total', n) % n)
+  self.reply('\n'.join(text))
+  return True
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':

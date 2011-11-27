@@ -126,6 +126,9 @@ class ChatBot(MessageMixin, UserMixin,
     logging.info('%d online buddies: %r', len(ret), ret)
     return ret
 
+  def get_xmpp_status(self, jid):
+    return sorted(self.presence[jid].values(), key=lambda x: x['priority'], reverse=True)[0]
+
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
     self.client.roster_client.update_item(jid, name, groups)
 
