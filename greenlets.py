@@ -25,7 +25,7 @@ class Welcome(greenlet):
       )
     else:
       nick = stanza.get_all_payload()[0].element.find('{vcard-temp}FN').text
-      while self.nick_exists(nick):
+      while s.nick_exists(nick):
         nick += '_'
       msg = _('Would you like to use "%s" as your nick, '\
               'or use "%snick your_nick" to choose another') % (
@@ -34,6 +34,3 @@ class Welcome(greenlet):
     s.send_message(jid, msg)
     s.set_user_nick(str(jid.bare()), nick, increase=False)
     logger.info('%s joined with nick %s', jid, nick)
-    # TODO: hook to `user_get_nick`
-    #       if the user's initial nick has been gotten, set `nick_changes` to
-    #       1 so that the next nick change will be broadcasted.

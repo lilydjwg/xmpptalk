@@ -69,11 +69,7 @@ class UserMixin:
     '''
     jid = str(self.current_jid.bare())
     user = self._set_user_nick(jid, nick)
-    if user['nick_changes'] == 0:
-      old_nick = None
-    else:
-      old_nick = user['nick']
-    return old_nick
+    return user['nick']
 
   def _set_user_nick(self, plainjid, nick, increase=True):
     '''
