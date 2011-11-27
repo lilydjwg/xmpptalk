@@ -27,6 +27,7 @@ def command(name, doc, flags=PERM_USER):
         return func(self, arg)
       else:
         return False
+    innerwrap.__doc__ = doc
     __commands[name] = (innerwrap, doc, flags)
     return innerwrap
   return outerwrap
