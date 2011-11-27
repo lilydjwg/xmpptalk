@@ -2,13 +2,20 @@ import re
 import unicodedata
 import hashlib
 from functools import lru_cache
+import builtins
 
 import config
 
 '''constants and simple functions'''
 
+__version__ = 'pre-alpha'
+
 # for i18n support
 _ = lambda s: s
+
+# install to builtin namespace
+builtins.__version__ = __version__
+builtins._ = _
 
 PERM_USER = 1
 PERM_GPADMIN = 2
@@ -44,5 +51,3 @@ def hashjid(jid):
   m.update(config.salt)
   domain = m.hexdigest()[:6]
   return '%s@%s' % (jid.local[:config.nick_maxwidth-7], domain)
-
-__all__ = list(globals().keys())

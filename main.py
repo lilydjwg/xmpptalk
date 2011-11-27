@@ -23,8 +23,7 @@ from pyxmpp2.iq import Iq
 import config
 from messages import MessageMixin
 from user import UserMixin
-
-__version__ = 'pre-alpha'
+from misc import *
 
 #TODO: subscription 部分的处理顺序
 
