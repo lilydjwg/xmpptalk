@@ -22,9 +22,10 @@ def validate_nick(nick):
   '''`nick` should be already stripped if you only allow spaces in between'''
   if not nick:
     raise ValidationError(_('no nickname provided'))
-  if len(nick) > config.nick_maxlen:
-    raise ValidationError(_('nickname too long (%d characters), max is %d') \
-                         % (len(nick), config.nick_maxlen))
+  l = width(nick)
+  if l > config.nick_maxwidth:
+    raise ValidationError(_('nickname too long (%d-character width), max is %d') \
+                         % (l, config.nick_maxwidth))
   for i in nick:
     cat = unicodedata.category(i)
     # Lt & Lm are special chars
