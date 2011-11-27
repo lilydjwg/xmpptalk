@@ -1,5 +1,6 @@
 import re
 import io
+import time
 import unicodedata
 import hashlib
 from functools import lru_cache
@@ -100,3 +101,22 @@ class Lex:
           return token
       else:
         token += nextchar
+def restart_if_failed(func, max_tries, args=(), kwargs={}, secs=60):
+  '''
+  re-run when some exception happens, until `max_tries` in `secs`
+  '''
+  import traceback
+  from collections import deque
+
+  dq = deque(maxlen=max_tries)
+  while True:
+    dq.append(time.time())
+    try:
+      func(*args, **kwargs)
+    except:
+      traceback.print_exc()
+      if len(dq) == max_tries and time.time() - dq[0] < secs:
+        break
+    else:
+      break
+

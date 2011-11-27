@@ -5,8 +5,6 @@ import sys
 import logging
 from collections import defaultdict
 from xml.etree import ElementTree as ET
-import time
-from collections import deque
 
 import pyxmpp2.exceptions
 from pyxmpp2.jid import JID
@@ -223,6 +221,15 @@ class ChatBot(MessageMixin, UserMixin,
     self.stanza_processor.set_response_handlers(q, callback, callback)
     self.send(q)
 
+def runit(settings):
+  bot = ChatBot(JID(config.jid), settings)
+  try:
+    bot.run()
+  except (KeyboardInterrupt, SystemExit):
+    pass
+  finally:
+    bot.disconnect()
+
 def main():
   logging.basicConfig(level=config.logging_level)
 
@@ -248,19 +255,10 @@ def main():
       logger = logging.getLogger(logger)
       logger.setLevel(max((logging.INFO, config.logging_level)))
 
-  dq = deque(maxlen=3)
-  dq.append(time.time())
-  while len(dq) < 3 or time.time() - dq[0] > 60:
-    try:
-      bot = ChatBot(JID(config.jid), settings)
-      try:
-        bot.run()
-      except (KeyboardInterrupt, SystemExit):
-        pass
-      finally:
-        bot.disconnect()
-    except:
-      dq.append(time.time())
+  if config.logging_level > logging.DEBUG:
+    restart_if_failed(runit, 3, args=(settings,))
+  else:
+    runit()
 
 if __name__ == '__main__':
   main()
