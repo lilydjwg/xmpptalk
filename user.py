@@ -81,7 +81,7 @@ class UserMixin:
     '''
     models.validate_nick(nick)
     if self.nick_exists(nick):
-      raise ValueError(_('duplicate nick name'))
+      raise ValueError(_('duplicate nick name: %s') % nick)
 
     self.user_get_nick.cache_clear()
     update = {
