@@ -60,7 +60,10 @@ class UserMixin:
     return the old nick or None
     This will reset the nick cache.
     '''
-    return self._set_user_nick(*args, **kwargs)['nick']
+    try:
+      return self._set_user_nick(*args, **kwargs)['nick']
+    except TypeError: #None
+      pass
 
   def set_self_nick(self, nick):
     '''
