@@ -18,6 +18,7 @@ from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
+from pyxmpp2.expdict import ExpiringDictionary
 from pyxmpp2.iq import Iq
 
 import config
@@ -39,6 +40,7 @@ class ChatBot(MessageMixin, UserMixin,
     version_provider = VersionProvider(settings)
     self.client = Client(jid, [self, version_provider], settings)
     self.presence = defaultdict(dict)
+    self.subscribes = ExpiringDictionary(default_timeout=5)
 
   def run(self):
     self.client.connect()
@@ -140,17 +142,22 @@ class ChatBot(MessageMixin, UserMixin,
   def handle_presence_subscribe(self, stanza):
     logging.info('%s subscribe', stanza.from_jid)
     sender = stanza.from_jid
-    if config.private and str(sender.bare()) != config.root:
+    bare = sender.bare()
+
+    if config.private and str(bare) != config.root:
       return stanza.make_deny_response()
 
     if not self.handle_userjoin_before():
       return stanza.make_deny_response()
 
     self.current_jid = sender
-    self.handle_userjoin(action=stanza.stanza_type)
+    # avoid repeated request
+    if bare not in self.subscribes:
+      self.handle_userjoin(action=stanza.stanza_type)
+      self.subscribes[bare] = True
 
     if stanza.stanza_type.endswith('ed'):
-      return True
+      return stanza.make_accept_response()
 
     presence = Presence(to_jid=stanza.from_jid.bare(),
                         stanza_type='subscribe')
@@ -170,7 +177,7 @@ class ChatBot(MessageMixin, UserMixin,
     self.handle_userleave(action=stanza.stanza_type)
 
     if stanza.stanza_type.endswith('ed'):
-      return True
+      return stanza.make_accept_response()
 
     presence = Presence(to_jid=stanza.from_jid.bare(),
                         stanza_type='unsubscribe')
