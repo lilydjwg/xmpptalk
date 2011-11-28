@@ -138,7 +138,7 @@ class ChatBot(MessageMixin, UserMixin,
 
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
-    logger.info('%s subscribe', stanza.from_jid)
+    logging.info('%s subscribe', stanza.from_jid)
     sender = stanza.from_jid
     if config.private and str(sender.bare()) != config.root:
       return stanza.make_deny_response()
@@ -159,12 +159,12 @@ class ChatBot(MessageMixin, UserMixin,
   @presence_stanza_handler('subscribed')
   def handle_presence_subscribed(self, stanza):
     # use the same function
-    logger.info('%s subscribed', stanza.from_jid)
+    logging.info('%s subscribed', stanza.from_jid)
     return self.handle_presence_subscribe(stanza)
 
   @presence_stanza_handler('unsubscribe')
   def handle_presence_unsubscribe(self, stanza):
-    logger.info('%s unsubscribe', stanza.from_jid)
+    logging.info('%s unsubscribe', stanza.from_jid)
     sender = stanza.from_jid
     self.current_jid = sender
     self.handle_userleave(action=stanza.stanza_type)
@@ -179,7 +179,7 @@ class ChatBot(MessageMixin, UserMixin,
   presence_stanza_handler('unsubscribed')
   def handle_presence_unsubscribed(self, stanza):
     # use the same function
-    logger.info('%s unsubscribe', stanza.from_jid)
+    logging.info('%s unsubscribe', stanza.from_jid)
     return self.handle_presence_unsubscribe(stanza)
 
   @presence_stanza_handler()
