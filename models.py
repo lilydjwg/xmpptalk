@@ -3,7 +3,7 @@ import datetime
 import unicodedata
 import logging
 
-from pymongo.errors import DuplicateKeyError
+from pymongo.errors import DuplicateKeyError, OperationFailure
 from mongokit import Connection
 from mongokit import Document as Doc
 from mongokit.schema_document import ValidationError
@@ -11,7 +11,7 @@ from mongokit.schema_document import ValidationError
 from misc import *
 import config
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def validate_jid(jid):
   if not re_jid.match(jid):
@@ -59,7 +59,7 @@ class Document(Doc):
           if isinstance(field, str):
             field = (field, 1)
           fields.append(field)
-      log.debug('Creating index for %s' % index['fields'])
+      logger.debug('Creating index for %s' % index['fields'])
       collection.ensure_index(fields, unique=unique, ttl=ttl)
       err = collection.database.command('getLastError')
       if err['err']:
@@ -152,5 +152,22 @@ class Log(Document):
     l.reverse()
     return l
 
-connection = Connection()
-connection.register([User, Log])
+def init_models():
+  global connection
+  logger.info('connecting to database...')
+  conn_args = getattr(config, 'connection', {})
+  connection = Connection(**conn_args)
+  logger.info('database connected')
+
+  if getattr(config, 'database_auth', None):
+    logger.info('authenticating...')
+    connection[config.database].authenticate(*config.database_auth)
+  try:
+    connection[config.database].collection_names()
+  except OperationFailure:
+    logger.error('database authentication failed')
+    raise
+  connection.register([User, Log])
+
+init_models()
+del init_models
