@@ -47,6 +47,19 @@ class MessageMixin:
     else:
       return False
 
+  def check_auth(self, msg):
+    bare = self.current_jid.bare()
+    subscribers = [x.jid for x in self.roster if x.subscription == 'both']
+    if bare in subscribers:
+      return True
+
+    if config.private:
+      self.reply(_('You are not allowed to send messages to this group until invited'))
+    else:
+      self.reply(_('You are currently not joined in this group, message ignored'))
+      self.xmpp_add_user(bare)
+    return False
+
   def handle_message(self, msg):
     for h in _message_handles:
       if h(self, msg):
@@ -76,6 +89,8 @@ class MessageMixin:
       return True
 
   message_handler_register(debug)
+
+  message_handler_register(check_auth)
   message_handler_register(pingpong)
   message_handler_register(give_help)
   message_handler_register(command)

@@ -49,6 +49,8 @@ class UserMixin:
     '''
     u = connection.User()
     u.jid = plainjid
+    if plainjid == config.root:
+      u.flag = PERM_USER | PERM_GPADMIN | PERM_SYSADMIN
     try:
       u.save()
     except pymongo.errors.DuplicateKeyError:

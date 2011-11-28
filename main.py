@@ -129,16 +129,23 @@ class ChatBot(MessageMixin, UserMixin,
   def get_xmpp_status(self, jid):
     return sorted(self.presence[jid].values(), key=lambda x: x['priority'], reverse=True)[0]
 
+  def xmpp_add_user(self, jid):
+    presence = Presence(to_jid=jid, stanza_type='subscribe')
+    self.send(presence)
+
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
     self.client.roster_client.update_item(jid, name, groups)
 
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
     sender = stanza.from_jid
-    self.current_jid = sender
+    if config.private and str(sender.bare()) != config.root:
+      return stanza.make_deny_response()
+
     if not self.handle_userjoin_before():
       return stanza.make_deny_response()
 
+    self.current_jid = sender
     self.handle_userjoin(action=stanza.stanza_type)
 
     if stanza.stanza_type.endswith('ed'):
