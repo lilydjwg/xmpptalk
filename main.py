@@ -26,8 +26,7 @@ from messages import MessageMixin
 from user import UserMixin
 from misc import *
 
-class ChatBot(MessageMixin, UserMixin,
-              EventHandler, XMPPFeatureHandler):
+class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   got_roster = False
 
   def __init__(self, jid, settings):

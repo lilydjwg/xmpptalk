@@ -152,6 +152,14 @@ class Log(Document):
     l.reverse()
     return l
 
+class Group(Document):
+  __collection__ = getattr(config, 'collection_group', 'group')
+  use_schemaless = True
+  structure = {
+    'about': str,
+    'status': str,
+  }
+
 def init_models():
   global connection
   logger.info('connecting to database...')
