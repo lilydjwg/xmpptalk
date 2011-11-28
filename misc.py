@@ -5,6 +5,7 @@ import unicodedata
 import hashlib
 from functools import lru_cache
 import builtins
+import datetime
 
 import config
 
@@ -40,6 +41,8 @@ xmpp_show_map = {
   'xa':   XAWAY,
   'chat': CHAT,
 }
+
+ONE_DAY = datetime.timedelta(hours=24)
 
 def width(s, ambiwidth=2):
   if ambiwidth == 2:

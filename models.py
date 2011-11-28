@@ -139,16 +139,16 @@ class Log(Document):
   }
   required_fields = ['type']
 
-  def find(self, n=20, in_=None):
+  def find(self, n, in_=None):
     '''
     find `n` recent messages in `in_` minutes in chronological order.
-    `n` defaults to 20, `in_` 60 (minutes).
     '''
-    if in_ is None:
-      in_ = 60
-    after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
-    l = list(super().find({'time': {'$gt': after}},
-                          sort=[('$natural', -1)]).limit(n))
+    if in_ is not None:
+      after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
+      query = {'time': {'$gt': after}}
+    else:
+      query = None
+    l = list(super().find(query).sort('$natural', -1).limit(n))
     l.reverse()
     return l
 

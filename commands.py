@@ -1,9 +1,11 @@
 from functools import wraps
 import logging
+import datetime
 
 from mongokit.schema_document import ValidationError
 
 import logdb
+from models import connection
 from misc import *
 
 '''
@@ -112,6 +114,42 @@ def do_online(self, arg):
   n = len(text)
   text.insert(0, header)
   text.append(N_('%d user in total', '%d users in total', n) % n)
+  self.reply('\n'.join(text))
+
+@command('old', _('show history in an hour; if argument given, it specifies the numbers of history entries to show'))
+def do_old(self, arg):
+  arg = arg.strip()
+  if arg:
+    try:
+      num = int(arg)
+      t = None
+    except ValueError:
+      self.reply(_('argument should be an integer'))
+      return
+  else:
+    num = 50
+    t = 60
+  q = connection.Log.find(num, t)
+  if q:
+    if datetime.datetime.utcnow() - q[0].time > ONE_DAY:
+      format = '%m-%d %H:%M:%S'
+    else:
+      format = '%H:%M:%S'
+  else:
+    self.reply(_('没有符合的聊天记录。'))
+    return
+
+  text = []
+  for l in q:
+    try:
+      m = '%s %s' % (
+        (l.time + config.timezoneoffset).strftime(format),
+        l.msg,
+      )
+    except AttributeError:
+      logger.warn('malformed log messages: %r', l)
+      continue
+    text.append(m)
   self.reply('\n'.join(text))
 
 def handle_command(self, msg):
