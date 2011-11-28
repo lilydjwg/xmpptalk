@@ -26,8 +26,6 @@ from messages import MessageMixin
 from user import UserMixin
 from misc import *
 
-#TODO: subscription 部分的处理顺序
-
 class ChatBot(MessageMixin, UserMixin,
               EventHandler, XMPPFeatureHandler):
   got_roster = False
@@ -150,9 +148,9 @@ class ChatBot(MessageMixin, UserMixin,
     if not self.handle_userjoin_before():
       return stanza.make_deny_response()
 
-    self.current_jid = sender
     # avoid repeated request
     if bare not in self.subscribes:
+      self.current_jid = sender
       self.handle_userjoin(action=stanza.stanza_type)
       self.subscribes[bare] = True
 
