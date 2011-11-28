@@ -27,7 +27,7 @@ class Welcome(greenlet):
       nick = s.get_name(jid)
     else:
       try:
-        nick = stanza.get_all_payload()[0].element.find('{vcard-temp}FN').text
+        nick = stanza.as_xml.find('{vcard-temp}vCard/{vcard-temp}FN').text
       except AttributeError: #None
         nick = s.get_name(jid)
 

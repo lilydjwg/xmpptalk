@@ -1,5 +1,6 @@
 import logging
 from functools import wraps
+import datetime
 
 import commands
 import config
@@ -64,18 +65,26 @@ class MessageMixin:
       self.xmpp_add_user(bare)
     return True
 
-  def handle_message(self, msg):
-    '''apply handlers'''
+  def handle_message(self, msg, timestamp=None):
+    '''apply handlers; timestamp indicates a delayed messages'''
     for h in _message_handles:
       if h(self, msg):
         break
     else:
-      self.dispatch_message(msg)
+      self.dispatch_message(msg, timestamp)
 
-  def dispatch_message(self, msg):
+  def dispatch_message(self, msg, timestamp=None):
     '''dispatch message to group members, also log the message in database'''
     curbare = self.current_jid.bare()
     s = '[%s] ' % self.user_get_nick(str(curbare)) + msg
+
+    if timestamp:
+      dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
+      interval = datetime.datetime.utcnow() - dt
+      if interval.days == 0:
+        dt += config.timezoneoffset
+        s = '(%s) ' % dt.strftime('%H:%M:%S') + s
+
     logdb.logmsg(self.current_jid, s)
     for u in self.get_online_users():
       if u != curbare:

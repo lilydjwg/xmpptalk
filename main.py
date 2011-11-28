@@ -62,10 +62,11 @@ class ChatBot(MessageMixin, UserMixin,
     self.got_roster = True
     q = self.message_queue
     if q:
-      for sender, msg in q:
+      for sender, stanza in q:
         self.current_jid = sender
         self._cached_jid = None
-        self.handle_message(msg)
+        timestamp = stanza.as_xml().find('{urn:xmpp:delay}delay').attrib['stamp']
+        self.handle_message(stanza.body, timestamp)
       self.message_queue = None
 
   @event_handler(RosterReceivedEvent)
@@ -88,7 +89,7 @@ class ChatBot(MessageMixin, UserMixin,
     if not self.got_roster:
       if not self.message_queue:
         self.message_queue = []
-      self.message_queue.append((sender, body))
+      self.message_queue.append((sender, stanza))
     else:
       self.handle_message(body)
 
