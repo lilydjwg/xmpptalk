@@ -26,9 +26,13 @@ class Welcome(greenlet):
     if use_roster_nick or stanza.stanza_type == 'error':
       nick = s.get_name(jid)
     else:
-      nick = stanza.get_all_payload()[0].element.find('{vcard-temp}FN').text
-      while s.nick_exists(nick):
-        nick += '_'
+      try:
+        nick = stanza.get_all_payload()[0].element.find('{vcard-temp}FN').text
+      except AttributeError: #None
+        nick = s.get_name(jid)
+
+    while s.nick_exists(nick):
+      nick += '_'
     try:
       models.validate_nick(nick)
     except models.ValidationError:
