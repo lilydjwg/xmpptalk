@@ -58,8 +58,12 @@ class UserMixin:
     return u
 
   def set_user_nick(self, *args, **kwargs):
-    '''
-    return the old nick or None
+    '''set sender's nick in database
+
+    return the old `User` document, raise ValueError if duplicate
+    use `increase` tells if this is an auto action so that the counter should
+    not be increased
+
     This will reset the nick cache.
     '''
     try:
@@ -68,7 +72,8 @@ class UserMixin:
       pass
 
   def set_self_nick(self, nick):
-    '''
+    '''set sender's nick in database
+
     return the old nick or None
     This will reset the nick cache.
     '''
@@ -77,8 +82,12 @@ class UserMixin:
     return user['nick']
 
   def _set_user_nick(self, plainjid, nick, increase=True):
-    '''
+    '''set a user's nick in database
+
     return the old `User` document, raise ValueError if duplicate
+    `increase` tells if this is an auto action so that the counter should not
+    be increased
+
     This will reset the nick cache.
     '''
     models.validate_nick(nick)
@@ -102,6 +111,10 @@ class UserMixin:
 
   @lru_cache()
   def user_get_nick(self, plainjid):
+    '''get a user's nick
+    
+    The result is cached so if any of the users's nicks change, call `cache_clear()`.
+    Fallback to `self.get_name` if not found in database'''
     u = connection.User.one({'jid': plainjid})
     nick = u.nick if u else None
     if nick is None:
@@ -113,9 +126,13 @@ class UserMixin:
     return connection.User.find_one({'nick': nick}, {}) is not None
 
   def get_user_by_nick(self, nick):
+    '''returns a `User` object
+    
+    nick should not be `None` or an arbitrary one will be returned'''
     return connection.User.find_one({'nick': nick})
 
   def handle_userjoin(self, action):
+    '''add the user to database and say Welcome'''
     # TODO: 根据 action 区别处理
     plainjid = str(self.current_jid.bare())
 
@@ -126,9 +143,8 @@ class UserMixin:
     logger.info('%s joined', plainjid)
 
   def handle_userleave(self, action):
+    '''user has left, delete the user from database'''
     # TODO: 根据 action 区别处理
-    # for u in self.get_online_users():
-    #   self.send_message(u, config.leave % self.get_name(plainjid))
     ret = self.current_user.delete()
     self._cached_jid = None
 

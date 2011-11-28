@@ -10,14 +10,17 @@ logger = logging.getLogger(__name__)
 _message_handles = []
 
 def message_handler_register(func):
-  # use a register func instead of decorator so that it's easier to (re-)order
-  # the handlers
+  '''register a message handler; handlers accept two argument: the bot itself and the message string
+
+  use a register func instead of decorator so that it's easier to (re-)order
+  the handlers'''
   _message_handles.append(func)
 
 class MessageMixin:
   message_queue = None
 
   def pingpong(self, msg):
+    '''availability test'''
     if msg == 'ping':
       self.reply('pong')
       return True
@@ -48,6 +51,7 @@ class MessageMixin:
       return False
 
   def check_auth(self, msg):
+    '''check if the user has joined or not'''
     bare = self.current_jid.bare()
     subscribers = [x.jid for x in self.roster if x.subscription == 'both']
     if bare in subscribers:
@@ -61,6 +65,7 @@ class MessageMixin:
     return True
 
   def handle_message(self, msg):
+    '''apply handlers'''
     for h in _message_handles:
       if h(self, msg):
         break
@@ -68,6 +73,7 @@ class MessageMixin:
       self.dispatch_message(msg)
 
   def dispatch_message(self, msg):
+    '''dispatch message to group members, also log the message in database'''
     curbare = self.current_jid.bare()
     s = '[%s] ' % self.user_get_nick(str(curbare)) + msg
     logdb.logmsg(self.current_jid, s)
@@ -77,6 +83,7 @@ class MessageMixin:
     return True
 
   def debug(self, msg):
+    '''debug things; unregister in production!'''
     if msg == 'cli':
       from cli import repl
       repl(locals(), 'cmd.txt')
