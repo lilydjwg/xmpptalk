@@ -97,6 +97,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     else:
       self.handle_message(body)
 
+    logging.info('done with new message')
     return True
 
   def send_message(self, receiver, msg):
