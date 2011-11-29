@@ -27,6 +27,7 @@ PERM_GPADMIN = 2
 PERM_SYSADMIN = 4
 
 re_jid = re.compile(r'[^@ ]+@(?:\w+\.)+\w{2,4}')
+logger = logging.getLogger(__name__)
 
 AWAY    = _('离开')
 XAWAY   = _('离开')
@@ -119,7 +120,7 @@ def restart_if_failed(func, max_tries, args=(), kwargs={}, secs=60):
     try:
       func(*args, **kwargs)
     except:
-      traceback.print_exc()
+      logger.error(traceback.format_exc())
       if len(dq) == max_tries and time.time() - dq[0] < secs:
         break
     else:

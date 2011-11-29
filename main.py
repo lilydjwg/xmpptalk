@@ -255,6 +255,7 @@ def runit(settings):
       # restart
       bot.disconnect()
       connection.disconnect()
+      logging.info('restart...')
       os.execv(sys.executable, [sys.executable] + sys.argv)
   except KeyboardInterrupt:
     pass
