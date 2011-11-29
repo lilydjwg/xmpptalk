@@ -185,4 +185,4 @@ def setup_logging():
   h.setFormatter(formatter)
   log.setLevel(level)
   log.addHandler(h)
-  logging.info('logging setup.')
+  logging.info('logging setup')

@@ -266,6 +266,8 @@ def main():
   gp = connection.Group.one()
   if gp and gp.status:
     st = gp.status
+  else:
+    st = None
   settings = dict(
     # deliver here even if the admin logs in
     initial_presence = Presence(priority=30, status=st),
