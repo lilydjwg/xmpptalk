@@ -2,6 +2,7 @@
 # vim:fileencoding=utf-8
 
 import sys
+import os
 import logging
 from collections import defaultdict
 from xml.etree import ElementTree as ET
@@ -249,7 +250,13 @@ def runit(settings):
   bot = ChatBot(JID(config.jid), settings)
   try:
     bot.run()
-  except (KeyboardInterrupt, SystemExit):
+  except SystemExit as e:
+    if e.code == 1:
+      # restart
+      bot.disconnect()
+      connection.disconnect()
+      os.execv(sys.executable, [sys.executable] + sys.argv)
+  except KeyboardInterrupt:
     pass
   finally:
     bot.disconnect()

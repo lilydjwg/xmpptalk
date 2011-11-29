@@ -99,6 +99,8 @@ class MessageMixin:
       return True
     elif msg == 'quit':
       raise SystemExit
+    elif msg == 'restart':
+      raise SystemExit(1)
     elif msg == 'cache_clear':
       self.user_get_nick.cache_clear()
       self.reply('ok.')
