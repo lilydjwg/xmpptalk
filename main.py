@@ -22,6 +22,7 @@ from pyxmpp2.expdict import ExpiringDictionary
 from pyxmpp2.iq import Iq
 
 import config
+from models import connection
 from messages import MessageMixin
 from user import UserMixin
 from misc import *
@@ -256,9 +257,12 @@ def runit(settings):
 def main():
   logging.basicConfig(level=config.logging_level)
 
+  gp = connection.Group.one()
+  if gp and gp.status:
+    st = gp.status
   settings = dict(
     # deliver here even if the admin logs in
-    initial_presence = Presence(priority=30),
+    initial_presence = Presence(priority=30, status=st),
     poll_interval = 3,
   )
   settings.update(config.settings)
