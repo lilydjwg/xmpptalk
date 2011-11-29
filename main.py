@@ -64,7 +64,10 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       for sender, stanza in q:
         self.current_jid = sender
         self._cached_jid = None
-        timestamp = stanza.as_xml().find('{urn:xmpp:delay}delay').attrib['stamp']
+        try:
+          timestamp = stanza.as_xml().find('{urn:xmpp:delay}delay').attrib['stamp']
+        except AttributeError:
+          timestamp = None
         self.handle_message(stanza.body, timestamp)
       self.message_queue = None
 
@@ -131,6 +134,10 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
   def xmpp_add_user(self, jid):
     presence = Presence(to_jid=jid, stanza_type='subscribe')
+    self.send(presence)
+
+  def xmpp_setstatus(self, status):
+    presence = Presence(status=status)
     self.send(presence)
 
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):

@@ -175,7 +175,7 @@ def init_models():
   except OperationFailure:
     logger.error('database authentication failed')
     raise
-  connection.register([User, Log])
+  connection.register([User, Log, Group])
 
 init_models()
 del init_models

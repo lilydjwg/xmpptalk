@@ -152,6 +152,23 @@ def do_old(self, arg):
     text.append(m)
   self.reply('\n'.join(text))
 
+@command('setstatus', _("get or set the talkbot's status message; use 'None' to clear"), PERM_GPADMIN)
+def do_setstatus(self, arg):
+  gp = connection.Group.one()
+  if gp is None:
+    gp = connection.Group()
+
+  if not arg:
+    self.reply(_('current group status: %s') % gp.status)
+    return
+
+  if arg == 'None':
+    arg = None
+  self.xmpp_setstatus(arg)
+  gp.status = arg
+  gp.save()
+  self.reply(_('ok.'))
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':
