@@ -251,7 +251,7 @@ def runit(settings):
   try:
     bot.run()
   except SystemExit as e:
-    if e.code == RESTART:
+    if e.code == CMD_RESTART:
       # restart
       bot.disconnect()
       connection.disconnect()

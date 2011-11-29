@@ -97,8 +97,6 @@ class MessageMixin:
       from cli import repl
       repl(locals(), 'cmd.txt')
       return True
-    elif msg == 'quit':
-      raise SystemExit
     elif msg == 'cache_clear':
       self.user_get_nick.cache_clear()
       self.reply('ok.')
