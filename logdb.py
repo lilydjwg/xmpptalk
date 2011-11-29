@@ -15,8 +15,8 @@ def logmsg(jid, msg):
   log(msg, 'msg', jid)
 
 def lognick(jid, msg):
-  '''log nick changes'''
-  log(msg, 'nick', jid)
+  '''log member changes'''
+  log(msg, 'member', jid)
 
 def logsys(msg):
   log(msg, 'sys')

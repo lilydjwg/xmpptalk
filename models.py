@@ -119,7 +119,7 @@ def validate_logtype(t):
   sys: system up/down
   '''
   #TODO: use sys
-  return t in ('msg', 'nick', 'sys')
+  return t in ('msg', 'member', 'sys')
 
 class Log(Document):
   __collection__ = getattr(config, 'collection_log', 'log')
