@@ -82,7 +82,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def message_received(self, stanza):
     if stanza.body is None:
       # She's typing
-      return False
+      return True
 
     sender = stanza.from_jid
     body = stanza.body

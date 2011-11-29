@@ -13,6 +13,9 @@ _message_handles = []
 def message_handler_register(func):
   '''register a message handler; handlers accept two argument: the bot itself and the message string
 
+  if the handler returns `True`, no further actions are done; if `str`, it's
+  the new message that will be handled later
+
   use a register func instead of decorator so that it's easier to (re-)order
   the handlers'''
   _message_handles.append(func)
@@ -65,11 +68,22 @@ class MessageMixin:
       self.xmpp_add_user(bare)
     return True
 
+  def remove_links(self, msg):
+    '''remove massive links cause by pasting'''
+    links = re_link.findall(msg)
+    if len(links) != 1:
+      msg = re_link.sub('', msg)
+    msg = re_link_js.sub('', msg)
+    return msg
+
   def handle_message(self, msg, timestamp=None):
     '''apply handlers; timestamp indicates a delayed messages'''
     for h in _message_handles:
-      if h(self, msg):
+      ret = h(self, msg)
+      if ret is True:
         break
+      elif isinstance(ret, str):
+        msg = ret
     else:
       msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
       self.dispatch_message(msg, timestamp)
@@ -110,3 +124,4 @@ class MessageMixin:
   message_handler_register(command)
   message_handler_register(filter_autoreply)
   message_handler_register(filter_otr)
+  message_handler_register(remove_links)

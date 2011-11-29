@@ -29,6 +29,8 @@ PERM_GPADMIN = 2
 PERM_SYSADMIN = 4
 
 re_jid = re.compile(r'[^@ ]+@(?:\w+\.)+\w{2,4}')
+re_link = re.compile(r' <https?://(?!i.imgur.com/)[^>]+>')
+re_link_js = re.compile(r' <javascript:[^>]+>')
 logger = logging.getLogger(__name__)
 
 AWAY    = _('离开')
