@@ -1,4 +1,7 @@
-* 流量统计
-* 命令使用统计
-* 同步数据库和 roster 中的昵称
-* 删除订阅不为 'both' 的 roster item
+* XMPP
+  * 同步数据库和 roster 中的昵称
+  * 删除订阅不为 'both' 的 roster item
+* 统计
+  * 流量统计
+  * 命令使用统计
+* logging profiling parser
