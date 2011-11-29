@@ -263,8 +263,6 @@ def runit(settings):
     bot.disconnect()
 
 def main():
-  logging.basicConfig(level=config.logging_level)
-
   gp = connection.Group.one()
   if gp and gp.status:
     st = gp.status
@@ -296,4 +294,5 @@ def main():
     runit(settings)
 
 if __name__ == '__main__':
+  setup_logging()
   main()

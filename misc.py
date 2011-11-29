@@ -6,6 +6,8 @@ import hashlib
 from functools import lru_cache
 import builtins
 import datetime
+import logging
+import curses
 
 import config
 
@@ -126,3 +128,61 @@ def restart_if_failed(func, max_tries, args=(), kwargs={}, secs=60):
     else:
       break
 
+class TornadoLogFormatter(logging.Formatter):
+  def __init__(self, color, *args, **kwargs):
+    super().__init__(self, *args, **kwargs)
+    self._color = color
+    if color:
+      curses.setupterm()
+      fg_color = str(curses.tigetstr("setaf") or
+                 curses.tigetstr("setf") or "", "ascii")
+      self._colors = {
+        logging.DEBUG: str(curses.tparm(fg_color, 4), # Blue
+                     "ascii"),
+        logging.INFO: str(curses.tparm(fg_color, 2), # Green
+                    "ascii"),
+        logging.WARNING: str(curses.tparm(fg_color, 3), # Yellow
+                     "ascii"),
+        logging.ERROR: str(curses.tparm(fg_color, 1), # Red
+                     "ascii"),
+      }
+      self._normal = str(curses.tigetstr("sgr0"), "ascii")
+
+  def format(self, record):
+    try:
+      record.message = record.getMessage()
+    except Exception as e:
+      record.message = "Bad message (%r): %r" % (e, record.__dict__)
+    record.asctime = time.strftime(
+      "%m-%d %H:%M:%S", self.converter(record.created))
+    record.asctime += '.%03d' % ((record.created % 1) * 1000)
+    prefix = '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d]' % \
+      record.__dict__
+    if self._color:
+      prefix = (self._colors.get(record.levelno, self._normal) +
+            prefix + self._normal)
+    formatted = prefix + " " + record.message
+    if record.exc_info:
+      if not record.exc_text:
+        record.exc_text = self.formatException(record.exc_info)
+    if record.exc_text:
+      formatted = formatted.rstrip() + "\n" + record.exc_text
+    return formatted.replace("\n", "\n    ")
+
+def setup_logging():
+  if not getattr(config, 'stderr_logging', True):
+    return
+
+  log = logging.getLogger()
+  h = logging.StreamHandler()
+
+  curses.setupterm()
+  color = getattr(config, 'color', False) or curses.tigetnum("colors") > 0
+  formatter = TornadoLogFormatter(color=color)
+
+  level = config.logging_level
+  h.setLevel(level)
+  h.setFormatter(formatter)
+  log.setLevel(level)
+  log.addHandler(h)
+  logging.info('logging setup.')
