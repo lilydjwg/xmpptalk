@@ -235,8 +235,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       jid = jid.bare()
     try:
       return self.roster[jid].name or hashjid(jid)
-    except (KeyError, TypeError):
-      # roster may be none
+    except KeyError:
       return hashjid(jid)
 
   def get_vcard(self, jid, callback):
