@@ -1,58 +1,49 @@
 #!/usr/bin/env python3
 # vim:fileencoding=utf-8
 
-'''
-An 'echo bot' – simple client that just confirms any presence subscriptions
-and echoes incoming messages.
-'''
-
 import sys
+import os
 import logging
-import hashlib
-import re
-from functools import lru_cache
 from collections import defaultdict
+from xml.etree import ElementTree as ET
 
+import pyxmpp2.exceptions
 from pyxmpp2.jid import JID
 from pyxmpp2.message import Message
 from pyxmpp2.presence import Presence
 from pyxmpp2.client import Client
 from pyxmpp2.settings import XMPPSettings
+from pyxmpp2.roster import RosterReceivedEvent
 from pyxmpp2.interfaces import EventHandler, event_handler, QUIT, NO_CHANGE
 from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
+from pyxmpp2.expdict import ExpiringDictionary
+from pyxmpp2.iq import Iq
 
+from misc import *
+# models makes use of logging when importting
+setup_logging()
 import config
+from models import connection
+from messages import MessageMixin
+from user import UserMixin
 
-re_help = re.compile(r'^.{,3}help\s*$')
-forbidden_msg = [
-  '你好，我现在有事情不在，一会再和您联系',
-]
+class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
+  got_roster = False
 
-@lru_cache()
-def hashjid(jid):
-  '''
-  return a representation of the jid with least conflict but still keep
-  confidential
-  '''
-  m = hashlib.md5()
-  bare = '%s/%s' % (jid.local, jid.domain)
-  m.update(bare.encode())
-  m.update(config.salt)
-  domain = m.hexdigest()[:6]
-  return '%s@%s' % (jid.local, domain)
-
-class ChatBot(EventHandler, XMPPFeatureHandler):
-  '''Echo Bot implementation.'''
-  def __init__(self, my_jid, settings):
+  def __init__(self, jid, settings):
+    if 'software_name' not in settings:
+      settings['software_name'] = self.__class__.__name__
+    if 'software_version' not in settings:
+      settings['software_version'] = __version__
     version_provider = VersionProvider(settings)
-    self.client = Client(my_jid, [self, version_provider], settings)
+    self.client = Client(jid, [self, version_provider], settings)
     self.presence = defaultdict(dict)
+    self.subscribes = ExpiringDictionary(default_timeout=5)
 
   def run(self):
-    '''Request client connection and start the main loop.'''
     self.client.connect()
     self.jid = self.client.jid
     self.client.run()
@@ -61,35 +52,152 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
     '''Request disconnection and let the main loop run for a 2 more
     seconds for graceful disconnection.'''
     self.client.disconnect()
-    self.client.run(timeout = 2)
+    while True:
+      try:
+        self.client.run(timeout = 2)
+      except pyxmpp2.exceptions.StreamParseError:
+        # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
+        pass
+      else:
+        break
+
+  def handle_early_message(self):
+    self.got_roster = True
+    q = self.message_queue
+    if q:
+      for sender, stanza in q:
+        self.current_jid = sender
+        self._cached_jid = None
+        try:
+          timestamp = stanza.as_xml().find('{urn:xmpp:delay}delay').attrib['stamp']
+        except AttributeError:
+          timestamp = None
+        self.handle_message(stanza.body, timestamp)
+      self.message_queue = None
+
+  @event_handler(RosterReceivedEvent)
+  def roster_received(self, stanze):
+    self.delayed_call(2, self.handle_early_message)
+    return True
+
+  @message_stanza_handler()
+  def message_received(self, stanza):
+    if stanza.body is None:
+      # She's typing
+      return True
+
+    sender = stanza.from_jid
+    body = stanza.body
+    self.current_jid = sender
+
+    logging.info('[%s] %s', sender, stanza.body)
+
+    if not self.got_roster:
+      if not self.message_queue:
+        self.message_queue = []
+      self.message_queue.append((sender, stanza))
+    else:
+      self.handle_message(body)
+
+    logging.info('done with new message')
+    return True
+
+  def send_message(self, receiver, msg):
+    m = Message(
+      stanza_type = 'chat',
+      from_jid = self.jid,
+      to_jid = receiver,
+      body = msg,
+    )
+    self.send(m)
+
+  def reply(self, msg):
+    self.send_message(self.current_jid, msg)
+
+  def send(self, stanza):
+    self.client.stream.send(stanza)
+
+  def delayed_call(self, seconds, func):
+    self.client.main_loop.delayed_call(seconds, func)
+
+  @event_handler(DisconnectedEvent)
+  def handle_disconnected(self, event):
+    return QUIT
+
+  @property
+  def roster(self):
+    return self.client.roster
+
+  def get_online_users(self):
+    ret = [x.jid for x in self.roster if x.subscription == 'both' and \
+           self.presence[x.jid]]
+    logging.info('%d online buddies: %r', len(ret), ret)
+    return ret
+
+  def get_xmpp_status(self, jid):
+    return sorted(self.presence[jid].values(), key=lambda x: x['priority'], reverse=True)[0]
+
+  def xmpp_add_user(self, jid):
+    presence = Presence(to_jid=jid, stanza_type='subscribe')
+    self.send(presence)
+
+  def xmpp_setstatus(self, status):
+    presence = Presence(status=status)
+    self.send(presence)
+
+  def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
+    self.client.roster_client.update_item(jid, name, groups)
 
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
-    logging.info('{0} requested presence subscription'
-                 .format(stanza.from_jid))
-    presence = Presence(to_jid = stanza.from_jid.bare(),
-                        stanza_type = 'subscribe')
+    logging.info('%s subscribe', stanza.from_jid)
+    sender = stanza.from_jid
+    bare = sender.bare()
+
+    if config.private and str(bare) != config.root:
+      return stanza.make_deny_response()
+
+    if not self.handle_userjoin_before():
+      return stanza.make_deny_response()
+
+    # avoid repeated request
+    if bare not in self.subscribes:
+      self.current_jid = sender
+      self.handle_userjoin(action=stanza.stanza_type)
+      self.subscribes[bare] = True
+
+    if stanza.stanza_type.endswith('ed'):
+      return stanza.make_accept_response()
+
+    presence = Presence(to_jid=stanza.from_jid.bare(),
+                        stanza_type='subscribe')
     return [stanza.make_accept_response(), presence]
 
   @presence_stanza_handler('subscribed')
   def handle_presence_subscribed(self, stanza):
-    logging.info('{0!r} accepted our subscription request'
-                 .format(stanza.from_jid))
-    return True
+    # use the same function
+    logging.info('%s subscribed', stanza.from_jid)
+    return self.handle_presence_subscribe(stanza)
 
   @presence_stanza_handler('unsubscribe')
   def handle_presence_unsubscribe(self, stanza):
-    logging.info('{0} canceled presence subscription'
-                 .format(stanza.from_jid))
-    presence = Presence(to_jid = stanza.from_jid.bare(),
-                        stanza_type = 'unsubscribe')
+    logging.info('%s unsubscribe', stanza.from_jid)
+    sender = stanza.from_jid
+    self.current_jid = sender
+    self.handle_userleave(action=stanza.stanza_type)
+
+    if stanza.stanza_type.endswith('ed'):
+      return stanza.make_accept_response()
+
+    presence = Presence(to_jid=stanza.from_jid.bare(),
+                        stanza_type='unsubscribe')
     return [stanza.make_accept_response(), presence]
 
-  @presence_stanza_handler('unsubscribed')
+  presence_stanza_handler('unsubscribed')
   def handle_presence_unsubscribed(self, stanza):
-    logging.info('{0!r} acknowledged our subscrption cancelation'
-                 .format(stanza.from_jid))
-    return True
+    # use the same function
+    logging.info('%s unsubscribe', stanza.from_jid)
+    return self.handle_presence_unsubscribe(stanza)
 
   @presence_stanza_handler()
   def handle_presence_available(self, stanza):
@@ -115,73 +223,10 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       pass
     return True
 
-  @message_stanza_handler()
-  def handle_message(self, stanza):
-    if stanza.body is None:
-      # She's typing
-      return True
-
-    sender = stanza.from_jid
-    bare = sender.bare()
-
-    logging.info('[%s] %s', bare, stanza.body)
-    if stanza.body == 'ping':
-      self.send_message(bare, 'pong')
-    elif stanza.body.startswith('?OTR'):
-      self.send_message(sender, '不支持 OTR 加密！')
-    elif stanza.body in forbidden_msg:
-      self.send_message(sender, '请不要自动回复！')
-    elif re_help.match(stanza.body):
-      self.send_message(sender, '当前唯一支持的命令是 -nick')
-    elif stanza.body.startswith('-nick '):
-      nick = stanza.body.split(None, 1)[1]
-      old_nick = self.get_name(sender)
-      self.update_roster(bare, nick)
-      self.send_message(sender, '昵称更新成功！')
-      msg = '%s 的昵称已更新为 %s。' % (old_nick, nick)
-      for u in self.get_online_users():
-        if u.jid != bare:
-          self.send_message(u.jid, msg)
-    else:
-      self.send_to_all(bare, stanza.body)
-    return True
-
-  @event_handler(DisconnectedEvent)
-  def handle_disconnected(self, event):
-    '''Quit the main loop upon disconnection.'''
-    return QUIT
-
   @event_handler()
   def handle_all(self, event):
     '''Log all events.'''
     logging.info('-- {0}'.format(event))
-
-  def get_online_users(self):
-    ret = [x for x in self.roster if x.subscription == 'both' and \
-           self.presence[x.jid]]
-    logging.info('%d online buddies: %r', len(ret), [x.jid for x in ret])
-    return ret
-
-  def send_to_all(self, sender, msg):
-    msg = '[%s] %s' % (self.get_name(sender), msg)
-    for u in self.get_online_users():
-      if u.jid != sender:
-        self.send_message(u.jid, msg)
-
-  def send_message(self, receiver, msg):
-    m = Message(
-      stanza_type = 'chat',
-      from_jid = self.jid,
-      to_jid = receiver,
-      body = msg,
-    )
-    self.send(m)
-
-  def send(self, stanza):
-    self.client.stream.send(stanza)
-
-  def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
-    self.client.roster_client.update_item(jid, name, groups)
 
   def get_name(self, jid):
     if isinstance(jid, str):
@@ -194,17 +239,43 @@ class ChatBot(EventHandler, XMPPFeatureHandler):
       # roster may be none
       return hashjid(jid)
 
-  @property
-  def roster(self):
-    return self.client.roster
+  def get_vcard(self, jid, callback):
+    '''callback is used as both result handler and error handler'''
+    q = Iq(
+      to_jid = jid,
+      stanza_type = 'get'
+    )
+    vc = ET.Element("{vcard-temp}vCard")
+    q.add_payload(vc)
+    self.stanza_processor.set_response_handlers(q, callback, callback)
+    self.send(q)
+
+def runit(settings):
+  bot = ChatBot(JID(config.jid), settings)
+  try:
+    bot.run()
+  except SystemExit as e:
+    if e.code == CMD_RESTART:
+      # restart
+      bot.disconnect()
+      connection.disconnect()
+      logging.info('restart...')
+      os.execv(sys.executable, [sys.executable] + sys.argv)
+  except KeyboardInterrupt:
+    pass
+  finally:
+    bot.disconnect()
 
 def main():
-  logging.basicConfig(level=config.logging_level)
-
+  gp = connection.Group.one()
+  if gp and gp.status:
+    st = gp.status
+  else:
+    st = None
   settings = dict(
-    software_name = 'ChatBot',
     # deliver here even if the admin logs in
-    initial_presence = Presence(priority=30),
+    initial_presence = Presence(priority=30, status=st),
+    poll_interval = 3,
   )
   settings.update(config.settings)
   settings = XMPPSettings(settings)
@@ -223,11 +294,10 @@ def main():
       logger = logging.getLogger(logger)
       logger.setLevel(max((logging.INFO, config.logging_level)))
 
-  bot = ChatBot(JID(config.jid), settings)
-  try:
-    bot.run()
-  except KeyboardInterrupt:
-    bot.disconnect()
+  if config.logging_level > logging.DEBUG:
+    restart_if_failed(runit, 3, args=(settings,))
+  else:
+    runit(settings)
 
 if __name__ == '__main__':
   main()
