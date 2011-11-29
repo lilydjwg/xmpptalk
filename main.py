@@ -22,11 +22,13 @@ from pyxmpp2.ext.version import VersionProvider
 from pyxmpp2.expdict import ExpiringDictionary
 from pyxmpp2.iq import Iq
 
+from misc import *
+# models makes use of logging when importting
+setup_logging()
 import config
 from models import connection
 from messages import MessageMixin
 from user import UserMixin
-from misc import *
 
 class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   got_roster = False
@@ -297,5 +299,4 @@ def main():
     runit(settings)
 
 if __name__ == '__main__':
-  setup_logging()
   main()
