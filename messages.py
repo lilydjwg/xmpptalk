@@ -71,24 +71,24 @@ class MessageMixin:
       if h(self, msg):
         break
     else:
+      msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
       self.dispatch_message(msg, timestamp)
 
   def dispatch_message(self, msg, timestamp=None):
     '''dispatch message to group members, also log the message in database'''
     curbare = self.current_jid.bare()
-    s = '[%s] ' % self.user_get_nick(str(curbare)) + msg
 
     if timestamp:
       dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
       interval = datetime.datetime.utcnow() - dt
       if interval.days == 0:
         dt += config.timezoneoffset
-        s = '(%s) ' % dt.strftime('%H:%M:%S') + s
+        msg = '(%msg) ' % dt.strftime('%H:%M:%S') + msg
 
-    logdb.logmsg(self.current_jid, s)
+    logdb.logmsg(self.current_jid, msg)
     for u in self.get_online_users():
       if u != curbare:
-        self.send_message(u, s)
+        self.send_message(u, msg)
     return True
 
   def debug(self, msg):
@@ -99,8 +99,6 @@ class MessageMixin:
       return True
     elif msg == 'quit':
       raise SystemExit
-    elif msg == 'restart':
-      raise SystemExit(1)
     elif msg == 'cache_clear':
       self.user_get_nick.cache_clear()
       self.reply('ok.')

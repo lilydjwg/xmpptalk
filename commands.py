@@ -169,6 +169,13 @@ def do_setstatus(self, arg):
   gp.save()
   self.reply(_('ok.'))
 
+@command('restart', _('restart the process'), PERM_SYSADMIN)
+def do_restart(self, arg):
+  self.reply(_('Restarting...'))
+  self.dispatch_message(_('Restarting by %s...') % \
+                        self.user_get_nick(str(self.current_jid.bare())))
+  raise SystemExit(RESTART)
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':

@@ -43,6 +43,7 @@ xmpp_show_map = {
 }
 
 ONE_DAY = datetime.timedelta(hours=24)
+RESTART = 1
 
 def width(s, ambiwidth=2):
   if ambiwidth == 2:
