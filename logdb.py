@@ -14,7 +14,7 @@ def log(msg, type, jid=None):
 def logmsg(jid, msg):
   log(msg, 'msg', jid)
 
-def lognick(jid, msg):
+def logmember(jid, msg):
   '''log member changes'''
   log(msg, 'member', jid)
 
