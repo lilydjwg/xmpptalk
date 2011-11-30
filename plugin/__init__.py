@@ -32,7 +32,7 @@ def autoreply(self, msg):
   return True
 
 def filter_autoreply(self, msg):
-  if msg in config.filtered_message:
+  if msg in filtered_message:
     self.reply('请不要设置自动回复。')
     return True
   else:
