@@ -172,8 +172,6 @@ def do_setstatus(self, arg):
 @command('restart', _('restart the process'), PERM_SYSADMIN)
 def do_restart(self, arg):
   self.reply(_('Restarting...'))
-  self.dispatch_message(_('Restarting by %s...') % \
-                        self.user_get_nick(str(self.current_jid.bare())))
   raise SystemExit(CMD_RESTART)
 
 @command('quit', _('quit the bot'), PERM_SYSADMIN)
