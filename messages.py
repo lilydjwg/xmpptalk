@@ -107,9 +107,10 @@ class MessageMixin:
 
   def autoreply(self, msg):
     #TODO: 作为独立的插件
+    msg = msg.strip()
     if msg in ('test', '测试'):
-      self.reply('ok.')
-    elif msg.find('有人') and len(msg) < 5:
+      self.reply(msg + ' ok.')
+    elif len(msg) < 8 and re_youren.match(msg):
       self.reply('查看在线用户请使用 %sonline 命令。' % self.current_user.prefix)
     else:
       return False
@@ -132,6 +133,7 @@ class MessageMixin:
   message_handler_register(pingpong)
   message_handler_register(give_help)
   message_handler_register(command)
+  message_handler_register(autoreply)
   message_handler_register(filter_autoreply)
   message_handler_register(filter_otr)
   message_handler_register(remove_links)
