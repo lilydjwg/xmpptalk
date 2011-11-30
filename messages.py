@@ -97,7 +97,7 @@ class MessageMixin:
       interval = datetime.datetime.utcnow() - dt
       if interval.days == 0:
         dt += config.timezoneoffset
-        msg = '(%msg) ' % dt.strftime('%H:%M:%S') + msg
+        msg = '(%s) ' % dt.strftime('%H:%M:%S') + msg
 
     logdb.logmsg(self.current_jid, msg)
     for u in self.get_online_users():
