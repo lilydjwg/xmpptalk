@@ -105,6 +105,16 @@ class MessageMixin:
         self.send_message(u, msg)
     return True
 
+  def autoreply(self, msg):
+    #TODO: 作为独立的插件
+    if msg in ('test', '测试'):
+      self.reply('ok.')
+    elif msg.find('有人') and len(msg) < 5:
+      self.reply('查看在线用户请使用 %sonline 命令。' % self.current_user.prefix)
+    else:
+      return False
+    return True
+
   def debug(self, msg):
     '''debug things; unregister in production!'''
     if msg == 'cli':
