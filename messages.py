@@ -40,13 +40,6 @@ class MessageMixin:
     else:
       return False
 
-  def filter_autoreply(self, msg):
-    if msg in config.filtered_message:
-      self.reply(_('请不要设置自动回复。'))
-      return True
-    else:
-      return False
-
   def give_help(self, msg):
     '''special handling for help messages'''
     if config.help_regex.match(msg):
@@ -67,14 +60,6 @@ class MessageMixin:
       self.reply(_('You are currently not joined in this group, message ignored'))
       self.xmpp_add_user(bare)
     return True
-
-  def remove_links(self, msg):
-    '''remove massive links cause by pasting'''
-    links = re_link.findall(msg)
-    if len(links) != 1:
-      msg = re_link.sub('', msg)
-    msg = re_link_js.sub('', msg)
-    return msg
 
   def handle_message(self, msg, timestamp=None):
     '''apply handlers; timestamp indicates a delayed messages'''
@@ -105,35 +90,17 @@ class MessageMixin:
         self.send_message(u, msg)
     return True
 
-  def autoreply(self, msg):
-    #TODO: 作为独立的插件
-    msg = msg.strip()
-    if msg in ('test', '测试'):
-      self.reply(msg + ' ok.')
-    elif len(msg) < 8 and re_youren.match(msg):
-      self.reply('查看在线用户请使用 %sonline 命令。' % self.current_user.prefix)
-    else:
-      return False
-    return True
-
-  def debug(self, msg):
-    '''debug things; unregister in production!'''
-    if msg == 'cli':
-      from cli import repl
-      repl(locals(), 'cmd.txt')
-      return True
-    elif msg == 'cache_clear':
-      self.user_get_nick.cache_clear()
-      self.reply('ok.')
-      return True
-
-  message_handler_register(debug)
-
+  # these are standard message plugins that normally desired
   message_handler_register(check_auth)
   message_handler_register(pingpong)
   message_handler_register(give_help)
   message_handler_register(command)
-  message_handler_register(autoreply)
-  message_handler_register(filter_autoreply)
   message_handler_register(filter_otr)
-  message_handler_register(remove_links)
+
+#TODO DOC: plugin documentation
+try:
+  from plugin import message_plugin
+  for h in message_plugin:
+    message_handler_register(h)
+except ImportError:
+  pass
