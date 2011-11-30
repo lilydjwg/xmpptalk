@@ -113,7 +113,7 @@ def do_online(self, arg):
   text.sort()
   n = len(text)
   text.insert(0, header)
-  text.append(N_('%d user in total', '%d users in total', n) % n)
+  text.append(N_('%d user in listed', '%d users listed', n) % n)
   self.reply('\n'.join(text))
 
 @command('old', _('show history in an hour; if argument given, it specifies the numbers of history entries to show'))
