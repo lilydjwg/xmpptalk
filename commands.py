@@ -97,13 +97,20 @@ def do_online(self, arg):
     header += _(' (with "%s" inbetween)') % arg
   text = []
 
+  now = datetime.datetime.utcnow()
   for u in self.get_online_users():
-    nick = self.user_get_nick(str(u))
+    user = connection.User.one(str(u))
+    nick = user.nick
     if arg and nick.find(arg) == -1:
       continue
 
-    st = self.get_xmpp_status(u)
     line = '* ' + nick
+    if u.mute_until > now:
+      line += _(' [muted]')
+    if u.stop_until > now:
+      line += _(' [stopped]')
+
+    st = self.get_xmpp_status(u)
     if st['show']:
       line += ' (%s)' % xmpp_show_map[st['show']]
     if st['status']:

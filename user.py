@@ -128,7 +128,7 @@ class UserMixin:
     
     The result is cached so if any of the users's nicks change, call `cache_clear()`.
     Fallback to `self.get_name` if not found in database'''
-    u = connection.User.one({'jid': plainjid})
+    u = connection.User.one({'jid': plainjid}, ['nick'])
     nick = u.nick if u else None
     if nick is None:
       #fallback
