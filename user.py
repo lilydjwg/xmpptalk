@@ -177,7 +177,14 @@ class UserMixin:
       to_jid=user.jid,
     )
     if seconds:
+      self.update_on_setstatus.add(user.jid)
+      # XXX: Too many handlers?
       self.delayed_call(seconds, self.user_update_presence, user.jid)
+    else:
+      try:
+        self.update_on_setstatus.remove(user.jid)
+      except KeyError:
+        pass
 
   def handle_userjoin(self, action=None):
     '''add the user to database and say Welcome'''
@@ -212,3 +219,5 @@ class UserMixin:
     self._cached_gp = connection.User.collection.find_and_modify(
       None, {'$set': {'status': value}}, new=True
     )
+    for jid in self.update_on_setstatus:
+      self.user_update_presence(jid)

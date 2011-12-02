@@ -56,7 +56,7 @@ def do_nick(self, new):
   if old_nick is not None:
     msg = _('%s 的昵称已更新为 %s。') % (old_nick, new_nick)
     logdb.logmember(self.current_jid, msg)
-    for u in self.get_online_users():
+    for u in self.get_message_receivers():
       if u != bare:
         self.send_message(u, msg)
 
