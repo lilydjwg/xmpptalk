@@ -50,13 +50,19 @@ def stat(file):
   data = defaultdict(int)
   count = defaultdict(int)
   it = log_entry(open(file))
+  tn = None
   while True:
     try:
-      type1, t1 = next(it)
+      if tn is not None:
+        type1, t1 = tn
+        tn = None
+      else:
+        type1, t1 = next(it)
+      type2, t2 = next(it)
       if type2 != 'done':
         #ignore it
+        tn = type2, t2
         continue
-      type2, t2 = next(it)
     except StopIteration:
       break
 
