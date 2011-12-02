@@ -190,7 +190,7 @@ def do_quit(self, arg):
                         self.user_get_nick(str(self.current_jid.bare())))
   raise SystemExit(CMD_QUIT)
 
-@command('stop', _('stop receiving messages for some time'))
+@command('stop', _('stop receiving messages for some time; useful units: m, h, d'))
 def do_stop(self, arg):
   arg = arg.strip()
   if not arg:
