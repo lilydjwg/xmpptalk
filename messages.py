@@ -28,6 +28,7 @@ class MessageMixin:
     '''availability test'''
     if msg == 'ping':
       self.reply('pong')
+      self.user_reset_stop()
       return True
     return False
 
@@ -72,6 +73,7 @@ class MessageMixin:
         msg = ret
     else:
       msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
+      self.user_reset_stop()
       self.dispatch_message(msg, timestamp)
 
   def dispatch_message(self, msg, timestamp=None):
@@ -80,7 +82,7 @@ class MessageMixin:
 
     if timestamp:
       dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
-      interval = datetime.datetime.utcnow() - dt
+      interval = NOW() - dt
       if interval.days == 0:
         dt += config.timezoneoffset
         msg = '(%s) ' % dt.strftime('%H:%M:%S') + msg
@@ -93,7 +95,7 @@ class MessageMixin:
 
   def get_message_receivers(self):
     allusers = {u['jid'] for u in connection.User.find({
-      'stop_until': {'$lte': datetime.datetime.utcnow()}
+      'stop_until': {'$lte': NOW()}
     }, ['jid'])}
     return [u for u in self.get_online_users() if str(u) in allusers]
 

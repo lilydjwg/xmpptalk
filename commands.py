@@ -97,7 +97,7 @@ def do_online(self, arg):
     header += _(' (with "%s" inbetween)') % arg
   text = []
 
-  now = datetime.datetime.utcnow()
+  now = NOW()
   for u in self.get_online_users():
     user = connection.User.one({'jid': str(u)})
     if user is None:
@@ -140,7 +140,7 @@ def do_old(self, arg):
     t = 60
   q = connection.Log.find(num, t)
   if q:
-    if datetime.datetime.utcnow() - q[0].time > ONE_DAY:
+    if NOW() - q[0].time > ONE_DAY:
       format = '%m-%d %H:%M:%S'
     else:
       format = '%H:%M:%S'
@@ -203,14 +203,19 @@ def do_stop(self, arg):
     self.reply(_("Sorry, I can't understand the time you specified."))
     return
 
-  dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=n)
+  if n == 0:
+    self.user_reset_stop()
+    self.reply(_('Ok, stop cancelled.'))
+    return
+
+  dt = NOW() + datetime.timedelta(seconds=n)
   # PyMongo again...
   connection.User.collection.update(
     {'jid': self.current_user.jid}, {'$set': {
       'stop_until': dt,
     }}
   )
-  self.reply(_('Ok, stop receiving messages until %s') % (
+  self.reply(_('Ok, stop receiving messages until %s.') % (
     (dt + config.timezoneoffset).strftime('%m-%d %H:%M:%S')
   ))
 

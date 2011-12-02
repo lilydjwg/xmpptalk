@@ -96,9 +96,9 @@ class User(Document):
   default_values = {
     'flag': PERM_USER,
     'allow_pm': True,
-    'join_date': datetime.datetime.utcnow,
-    'stop_until': datetime.datetime.utcnow,
-    'mute_until': datetime.datetime.utcnow,
+    'join_date': NOW,
+    'stop_until': NOW,
+    'mute_until': NOW,
     'msg_bytes': 0,
     'msg_count': 0,
     'nick_changes': 0,
@@ -135,7 +135,7 @@ class Log(Document):
     'type': validate_logtype,
   }
   default_values = {
-    'time': datetime.datetime.utcnow,
+    'time': NOW,
   }
   required_fields = ['type']
 
@@ -144,7 +144,7 @@ class Log(Document):
     find `n` recent messages in `in_` minutes in chronological order.
     '''
     if in_ is not None:
-      after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
+      after = NOW() - datetime.timedelta(minutes=in_)
       query = {'time': {'$gt': after}}
     else:
       query = None

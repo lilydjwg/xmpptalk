@@ -28,6 +28,8 @@ PERM_USER = 1
 PERM_GPADMIN = 2
 PERM_SYSADMIN = 4
 
+NOW = datetime.datetime.utcnow
+
 re_jid = re.compile(r'[^@ ]+@(?:\w+\.)+\w{2,4}')
 logger = logging.getLogger(__name__)
 
@@ -109,6 +111,7 @@ class Lex:
           return token
       else:
         token += nextchar
+
 def restart_if_failed(func, max_tries, args=(), kwargs={}, secs=60):
   '''
   re-run when some exception happens, until `max_tries` in `secs`

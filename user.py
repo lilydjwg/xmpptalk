@@ -98,7 +98,7 @@ class UserMixin:
     update = {
       '$set': {
         'nick': nick,
-        'nick_lastchange': datetime.datetime.utcnow(),
+        'nick_lastchange': NOW(),
       }
     }
     if increase:
@@ -130,6 +130,14 @@ class UserMixin:
     
     nick should not be `None` or an arbitrary one will be returned'''
     return connection.User.find_one({'nick': nick})
+
+  def user_reset_stop(self):
+    connection.User.collection.update(
+      {'jid': self.current_user.jid}, {'$set': {
+        'stop_until': NOW(),
+      }}
+    )
+    self.current_user.reload()
 
   def handle_userjoin(self, action):
     '''add the user to database and say Welcome'''
