@@ -13,8 +13,11 @@ filtered_message = (
 def debug(self, msg):
   '''debug things; unregister in production!'''
   if msg == 'cli':
+    import builtins
     from cli import repl
+    old_ = builtins._
     repl(locals(), 'cmd.txt')
+    builtins._ = old_
     return True
   elif msg == 'cache_clear':
     self.user_get_nick.cache_clear()
