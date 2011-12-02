@@ -85,7 +85,7 @@ class MessageMixin:
       interval = NOW() - dt
       if interval.days == 0:
         dt += config.timezoneoffset
-        msg = '(%s) ' % dt.strftime('%H:%M:%S') + msg
+        msg = '(%s) ' % dt.strftime(timeformat) + msg
 
     logdb.logmsg(self.current_jid, msg)
     for u in self.get_message_receivers():

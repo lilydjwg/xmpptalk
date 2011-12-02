@@ -141,9 +141,9 @@ def do_old(self, arg):
   q = connection.Log.find(num, t)
   if q:
     if NOW() - q[0].time > ONE_DAY:
-      format = '%m-%d %H:%M:%S'
+      format = dateformat
     else:
-      format = '%H:%M:%S'
+      format = timeformat
   else:
     self.reply(_('没有符合的聊天记录。'))
     return
@@ -212,9 +212,10 @@ def do_stop(self, arg):
       'stop_until': dt,
     }}
   )
-  self.reply(_('Ok, stop receiving messages until %s.') % (
-    (dt + config.timezoneoffset).strftime('%m-%d %H:%M:%S')
-  ))
+  self.current_user.reload()
+  t = (dt + config.timezoneoffset).strftime(dateformat)
+  self.reply(_('Ok, stop receiving messages until %s.') % t)
+  self.user_update_presence_inner(self.current_user)
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix

@@ -31,6 +31,8 @@ PERM_SYSADMIN = 4
 NOW = datetime.datetime.utcnow
 
 re_jid = re.compile(r'[^@ ]+@(?:\w+\.)+\w{2,4}')
+dateformat = _('%m-%d %H:%M:%S')
+timeformat = _('%H:%M:%S')
 logger = logging.getLogger(__name__)
 
 AWAY    = _('离开')

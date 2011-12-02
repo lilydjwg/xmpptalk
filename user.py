@@ -132,6 +132,9 @@ class UserMixin:
     nick should not be `None` or an arbitrary one will be returned'''
     return connection.User.find_one({'nick': nick})
 
+  def get_user_by_jid(self, jid):
+    return connection.User.one({'jid': jid})
+
   def user_reset_stop(self):
     connection.User.collection.update(
       {'jid': self.current_user.jid}, {'$set': {
@@ -139,7 +142,42 @@ class UserMixin:
       }}
     )
     self.current_user.reload()
-    self.xmpp_setstatus()
+    self.xmpp_setstatus(self.group_status, to_jid=self.current_jid)
+
+  def user_update_presence(self, plainjid):
+    u = self.get_user_by_jid(plainjid)
+    if u:
+      self.user_update_presence_inner(u)
+
+  def user_update_presence_inner(self, user):
+    now = NOW()
+    prefix = ''
+
+    sec1 = (user.mute_until - now).total_seconds()
+    if sec1 > 0:
+      t = (user.mute_until + config.timezoneoffset).strftime(dateformat)
+      prefix += _('(muted until %s) ') % t
+
+    sec2 = (user.stop_until - now).total_seconds()
+    if sec2 > 0:
+      t = (user.stop_until + config.timezoneoffset).strftime(dateformat)
+      prefix += _('(stopped until %s) ') % t
+
+    if sec1 > sec2 and sec1 > 0:
+      seconds = sec1
+    elif sec1 < sec2 and sec2 > 0:
+      seconds = sec2
+    else:
+      seconds = 0
+
+    logger.debug('%s: %d seconds to go; sec1 = %d, sec2 = %d',
+                 user.jid, seconds, sec1, sec2)
+    self.xmpp_setstatus(
+      prefix + self.group_status,
+      to_jid=user.jid,
+    )
+    if seconds:
+      self.delayed_call(seconds, self.user_update_presence, user.jid)
 
   def handle_userjoin(self, action):
     '''add the user to database and say Welcome'''

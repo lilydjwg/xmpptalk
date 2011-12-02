@@ -5,6 +5,7 @@ import sys
 import os
 import logging
 from collections import defaultdict
+from functools import partial
 from xml.etree import ElementTree as ET
 
 import pyxmpp2.exceptions
@@ -117,8 +118,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def send(self, stanza):
     self.client.stream.send(stanza)
 
-  def delayed_call(self, seconds, func):
-    self.client.main_loop.delayed_call(seconds, func)
+  def delayed_call(self, seconds, func, *args, **kwargs):
+    self.client.main_loop.delayed_call(seconds, partial(func, *args, **kwargs))
 
   @event_handler(DisconnectedEvent)
   def handle_disconnected(self, event):
@@ -142,6 +143,9 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.send(presence)
 
   def xmpp_setstatus(self, status, to_jid=None):
+    if isinstance(to_jid, str):
+      to_jid = JID(to_jid)
+
     presence = Presence(status=status, to_jid=to_jid)
     self.send(presence)
 
@@ -205,7 +209,11 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       return False
 
     jid = stanza.from_jid
-    self.presence[jid.bare()][jid.resource] = {
+    jid_bare = jid.bare()
+    if jid_bare not in self.presence:
+      self.user_update_presence(str(jid_bare))
+
+    self.presence[jid_bare][jid.resource] = {
       'show': stanza.show,
       'status': stanza.status,
       'priority': stanza.priority,
