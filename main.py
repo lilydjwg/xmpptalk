@@ -219,6 +219,11 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       'priority': stanza.priority,
     }
     logging.info('%s[%s]', jid, stanza.show or 'available')
+
+    if self.get_user_by_jid(str(jid_bare)) is None and jid_bare != self.jid:
+      self.current_jid = jid
+      self.handle_userjoin()
+
     return True
 
   @presence_stanza_handler('unavailable')

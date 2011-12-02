@@ -179,7 +179,7 @@ class UserMixin:
     if seconds:
       self.delayed_call(seconds, self.user_update_presence, user.jid)
 
-  def handle_userjoin(self, action):
+  def handle_userjoin(self, action=None):
     '''add the user to database and say Welcome'''
     # TODO: 根据 action 区别处理
     plainjid = str(self.current_jid.bare())
@@ -190,7 +190,7 @@ class UserMixin:
     Welcome(self.current_jid, self)
     logger.info('%s joined', plainjid)
 
-  def handle_userleave(self, action):
+  def handle_userleave(self, action=None):
     '''user has left, delete the user from database'''
     # TODO: 根据 action 区别处理
     self.current_user.delete()
