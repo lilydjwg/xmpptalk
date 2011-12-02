@@ -63,7 +63,7 @@ def stat(file):
     data[type1] += t2 - t1
     count[type1] += 1
 
-  for k in data.keys():
+  for k in sorted(data.keys()):
     print('%s: %dms, %d entries' % (k, data[k] // count[k], count[k]))
 
 if __name__ == '__main__':
