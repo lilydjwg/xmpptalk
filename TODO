@@ -5,3 +5,5 @@
   * 流量统计
   * 命令使用统计
 * logging profiling parser
+* 对于 muted 和 stopped 的用户，在状态中显示
+* -iam 命令：显示关于自己的一切
