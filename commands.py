@@ -99,15 +99,17 @@ def do_online(self, arg):
 
   now = datetime.datetime.utcnow()
   for u in self.get_online_users():
-    user = connection.User.one(str(u))
+    user = connection.User.one({'jid': str(u)})
+    if user is None:
+      continue
     nick = user.nick
     if arg and nick.find(arg) == -1:
       continue
 
     line = '* ' + nick
-    if u.mute_until > now:
+    if user.mute_until > now:
       line += _(' [muted]')
-    if u.stop_until > now:
+    if user.stop_until > now:
       line += _(' [stopped]')
 
     st = self.get_xmpp_status(u)
@@ -198,15 +200,17 @@ def do_stop(self, arg):
     n = parseTime(arg)
   except ValueError:
     self.reply(_("Sorry, I can't understand the time you specified."))
-    dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=n)
-    connection.User.update(
-      {'jid': self.current_user.jid}, {'$set': {
-        'stop_until': dt,
-      }}
-    )
-    self.reply(_('Ok, stop receiving messages until %s') % (
-      (dt + config.timezoneoffset).strftime('%m-%d %H:%M:%S')
-    )
+
+  dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=n)
+  # PyMongo again...
+  connection.User.collection.update(
+    {'jid': self.current_user.jid}, {'$set': {
+      'stop_until': dt,
+    }}
+  )
+  self.reply(_('Ok, stop receiving messages until %s') % (
+    (dt + config.timezoneoffset).strftime('%m-%d %H:%M:%S')
+  ))
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix

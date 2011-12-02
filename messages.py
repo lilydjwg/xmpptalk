@@ -92,7 +92,7 @@ class MessageMixin:
     return True
 
   def get_message_receivers(self):
-    return [u for u in self.get_online_users() if u.jid in self.allusers]
+    return [u for u in self.get_online_users() if str(u) in self.allusers]
 
   # these are standard message plugins that normally desired
   message_handler_register(check_auth)
