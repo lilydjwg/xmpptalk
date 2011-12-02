@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 class UserMixin:
   # _cached_jid: the corresponding jid cached in _cached_user
   _cached_jid = _cached_user = None
+  _cached_gp = None # Group or dict object
   current_jid = current_user = None
 
   @property
@@ -138,6 +139,7 @@ class UserMixin:
       }}
     )
     self.current_user.reload()
+    self.xmpp_setstatus()
 
   def handle_userjoin(self, action):
     '''add the user to database and say Welcome'''
@@ -157,3 +159,18 @@ class UserMixin:
     self._cached_jid = None
 
     logger.info('%s left', self.current_jid)
+
+  @property
+  def group_status(self):
+    gp = self._cached_gp or connection.Group.one()
+    if gp is None:
+      return None
+    else:
+      return gp['status']
+
+  @group_status.setter
+  def group_status(self, value):
+    # external change takes effect here
+    self._cached_gp = connection.User.collection.find_and_modify(
+      None, {'$set': {'status': value}}, new=True
+    )

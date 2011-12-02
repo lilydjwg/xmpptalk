@@ -141,8 +141,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     presence = Presence(to_jid=jid, stanza_type='subscribe')
     self.send(presence)
 
-  def xmpp_setstatus(self, status):
-    presence = Presence(status=status)
+  def xmpp_setstatus(self, status, to_jid=None):
+    presence = Presence(status=status, to_jid=to_jid)
     self.send(presence)
 
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):

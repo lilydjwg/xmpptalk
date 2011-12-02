@@ -163,19 +163,16 @@ def do_old(self, arg):
 
 @command('setstatus', _("get or set the talkbot's status message; use 'None' to clear"), PERM_GPADMIN)
 def do_setstatus(self, arg):
-  gp = connection.Group.one()
-  if gp is None:
-    gp = connection.Group()
+  st = self.group_status
 
   if not arg:
-    self.reply(_('current group status: %s') % gp.status)
+    self.reply(_('current group status: %s') % st)
     return
 
   if arg == 'None':
     arg = None
   self.xmpp_setstatus(arg)
-  gp.status = arg
-  gp.save()
+  self.group_status = arg
   self.reply(_('ok.'))
 
 @command('restart', _('restart the process'), PERM_SYSADMIN)
