@@ -9,7 +9,7 @@ from collections import defaultdict
 re_color = re.compile(r'\[[0-9;]*[mK]|')
 re_ping = re.compile(r'\[[^]]+\] ping$')
 re_test = re.compile(r'\[[^]]+\]\s+(test|测试)\s*$')
-re_cmd = re.compile(r'\[[^]]+\] (\w+)')
+re_cmd = re.compile(r'\[[^]]+\] -(\w+)')
 re_other_msg = re.compile(r'\[[^]]+\] ')
 
 year = time.gmtime().tm_year
