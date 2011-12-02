@@ -54,7 +54,9 @@ def stat(file):
     try:
       type1, t1 = next(it)
       type2, t2 = next(it)
-      assert type2 == 'done'
+      if type2 != 'done':
+        #ignore it
+        continue
     except StopIteration:
       break
 
