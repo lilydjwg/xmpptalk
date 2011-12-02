@@ -108,9 +108,9 @@ def do_online(self, arg):
 
     line = '* ' + nick
     if user.mute_until > now:
-      line += _(' [muted]')
+      line += _(' <muted>')
     if user.stop_until > now:
-      line += _(' [stopped]')
+      line += _(' <stopped>')
 
     st = self.get_xmpp_status(u)
     if st['show']:
@@ -195,11 +195,13 @@ def do_stop(self, arg):
   arg = arg.strip()
   if not arg:
     self.reply(_('How long will you stop receiving messages?'))
+    return
 
   try:
     n = parseTime(arg)
   except ValueError:
     self.reply(_("Sorry, I can't understand the time you specified."))
+    return
 
   dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=n)
   # PyMongo again...

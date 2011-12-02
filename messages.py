@@ -92,7 +92,10 @@ class MessageMixin:
     return True
 
   def get_message_receivers(self):
-    return [u for u in self.get_online_users() if str(u) in self.allusers]
+    allusers = {u['jid'] for u in connection.User.find({
+      'stop_until': {'$lte': datetime.datetime.utcnow()}
+    }, ['jid'])}
+    return [u for u in self.get_online_users() if str(u) in allusers]
 
   # these are standard message plugins that normally desired
   message_handler_register(check_auth)

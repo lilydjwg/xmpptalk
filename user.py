@@ -16,7 +16,6 @@ class UserMixin:
   # _cached_jid: the corresponding jid cached in _cached_user
   _cached_jid = _cached_user = None
   current_jid = current_user = None
-  _cached_allusers = None
 
   @property
   def current_user(self):
@@ -37,18 +36,6 @@ class UserMixin:
     self._cached_jid = self.current_jid
     self._cached_user = user
     return user
-
-  @property
-  def allusers(self):
-    if self._cached_allusers is not None:
-      return self._cached_allusers
-
-    allusers = {u['jid'] for u in connection.User.find({
-      'stop_until': datetime.datetime.utcnow()
-    }, ['jid'])}
-
-    self._cached_allusers = allusers
-    return allusers
 
   def handle_userjoin_before(self):
     # TODO do block check here
