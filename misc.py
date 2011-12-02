@@ -192,3 +192,24 @@ def setup_logging(hdl=None, color=False):
   _setup_logging()
   for log in config.additional_logging:
     _setup_logging(*log)
+
+re_timeParser = re.compile(r'^(\d+)([smhd])?$')
+TimeUnitMap = {
+  '':  1,
+  's': 1,
+  'm': 60,
+  'h': 3600,
+  'd': 86400,
+}
+def parseTime(s):
+  '''convert 3s，5d，1h，6m to seconds'''
+  m = re_timeParser.match(s)
+  if m is None:
+    raise ValueError('not a time')
+  n = int(m.group(1))
+  u = m.group(2)
+  if u is None:
+    return n
+  else:
+    return n * TimeUnitMap[u]
+

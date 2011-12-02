@@ -181,6 +181,26 @@ def do_quit(self, arg):
                         self.user_get_nick(str(self.current_jid.bare())))
   raise SystemExit(CMD_QUIT)
 
+@command('stop', _('stop receiving messages for some time'))
+def do_stop(self, arg):
+  arg = arg.strip()
+  if not arg:
+    self.reply(_('How long will you stop receiving messages?'))
+
+  try:
+    n = parseTime(arg)
+  except ValueError:
+    self.reply(_("Sorry, I can't understand the time you specified."))
+    dt = datetime.datetime.utcnow() + datetime.timedelta(seconds=n)
+    connection.User.update(
+      {'jid': self.current_user.jid}, {'$set': {
+        'stop_until': dt,
+      }}
+    )
+    self.reply(_('Ok, stop receiving messages until %s') % (
+      (dt + config.timezoneoffset).strftime('%m-%d %H:%M:%S')
+    )
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':

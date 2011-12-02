@@ -5,6 +5,7 @@ import datetime
 import commands
 import config
 import logdb
+from models import connection
 from misc import *
 
 logger = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ class MessageMixin:
 
   def dispatch_message(self, msg, timestamp=None):
     '''dispatch message to group members, also log the message in database'''
-    curbare = self.current_jid.bare()
+    jid = self.current_user.jid
 
     if timestamp:
       dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
@@ -85,10 +86,13 @@ class MessageMixin:
         msg = '(%s) ' % dt.strftime('%H:%M:%S') + msg
 
     logdb.logmsg(self.current_jid, msg)
-    for u in self.get_online_users():
-      if u != curbare:
+    for u in self.get_message_receivers():
+      if u != jid:
         self.send_message(u, msg)
     return True
+
+  def get_message_receivers(self):
+    return [u for u in self.get_online_users() if u.jid in self.allusers]
 
   # these are standard message plugins that normally desired
   message_handler_register(check_auth)

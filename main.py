@@ -56,7 +56,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       try:
         self.client.run(timeout = 2)
       except pyxmpp2.exceptions.StreamParseError:
-        # we raise Systemexit to exit, expat says XML_ERROR_FINISHED
+        # we raise SystemExit to exit, expat says XML_ERROR_FINISHED
         pass
       else:
         break
