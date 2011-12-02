@@ -53,10 +53,10 @@ def stat(file):
   while True:
     try:
       type1, t1 = next(it)
-      type2, t2 = next(it)
       if type2 != 'done':
         #ignore it
         continue
+      type2, t2 = next(it)
     except StopIteration:
       break
 

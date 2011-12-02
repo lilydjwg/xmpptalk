@@ -1,5 +1,4 @@
 * 在 presence 时判断用户数据是否已存入数据库
-* logging profiling parser
 * -iam 命令：显示关于自己的一切
 * 对于 muted 和 stopped 的用户，在状态中显示
 
