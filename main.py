@@ -47,6 +47,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def run(self):
     self.client.connect()
     self.jid = self.client.jid
+    logger.info('self jid: %r', self.jid)
     self.update_on_setstatus = set()
     self.client.run()
 
