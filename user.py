@@ -138,7 +138,6 @@ class UserMixin:
 
     self._cached_jid = None
     u = self.db_add_user(plainjid)
-    self._cached_allusers.add(plainjid)
 
     Welcome(self.current_jid, self)
     logger.info('%s joined', plainjid)
@@ -146,7 +145,6 @@ class UserMixin:
   def handle_userleave(self, action):
     '''user has left, delete the user from database'''
     # TODO: 根据 action 区别处理
-    self._cached_allusers.remove(self.current_user.jid)
     self.current_user.delete()
     self._cached_jid = None
 
