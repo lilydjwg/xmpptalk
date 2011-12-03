@@ -8,6 +8,7 @@ filtered_message = (
   "I'm currently away and will reply as soon as I return to eBuddy on my iPod touch",
   'This is an autoreply: I am currently not available. Please leave your message, and I will get back to you as soon as possible.',
   '你好，我现在有事情不在，一会再和您联系',
+  'A music messaging session has been requested. Please click the MM icon to accept.',
 )
 
 def debug(self, msg):
@@ -36,7 +37,7 @@ def autoreply(self, msg):
 
 def filter_autoreply(self, msg):
   if msg in filtered_message:
-    self.reply('请不要设置自动回复。')
+    self.reply('请不要设置自动回复或者其它自动发送的消息。')
     return True
   else:
     return False
