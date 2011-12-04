@@ -232,8 +232,13 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def handle_presence_unavailable(self, stanza):
     jid = stanza.from_jid
     try:
-      del self.presence[jid.bare()][jid.resource]
-      logging.info('%s[unavailable]', jid)
+      bare = jid.bare()
+      del self.presence[bare][jid.resource]
+      if self.presence[bare]:
+        logging.info('%s[unavailable] (partly)', jid)
+      else:
+        del self.presence[bare]
+        logging.info('%s[unavailable] (totally)', jid)
     except KeyError:
       pass
     return True

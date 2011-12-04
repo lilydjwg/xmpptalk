@@ -215,7 +215,7 @@ def do_stop(self, arg):
   self.current_user.reload()
   t = (dt + config.timezoneoffset).strftime(dateformat)
   self.reply(_('Ok, stop receiving messages until %s.') % t)
-  self.user_update_presence_inner(self.current_user)
+  self.user_update_presence(self.current_user)
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix

@@ -144,12 +144,12 @@ class UserMixin:
     self.current_user.reload()
     self.xmpp_setstatus(self.group_status, to_jid=self.current_jid)
 
-  def user_update_presence(self, plainjid):
-    u = self.get_user_by_jid(plainjid)
-    if u:
-      self.user_update_presence_inner(u)
+  def user_update_presence(self, user):
+    if isinstance(user, str):
+      user = self.get_user_by_jid(user)
+      if not user:
+        return
 
-  def user_update_presence_inner(self, user):
     now = NOW()
     prefix = ''
 
