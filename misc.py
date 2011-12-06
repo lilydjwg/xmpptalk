@@ -29,6 +29,7 @@ PERM_GPADMIN = 2
 PERM_SYSADMIN = 4
 
 NOW = datetime.datetime.utcnow
+DEFAULT_WELOME = _('Welcome to join this group!')
 
 re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
 dateformat = _('%m-%d %H:%M:%S')

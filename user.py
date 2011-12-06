@@ -225,9 +225,9 @@ class UserMixin:
   def welcome(self):
     gp = self._cached_gp or connection.Group.one()
     if gp is None:
-      return None
+      return DEFAULT_WELOME
     else:
-      return gp.get('welcome', None)
+      return gp.get('welcome', DEFAULT_WELOME)
 
   @welcome.setter
   def welcome(self, value):
