@@ -1,4 +1,10 @@
 import re
+import logging
+import urllib.request
+import urllib.parse
+import traceback
+
+logger = logging.getLogger(__name__)
 
 re_youren = re.compile(r'有人在?吗.{,3}')
 re_link = re.compile(r' <https?://(?!i.imgur.com/)[^>]+>')
@@ -52,4 +58,41 @@ def remove_links(self, msg):
 
 message_plugin = [
   debug, autoreply, filter_autoreply, remove_links
+]
+
+def post_code(msg):
+  '''将代码贴到网站，返回 URL 地址 或者 None（失败）'''
+  form_data = urllib.parse.urlencode({'vimcn': msg}).encode('utf-8')
+  try:
+    result = urllib.request.urlopen('http://p.vim-cn.com/', form_data)
+    return result.read().decode('utf-8').strip() + '/text' # 默认当作纯文本高亮
+  except:
+    logger.error(traceback.format_exc())
+    return
+
+def long_text_check(self, msg):
+  if len(msg) > 500 or msg.count('\n') > 5:
+    msgbody = post_code(msg)
+    if msgbody:
+      self.reply('内容过长，已贴至 %s 。' % msgbody)
+      firstline = ''
+      lineiter = iter(msg.split('\n'))
+      try:
+        while not firstline:
+          firstline = next(lineiter)
+      except StopIteration:
+        pass
+      if len(firstline) > 40:
+        firstline = firstline[:40]
+      msgbody += '\n' + firstline + '...'
+      return msgbody
+    else:
+      logger.warn('转贴代码失败，代码长度 %d' % len(msg))
+      self.reply('大段文本请贴 paste 网站。\n'
+                 '如 http://paste.ubuntu.org.cn/ http://slexy.org/\n'
+                 'PS: 自动转帖失败！')
+      return True
+
+message_plugin_early = [
+  long_text_check,
 ]
