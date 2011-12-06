@@ -33,6 +33,7 @@ from user import UserMixin
 
 class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   got_roster = False
+  message_queue = None
 
   def __init__(self, jid, settings):
     if 'software_name' not in settings:
