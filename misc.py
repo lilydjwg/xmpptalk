@@ -14,6 +14,7 @@ import config
 '''constants and simple functions'''
 
 __version__ = 'pre-alpha'
+__last_change__ = datetime.datetime.fromtimestamp(11323161414)
 
 # for i18n support
 _ = lambda s: s
