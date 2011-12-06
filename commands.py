@@ -220,11 +220,8 @@ def do_stop(self, arg):
 @command('about', _('about this software'))
 def do_about(self, arg):
   self.reply(_('lilytalk is a groupchat bot using XMPP\n'
-               'version: %s\n'
-               'last change: %s UTC\n'
-              ) % (
-                __version__, __last_change__.strftime(dateformat)
-            ))
+               'version: %s'
+              ) % __version__)
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
