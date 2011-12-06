@@ -175,6 +175,19 @@ def do_setstatus(self, arg):
   self.group_status = arg
   self.reply(_('ok.'))
 
+@command('setwelcome', _("get or set the talkbot's welcome message; use 'None' to clear"), PERM_GPADMIN)
+def do_setwelcome(self, arg):
+  wel = self.welcome
+
+  if not arg:
+    self.reply(_('current group welcome message: %s') % wel)
+    return
+
+  if arg == 'None':
+    arg = None
+  self.welcome = arg
+  self.reply(_('ok.'))
+
 @command('restart', _('restart the process'), PERM_SYSADMIN)
 def do_restart(self, arg):
   self.reply(_('Restarting...'))

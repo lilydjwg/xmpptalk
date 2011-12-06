@@ -156,7 +156,7 @@ class Group(Document):
   __collection__ = getattr(config, 'collection_group', 'group')
   use_schemaless = True
   structure = {
-    'about': str,
+    'welcome': str,
     'status': str,
   }
 

@@ -20,7 +20,7 @@ class Welcome(greenlet):
     self.switch(jid, xmpp, use_roster_nick)
 
   def run(self, jid, s, use_roster_nick):
-    s.send_message(jid, config.welcome)
+    s.send_message(jid, s.welcome)
     s.get_vcard(jid, self.switch)
     stanza = self.parent.switch()
     if use_roster_nick or stanza.stanza_type == 'error':

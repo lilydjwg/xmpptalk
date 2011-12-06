@@ -211,7 +211,7 @@ class UserMixin:
     if gp is None:
       return None
     else:
-      return gp['status']
+      return gp.get('status', None)
 
   @group_status.setter
   def group_status(self, value):
@@ -221,3 +221,17 @@ class UserMixin:
     )
     for jid in self.update_on_setstatus:
       self.user_update_presence(jid)
+  @property
+  def welcome(self):
+    gp = self._cached_gp or connection.Group.one()
+    if gp is None:
+      return None
+    else:
+      return gp.get('welcome', None)
+
+  @welcome.setter
+  def welcome(self, value):
+    # external change takes effect here
+    self._cached_gp = connection.User.collection.find_and_modify(
+      None, {'$set': {'welcome': value}}, new=True
+    )
