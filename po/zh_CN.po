@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-07 23:25+0800\n"
+"POT-Creation-Date: 2011-12-08 00:15+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -97,7 +97,7 @@ msgid ""
 "inbetween will be shown"
 msgstr "显示在线用户列表；如果给出了参数，只显示包含该参数的昵称"
 
-#: commands.py:151 commands.py:272
+#: commands.py:151
 msgid "online users list"
 msgstr "在线用户列表"
 
@@ -209,6 +209,10 @@ msgid ""
 "show all members; if argument given, only nicks with the argument inbetween "
 "will be shown"
 msgstr "显示所有成员；如果给出了参数，只显示包含该参数的昵称"
+
+#: commands.py:272
+msgid "all users list"
+msgstr "所有用户列表"
 
 #: commands.py:286
 msgid "show information about others"

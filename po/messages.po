@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-07 23:27+0800\n"
+"POT-Creation-Date: 2011-12-08 00:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgid ""
 "inbetween will be shown"
 msgstr ""
 
-#: commands.py:151 commands.py:272
+#: commands.py:151
 msgid "online users list"
 msgstr ""
 
@@ -207,6 +207,10 @@ msgstr ""
 msgid ""
 "show all members; if argument given, only nicks with the argument inbetween "
 "will be shown"
+msgstr ""
+
+#: commands.py:272
+msgid "all users list"
 msgstr ""
 
 #: commands.py:286

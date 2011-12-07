@@ -269,7 +269,7 @@ def do_stop(self, arg):
 
 @command('users', _('show all members; if argument given, only nicks with the argument inbetween will be shown'))
 def do_users(self, arg):
-  header = _('online users list')
+  header = _('all users list')
   if arg:
     header += _(' (with "%s" inbetween)') % arg
   text = []
