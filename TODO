@@ -1,6 +1,6 @@
-* -iam 命令：显示关于自己的一切
 * mute 命令
 * 对 Talk.v105 进行提示
+* msg_bytes 和 msg_count
 
 * XMPP
   * 同步数据库和 roster 中的昵称

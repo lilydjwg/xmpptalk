@@ -33,7 +33,9 @@ DEFAULT_WELOME = _('Welcome to join this group!')
 
 re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
 dateformat = _('%m-%d %H:%M:%S')
+longdateformat = _('%Y-%m-%d %H:%M:%S')
 timeformat = _('%H:%M:%S')
+until_date = lambda dt, now: dt.strftime(longdateformat) if dt > now else '(Never)'
 logger = logging.getLogger(__name__)
 
 AWAY    = _('离开')
@@ -53,6 +55,44 @@ xmpp_show_map = {
 ONE_DAY = datetime.timedelta(hours=24)
 CMD_QUIT = 1
 CMD_RESTART = 2
+
+def show_privileges(flag):
+  flag = int(flag)
+  ret = []
+  if flag & PERM_USER:
+    ret.append(_('user'))
+  if flag & PERM_GPADMIN:
+    ret.append(_('group_admin'))
+  if flag & PERM_SYSADMIN:
+    ret.append(_('sys_admin'))
+  return ', '.join(ret)
+
+def user_info(user, show_jid=True):
+  now = NOW()
+  ans= _(
+    'Nick: %s\n'
+    'Nick changed %d time(s), last at %s\n'
+    'Stopped Until: %s\n'
+    'Muted Until: %s\n'
+    'Command Prefix: %s\n'
+    'Joined At: %s\n'
+    'Receive PM: %s\n'
+    'Bad People: [%s]\n'
+    'Privileges: %s'
+  ) % (
+    user['nick'],
+    user['nick_changes'], user['nick_lastchange'].strftime(longdateformat),
+    until_date(user['stop_until'], now),
+    until_date(user['mute_until'], now),
+    user['prefix'],
+    user['join_date'].strftime(longdateformat),
+    user['allow_pm'],
+    ', '.join(user['badpeople']),
+    show_privileges(user['flag']),
+  )
+  if show_jid:
+    ans = 'JID: %s\n' % user['jid'] + ans
+  return ans
 
 def width(s, ambiwidth=2):
   if ambiwidth == 2:

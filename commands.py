@@ -236,6 +236,10 @@ def do_about(self, arg):
                'version: %s'
               ) % __version__)
 
+@command('iam', _('show information about yourself'))
+def do_iam(self, arg):
+  self.reply(user_info(self.current_user))
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':
