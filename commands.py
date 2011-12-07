@@ -104,7 +104,7 @@ def do_nick(self, new):
   self.reply(_('Your nick name has changed to "%s"!') % new_nick)
 
   if old_nick is not None:
-    msg = _('%s 的昵称已更新为 %s。') % (old_nick, new_nick)
+    msg = _('%s is now known as %s.') % (old_nick, new_nick)
     logdb.logmember(self.current_jid, msg)
     for u in self.get_message_receivers():
       if u != bare:

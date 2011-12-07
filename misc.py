@@ -15,14 +15,23 @@ import config
 
 __version__ = 'pre-alpha'
 
-# for i18n support
-_ = lambda s: s
-N_ = lambda a, b, n: a if n == 1 else b
-
 # install to builtin namespace
 builtins.__version__ = __version__
-builtins._ = _
-builtins.N_ = N_
+
+# for i18n support
+try:
+  import gettext
+  APP_NAME = "LilyTalk"
+  LOCALE_DIR = os.path.abspath("locale")
+  if not os.path.exists(LOCALE_DIR):
+      LOCALE_DIR = "/usr/share/locale"
+  gettext.bindtextdomain(APP_NAME, LOCALE_DIR)
+  gettext.textdomain(APP_NAME)
+  builtins._ = gettext.gettext
+  builtins.N_ = gettext.ngettext
+except ImportError:
+  builtins._ = lambda s: s
+  builtins.N_ = lambda a, b, n: a if n == 1 else b
 
 PERM_USER = 1
 PERM_GPADMIN = 2
