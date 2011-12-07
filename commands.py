@@ -35,6 +35,56 @@ def command(name, doc, flags=PERM_USER):
     return innerwrap
   return outerwrap
 
+def handle_command(self, msg):
+  # handle help message first; it is special since it need no prefix
+  if msg == 'help':
+    try:
+      __commands[msg][0](self, '')
+    except KeyError:
+      self.reply(_('No help yet.'))
+    return True
+
+  prefix = self.current_user.prefix
+  if not msg.startswith(prefix):
+    return False
+
+  cmds = msg[len(prefix):].split(None, 1)
+  try:
+    cmd = cmds[0]
+  except IndexError:
+    self.reply(_('No command specified.'))
+    return True
+
+  rest = len(cmds) == 2 and cmds[1] or ''
+  if cmd in __commands:
+    if __commands[cmd][0](self, rest) is not False:
+      # we handled it
+      return True
+  self.reply(_('No such command found.'))
+  return True
+@command('about', _('about this software'))
+def do_about(self, arg):
+  self.reply(_('lilytalk is a groupchat bot using XMPP\n'
+               'version: %s'
+              ) % __version__)
+
+@command('help', _('display this help'))
+def do_help(self, arg):
+  help = []
+  for name, (__, doc, flags) in __commands.items():
+    if int(self.current_user.flag) & flags:
+      help.append((name, doc))
+  help.sort(key=lambda x: x[0])
+  prefix = self.current_user.prefix
+  text = [_('***command help***')]
+  for name, doc in help:
+    text.append('%s%s:\t%s' % (prefix, name, doc))
+  self.reply('\n'.join(text))
+
+@command('iam', _('show information about yourself'))
+def do_iam(self, arg):
+  self.reply(user_info(self.current_user))
+
 @command('nick', _('change your nick; show your current nick if no new nick provided'))
 def do_nick(self, new):
   new_nick = new.strip()
@@ -59,71 +109,6 @@ def do_nick(self, new):
     for u in self.get_message_receivers():
       if u != bare:
         self.send_message(u, msg)
-
-@command('help', _('display this help'))
-def do_help(self, arg):
-  help = []
-  for name, (__, doc, flags) in __commands.items():
-    if int(self.current_user.flag) & flags:
-      help.append((name, doc))
-  help.sort(key=lambda x: x[0])
-  prefix = self.current_user.prefix
-  text = [_('***command help***')]
-  for name, doc in help:
-    text.append('%s%s:\t%s' % (prefix, name, doc))
-  self.reply('\n'.join(text))
-
-@command('pm', _('send a private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
-def do_pm(self, arg):
-  lex = Lex(arg)
-  nick = lex.get_token()
-  msg = lex.instream.read().lstrip()
-  if nick and msg:
-    u = self.get_user_by_nick(nick)
-    if u:
-      if not u.allow_pm or str(self.current_jid.bare()) in u.badpeople:
-        self.reply(_('Sorry, %s does not accept private messages from you.') % nick)
-      else:
-        self.send_message(u.jid, _('_PM_ [%s] ') % self.current_user.nick + msg)
-    else:
-      self.reply(_('Nobody with the nick "%s" found.') % nick)
-  else:
-    self.reply(_("arguments error: please give the user's nick and the message you want to send"))
-
-@command('online', _('show online user list; if argument given, only nicks with the argument inbetween will be shown'))
-def do_online(self, arg):
-  header = _('online users list')
-  if arg:
-    header += _(' (with "%s" inbetween)') % arg
-  text = []
-
-  now = NOW()
-  for u in self.get_online_users():
-    user = connection.User.one({'jid': str(u)})
-    if user is None:
-      continue
-    nick = user.nick
-    if arg and nick.find(arg) == -1:
-      continue
-
-    line = '* ' + nick
-    if user.mute_until > now:
-      line += _(' <muted>')
-    if user.stop_until > now:
-      line += _(' <stopped>')
-
-    st = self.get_xmpp_status(u)
-    if st['show']:
-      line += ' (%s)' % xmpp_show_map[st['show']]
-    if st['status']:
-      line += ' [%s]' % st['status']
-    text.append(line)
-
-  text.sort()
-  n = len(text)
-  text.insert(0, header)
-  text.append(N_('%d user in listed', '%d users listed', n) % n)
-  self.reply('\n'.join(text))
 
 @command('old', _('show history in an hour; if argument given, it specifies the numbers of history entries to show'))
 def do_old(self, arg):
@@ -161,6 +146,70 @@ def do_old(self, arg):
     text.append(m)
   self.reply('\n'.join(text))
 
+@command('online', _('show online user list; if argument given, only nicks with the argument inbetween will be shown'))
+def do_online(self, arg):
+  header = _('online users list')
+  if arg:
+    header += _(' (with "%s" inbetween)') % arg
+  text = []
+
+  now = NOW()
+  for u in self.get_online_users():
+    user = connection.User.one({'jid': str(u)})
+    if user is None:
+      continue
+    nick = user.nick
+    if arg and nick.find(arg) == -1:
+      continue
+
+    line = '* ' + nick
+    if user.mute_until > now:
+      line += _(' <muted>')
+    if user.stop_until > now:
+      line += _(' <stopped>')
+
+    st = self.get_xmpp_status(u)
+    if st['show']:
+      line += ' (%s)' % xmpp_show_map[st['show']]
+    if st['status']:
+      line += ' [%s]' % st['status']
+    text.append(line)
+
+  text.sort()
+  n = len(text)
+  text.insert(0, header)
+  text.append(N_('%d user in listed', '%d users listed', n) % n)
+  self.reply('\n'.join(text))
+
+@command('pm', _('send a private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
+def do_pm(self, arg):
+  lex = Lex(arg)
+  nick = lex.get_token()
+  msg = lex.instream.read().lstrip()
+  if nick and msg:
+    u = self.get_user_by_nick(nick)
+    if u:
+      if not u.allow_pm or str(self.current_jid.bare()) in u.badpeople:
+        self.reply(_('Sorry, %s does not accept private messages from you.') % nick)
+      else:
+        self.send_message(u.jid, _('_PM_ [%s] ') % self.current_user.nick + msg)
+    else:
+      self.reply(_('Nobody with the nick "%s" found.') % nick)
+  else:
+    self.reply(_("arguments error: please give the user's nick and the message you want to send"))
+
+@command('quit', _('quit the bot'), PERM_SYSADMIN)
+def do_quit(self, arg):
+  self.reply(_('Quitting...'))
+  self.dispatch_message(_('Quitting by %s...') % \
+                        self.user_get_nick(str(self.current_jid.bare())))
+  raise SystemExit(CMD_QUIT)
+
+@command('restart', _('restart the process'), PERM_SYSADMIN)
+def do_restart(self, arg):
+  self.reply(_('Restarting...'))
+  raise SystemExit(CMD_RESTART)
+
 @command('setstatus', _("get or set the talkbot's status message; use 'None' to clear"), PERM_GPADMIN)
 def do_setstatus(self, arg):
   st = self.group_status
@@ -187,18 +236,6 @@ def do_setwelcome(self, arg):
     arg = None
   self.welcome = arg
   self.reply(_('ok.'))
-
-@command('restart', _('restart the process'), PERM_SYSADMIN)
-def do_restart(self, arg):
-  self.reply(_('Restarting...'))
-  raise SystemExit(CMD_RESTART)
-
-@command('quit', _('quit the bot'), PERM_SYSADMIN)
-def do_quit(self, arg):
-  self.reply(_('Quitting...'))
-  self.dispatch_message(_('Quitting by %s...') % \
-                        self.user_get_nick(str(self.current_jid.bare())))
-  raise SystemExit(CMD_QUIT)
 
 @command('stop', _('stop receiving messages for some time; useful units: m, h, d'))
 def do_stop(self, arg):
@@ -230,26 +267,6 @@ def do_stop(self, arg):
   self.reply(_('Ok, stop receiving messages until %s.') % t)
   self.user_update_presence(self.current_user)
 
-@command('about', _('about this software'))
-def do_about(self, arg):
-  self.reply(_('lilytalk is a groupchat bot using XMPP\n'
-               'version: %s'
-              ) % __version__)
-
-@command('iam', _('show information about yourself'))
-def do_iam(self, arg):
-  self.reply(user_info(self.current_user))
-
-@command('whois', _('show information about others'))
-def do_whois(self, arg):
-  nick = arg.strip()
-  u = self.get_user_by_nick(nick)
-  if u:
-    show_jid = int(self.current_user.flag) & PERM_GPADMIN
-    self.reply(user_info(u, show_jid))
-  else:
-    self.reply(_('Nobody with the nick "%s" found.') % nick)
-
 @command('users', _('show all members; if argument given, only nicks with the argument inbetween will be shown'))
 def do_users(self, arg):
   header = _('online users list')
@@ -266,30 +283,13 @@ def do_users(self, arg):
   text.append(N_('%d user in listed', '%d users listed', n) % n)
   self.reply('\n'.join(text))
 
-def handle_command(self, msg):
-  # handle help message first; it is special since it need no prefix
-  if msg == 'help':
-    try:
-      __commands[msg][0](self, '')
-    except KeyError:
-      self.reply(_('No help yet.'))
-    return True
+@command('whois', _('show information about others'))
+def do_whois(self, arg):
+  nick = arg.strip()
+  u = self.get_user_by_nick(nick)
+  if u:
+    show_jid = int(self.current_user.flag) & PERM_GPADMIN
+    self.reply(user_info(u, show_jid))
+  else:
+    self.reply(_('Nobody with the nick "%s" found.') % nick)
 
-  prefix = self.current_user.prefix
-  if not msg.startswith(prefix):
-    return False
-
-  cmds = msg[len(prefix):].split(None, 1)
-  try:
-    cmd = cmds[0]
-  except IndexError:
-    self.reply(_('No command specified.'))
-    return True
-
-  rest = len(cmds) == 2 and cmds[1] or ''
-  if cmd in __commands:
-    if __commands[cmd][0](self, rest) is not False:
-      # we handled it
-      return True
-  self.reply(_('No such command found.'))
-  return True
