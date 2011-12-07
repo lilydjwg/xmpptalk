@@ -64,7 +64,7 @@ def handle_command(self, msg):
   return True
 @command('about', _('about this software'))
 def do_about(self, arg):
-  self.reply(_('lilytalk is a groupchat bot using XMPP\n'
+  self.reply(_('xmpptalk is a groupchat bot using XMPP\n'
                'version: %s'
               ) % __version__)
 
@@ -130,7 +130,7 @@ def do_old(self, arg):
     else:
       format = timeformat
   else:
-    self.reply(_('没有符合的聊天记录。'))
+    self.reply(_('No history entries match your criteria'))
     return
 
   text = []
@@ -224,7 +224,7 @@ def do_setstatus(self, arg):
   self.group_status = arg
   self.reply(_('ok.'))
 
-@command('setwelcome', _("get or set the talkbot's welcome message; use 'None' to clear"), PERM_GPADMIN)
+@command('setwelcome', _("get or set the group's welcome message; use 'None' to clear"), PERM_GPADMIN)
 def do_setwelcome(self, arg):
   wel = self.welcome
 

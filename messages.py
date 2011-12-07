@@ -45,7 +45,7 @@ def command(self, msg):
 
 def filter_otr(self, msg):
   if msg.startswith('?OTR'):
-    self.reply(_('你的客户端正在尝试使用 OTR 加密，但本群并不支持。'))
+    self.reply(_('Your client is trying OTR encryption, which is not supported by this group.'))
     return True
   else:
     return False

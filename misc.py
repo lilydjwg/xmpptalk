@@ -1,4 +1,5 @@
 import re
+import os
 import io
 import time
 import unicodedata
@@ -21,7 +22,7 @@ builtins.__version__ = __version__
 # for i18n support
 try:
   import gettext
-  APP_NAME = "LilyTalk"
+  APP_NAME = "xmpptalk"
   LOCALE_DIR = os.path.abspath("locale")
   if not os.path.exists(LOCALE_DIR):
       LOCALE_DIR = "/usr/share/locale"
@@ -47,11 +48,11 @@ timeformat = _('%H:%M:%S')
 until_date = lambda dt, now: dt.strftime(longdateformat) if dt > now else '(Never)'
 logger = logging.getLogger(__name__)
 
-AWAY    = _('离开')
-XAWAY   = _('离开')
-BUSY    = _('忙碌')
-ONLINE  = _('在线')
-CHAT    = _('和我说话吧')
+AWAY    = _('away')
+XAWAY   = _('away')
+BUSY    = _('dnd')
+ONLINE  = _('online')
+CHAT    = _('chatty')
 
 xmpp_show_map = {
   '':     ONLINE,

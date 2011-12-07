@@ -1,0 +1,326 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-12-07 23:27+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: commands.py:44
+msgid "No help yet."
+msgstr ""
+
+#: commands.py:55
+msgid "No command specified."
+msgstr ""
+
+#: commands.py:63
+msgid "No such command found."
+msgstr ""
+
+#: commands.py:65
+msgid "about this software"
+msgstr ""
+
+#: commands.py:67
+#, python-format
+msgid ""
+"xmpptalk is a groupchat bot using XMPP\n"
+"version: %s"
+msgstr ""
+
+#: commands.py:71
+msgid "display this help"
+msgstr ""
+
+#: commands.py:79
+msgid "***command help***"
+msgstr ""
+
+#: commands.py:84
+msgid "show information about yourself"
+msgstr ""
+
+#: commands.py:88
+msgid "change your nick; show your current nick if no new nick provided"
+msgstr ""
+
+#: commands.py:93
+#, python-format
+msgid "Your current nick is: %s"
+msgstr ""
+
+#: commands.py:99
+#, python-format
+msgid "Error: %s"
+msgstr ""
+
+#: commands.py:104
+#, python-format
+msgid "Your nick name has changed to \"%s\"!"
+msgstr ""
+
+#: commands.py:107
+#, python-format
+msgid "%s is now known as %s."
+msgstr ""
+
+#: commands.py:113
+msgid ""
+"show history in an hour; if argument given, it specifies the numbers of "
+"history entries to show"
+msgstr ""
+
+#: commands.py:121
+msgid "argument should be an integer"
+msgstr ""
+
+#: commands.py:133
+msgid "No history entries match your criteria"
+msgstr ""
+
+#: commands.py:149
+msgid ""
+"show online user list; if argument given, only nicks with the argument "
+"inbetween will be shown"
+msgstr ""
+
+#: commands.py:151 commands.py:272
+msgid "online users list"
+msgstr ""
+
+#: commands.py:153 commands.py:274
+#, python-format
+msgid " (with \"%s\" inbetween)"
+msgstr ""
+
+#: commands.py:167
+msgid " <muted>"
+msgstr ""
+
+#: commands.py:169
+msgid " <stopped>"
+msgstr ""
+
+#: commands.py:184
+msgid ""
+"send a private message to someone; need two arguments; spaces in nick should "
+"be escaped or quote the nick"
+msgstr ""
+
+#: commands.py:193
+#, python-format
+msgid "Sorry, %s does not accept private messages from you."
+msgstr ""
+
+#: commands.py:195
+#, python-format
+msgid "_PM_ [%s] "
+msgstr ""
+
+#: commands.py:197 commands.py:294
+#, python-format
+msgid "Nobody with the nick \"%s\" found."
+msgstr ""
+
+#: commands.py:199
+msgid ""
+"arguments error: please give the user's nick and the message you want to send"
+msgstr ""
+
+#: commands.py:201
+msgid "quit the bot"
+msgstr ""
+
+#: commands.py:203
+msgid "Quitting..."
+msgstr ""
+
+#: commands.py:204
+#, python-format
+msgid "Quitting by %s..."
+msgstr ""
+
+#: commands.py:208
+msgid "restart the process"
+msgstr ""
+
+#: commands.py:210
+msgid "Restarting..."
+msgstr ""
+
+#: commands.py:213
+msgid "get or set the talkbot's status message; use 'None' to clear"
+msgstr ""
+
+#: commands.py:218
+#, python-format
+msgid "current group status: %s"
+msgstr ""
+
+#: commands.py:225 commands.py:238
+msgid "ok."
+msgstr ""
+
+#: commands.py:227
+msgid "get or set the group's welcome message; use 'None' to clear"
+msgstr ""
+
+#: commands.py:232
+#, python-format
+msgid "current group welcome message: %s"
+msgstr ""
+
+#: commands.py:240
+msgid "stop receiving messages for some time; useful units: m, h, d"
+msgstr ""
+
+#: commands.py:244
+msgid "How long will you stop receiving messages?"
+msgstr ""
+
+#: commands.py:250
+msgid "Sorry, I can't understand the time you specified."
+msgstr ""
+
+#: commands.py:255
+msgid "Ok, stop cancelled."
+msgstr ""
+
+#: commands.py:267
+#, python-format
+msgid "Ok, stop receiving messages until %s."
+msgstr ""
+
+#: commands.py:270
+msgid ""
+"show all members; if argument given, only nicks with the argument inbetween "
+"will be shown"
+msgstr ""
+
+#: commands.py:286
+msgid "show information about others"
+msgstr ""
+
+#: greenlets.py:41
+#, python-format
+msgid ""
+"Would you like to use \"%s\" as your nick, or use \"%snick your_nick\" to "
+"choose another"
+msgstr ""
+
+#: messages.py:48
+msgid ""
+"Your client is trying OTR encryption, which is not supported by this group."
+msgstr ""
+
+#: messages.py:68
+msgid "You are not allowed to send messages to this group until invited"
+msgstr ""
+
+#: messages.py:70
+msgid "You are currently not joined in this group, message ignored"
+msgstr ""
+
+#: misc.py:42
+msgid "Welcome to join this group!"
+msgstr ""
+
+#: misc.py:45
+msgid "%m-%d %H:%M:%S"
+msgstr ""
+
+#: misc.py:46
+msgid "%Y-%m-%d %H:%M:%S"
+msgstr ""
+
+#: misc.py:47
+msgid "%H:%M:%S"
+msgstr ""
+
+#: misc.py:51 misc.py:52
+msgid "away"
+msgstr ""
+
+#: misc.py:53
+msgid "dnd"
+msgstr ""
+
+#: misc.py:54
+msgid "online"
+msgstr ""
+
+#: misc.py:55
+msgid "chatty"
+msgstr ""
+
+#: misc.py:73
+msgid "member"
+msgstr ""
+
+#: misc.py:75
+msgid "group_admin"
+msgstr ""
+
+#: misc.py:77
+msgid "sys_admin"
+msgstr ""
+
+#: misc.py:83
+#, python-format
+msgid ""
+"Nick: %s\n"
+"Nick changed %d time(s), last at %s\n"
+"Stopped Until: %s\n"
+"Muted Until: %s\n"
+"Command Prefix: %s\n"
+"Joined At: %s\n"
+"Receive PM: %s\n"
+"Bad People: [%s]\n"
+"Privileges: %s"
+msgstr ""
+
+#: models.py:18
+#, python-format
+msgid "wrong jid format: %s"
+msgstr ""
+
+#: models.py:24
+msgid "no nickname provided"
+msgstr ""
+
+#: models.py:27
+#, python-format
+msgid "nickname too long (%d-character width), max is %d"
+msgstr ""
+
+#: models.py:34
+#, python-format
+msgid "nickname `%s' contains disallowed character: '%c'"
+msgstr ""
+
+#: user.py:96
+#, python-format
+msgid "duplicate nick name: %s"
+msgstr ""
+
+#: user.py:159
+#, python-format
+msgid "(muted until %s) "
+msgstr ""
+
+#: user.py:164
+#, python-format
+msgid "(stopped until %s) "
+msgstr ""
