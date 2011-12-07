@@ -60,7 +60,7 @@ def show_privileges(flag):
   flag = int(flag)
   ret = []
   if flag & PERM_USER:
-    ret.append(_('user'))
+    ret.append(_('member'))
   if flag & PERM_GPADMIN:
     ret.append(_('group_admin'))
   if flag & PERM_SYSADMIN:

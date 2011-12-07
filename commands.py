@@ -90,7 +90,7 @@ def do_pm(self, arg):
   else:
     self.reply(_("arguments error: please give the user's nick and the message you want to send"))
 
-@command('online', _('show online user list; if argument given, only nicks with the argument will be shown'))
+@command('online', _('show online user list; if argument given, only nicks with the argument inbetween will be shown'))
 def do_online(self, arg):
   header = _('online users list')
   if arg:
@@ -249,6 +249,22 @@ def do_whois(self, arg):
     self.reply(user_info(u, show_jid))
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
+
+@command('users', _('show all members; if argument given, only nicks with the argument inbetween will be shown'))
+def do_users(self, arg):
+  header = _('online users list')
+  if arg:
+    header += _(' (with "%s" inbetween)') % arg
+  text = []
+
+  q = connection.User.find(None, ['nick'], sort=[('nick', 1)])
+  for u in q:
+    text.append('* %s' % u.nick)
+
+  n = len(text)
+  text.insert(0, header)
+  text.append(N_('%d user in listed', '%d users listed', n) % n)
+  self.reply('\n'.join(text))
 
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
