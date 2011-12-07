@@ -11,5 +11,5 @@ def setup_log_collection():
   #http://www.mongodb.org/display/DOCS/Capped+Collections
   db.create_collection(Log.__collection__, {
     'capped': True,
-    'size': getattr(config, 'log_size', 1048576),
+    'size': getattr(config, 'log_size', 524288),
   })
