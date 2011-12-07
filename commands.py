@@ -240,6 +240,16 @@ def do_about(self, arg):
 def do_iam(self, arg):
   self.reply(user_info(self.current_user))
 
+@command('whois', _('show information about others'))
+def do_whois(self, arg):
+  nick = arg.strip()
+  u = self.get_user_by_nick(nick)
+  if u:
+    show_jid = int(self.current_user.flag) & PERM_GPADMIN
+    self.reply(user_info(u, show_jid))
+  else:
+    self.reply(_('Nobody with the nick "%s" found.') % nick)
+
 def handle_command(self, msg):
   # handle help message first; it is special since it need no prefix
   if msg == 'help':
