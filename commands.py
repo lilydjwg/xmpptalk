@@ -178,7 +178,7 @@ def do_online(self, arg):
   text.sort()
   n = len(text)
   text.insert(0, header)
-  text.append(N_('%d user in listed', '%d users listed', n) % n)
+  text.append(N_('%d user listed', '%d users listed', n) % n)
   self.reply('\n'.join(text))
 
 @command('pm', _('send a private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
@@ -280,7 +280,7 @@ def do_users(self, arg):
 
   n = len(text)
   text.insert(0, header)
-  text.append(N_('%d user in listed', '%d users listed', n) % n)
+  text.append(N_('%d user listed', '%d users listed', n) % n)
   self.reply('\n'.join(text))
 
 @command('whois', _('show information about others'))

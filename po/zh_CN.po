@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-08 00:15+0800\n"
+"POT-Creation-Date: 2011-12-08 19:52+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -15,6 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #: commands.py:44
 msgid "No help yet."
@@ -113,6 +114,12 @@ msgstr " <已禁言>"
 #: commands.py:169
 msgid " <stopped>"
 msgstr " <已暂停>"
+
+#: commands.py:181 commands.py:283
+#, python-format
+msgid "%d user listed"
+msgid_plural "%d users listed"
+msgstr[0] "共列出 %d 位用户"
 
 #: commands.py:184
 msgid ""
