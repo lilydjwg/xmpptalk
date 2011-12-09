@@ -45,7 +45,7 @@ re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
 dateformat = _('%m-%d %H:%M:%S')
 longdateformat = _('%Y-%m-%d %H:%M:%S')
 timeformat = _('%H:%M:%S')
-until_date = lambda dt, now: dt.strftime(longdateformat) if dt > now else '(Never)'
+until_date = lambda dt, now: (dt + config.timezoneoffset).strftime(longdateformat) if dt > now else '(Never)'
 logger = logging.getLogger(__name__)
 
 AWAY    = _('away')
@@ -91,11 +91,11 @@ def user_info(user, show_jid=True):
     'Privileges: %s'
   ) % (
     user['nick'],
-    user['nick_changes'], user['nick_lastchange'].strftime(longdateformat),
+    user['nick_changes'], (user['nick_lastchange'] + config.timezoneoffset).strftime(longdateformat),
     until_date(user['stop_until'], now),
     until_date(user['mute_until'], now),
     user['prefix'],
-    user['join_date'].strftime(longdateformat),
+    (user['join_date'] + config.timezoneoffset).strftime(longdateformat),
     user['allow_pm'],
     ', '.join(user['badpeople']),
     show_privileges(user['flag']),
