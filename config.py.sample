@@ -1,0 +1,59 @@
+# vim:se ft=python:
+import re
+import datetime
+import logging
+
+# NOTE: search for "TODO" to config, and then remove the '.sample' suffix
+
+# TODO: your bot's JID
+jid = 'somebot@jabber.org/bot'
+private = False
+# TODO: your JID
+root = 'mail@example.com'
+trace = True
+# TODO: type a random string below
+salt = b'anything random is ok.' # used to encryt user's jid, keep this secret!
+logging_level = logging.INFO
+timezoneoffset = datetime.timedelta(hours=8)
+
+# TODO: select a database
+database = 'test'
+# connection = dict(
+#   host = 'localhost',
+#   port = 27017,
+# )
+# database_auth = ('user', 'pass')
+# collection_user = 'user'
+# collection_log = 'log'
+# collection_group = 'group'
+
+# 中文算两个英文字符宽度
+nick_maxwidth = 20
+nick_max_change = 0
+nick_allowed_symbol = '+-_@.™ '
+user_default_prefix = '-'
+# how much log we preserve; in bytes
+# about 6 entries per kibibytes
+# log_size = 524288 #default to 512KiB
+
+settings = dict(
+  # TODO: the password of your bot
+  password = 'password',
+  starttls = True,
+  tls_verify_peer = False,
+  # XEP-0092: Software Version xmlns="jabber:iq:version"
+  # software_name = 'ChatBot',
+  # software_version = 'pre-alpha',
+  # set this, or default will reveal your actual os
+  software_os = 'Linux',
+)
+
+help_regex = re.compile(r'^\W{,3}help\s*$')
+
+# logging to stderr, or setup one by yourself
+# stderr_logging = True
+
+additional_logging = [
+  # handler, use_color=False
+  # (logging.FileHandler('/home/lilydjwg/tmpfs/xmpp.log'), True)
+]
