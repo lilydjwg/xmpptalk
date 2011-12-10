@@ -82,6 +82,7 @@ def user_info(user, show_jid=True):
   ans= _(
     'Nick: %s\n'
     'Nick changed %d time(s), last at %s\n'
+    '%d message(s), %d characters in total.\n'
     'Stopped Until: %s\n'
     'Muted Until: %s\n'
     'Command Prefix: %s\n'
@@ -92,6 +93,7 @@ def user_info(user, show_jid=True):
   ) % (
     user['nick'],
     user['nick_changes'], (user['nick_lastchange'] + config.timezoneoffset).strftime(longdateformat),
+    user['msg_count'], user['msg_chars'],
     until_date(user['stop_until'], now),
     until_date(user['mute_until'], now),
     user['prefix'],

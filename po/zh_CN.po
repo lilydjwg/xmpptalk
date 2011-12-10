@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-08 19:52+0800\n"
+"POT-Creation-Date: 2011-12-10 18:13+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -294,6 +294,7 @@ msgstr "系统管理员"
 msgid ""
 "Nick: %s\n"
 "Nick changed %d time(s), last at %s\n"
+"%d message(s), %d characters in total.\n"
 "Stopped Until: %s\n"
 "Muted Until: %s\n"
 "Command Prefix: %s\n"
@@ -304,6 +305,7 @@ msgid ""
 msgstr ""
 "昵称: %s\n"
 "昵称更改了 %d 次，最后一次在 %s\n"
+"%d 条消息，共 %d 字符。\n"
 "暂停，直到: %s\n"
 "被禁言，直到: %s\n"
 "命令前缀: %s\n"
@@ -336,12 +338,12 @@ msgstr "昵称“%s”包含非法字符: “%c”"
 msgid "duplicate nick name: %s"
 msgstr "重复的昵称: %s"
 
-#: user.py:159
+#: user.py:168
 #, python-format
 msgid "(muted until %s) "
 msgstr "（在 %s 前被禁言）"
 
-#: user.py:164
+#: user.py:173
 #, python-format
 msgid "(stopped until %s) "
 msgstr "（在 %s 前暂停）"

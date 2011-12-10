@@ -81,8 +81,9 @@ class MessageMixin:
       elif isinstance(ret, str):
         msg = ret
     else:
+      self.user_update_msglog(msg)
       msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
-      self.user_reset_stop()
+      self.user_reset_stop() # self.current_user is reloaded here
       self.dispatch_message(msg, timestamp)
 
   def dispatch_message(self, msg, timestamp=None):

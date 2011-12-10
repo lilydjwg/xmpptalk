@@ -144,6 +144,15 @@ class UserMixin:
     self.current_user.reload()
     self.xmpp_setstatus(self.group_status, to_jid=self.current_jid)
 
+  def user_update_msglog(self, msg):
+    '''Note: This won't reload `self.current_user`'''
+    connection.User.collection.update(
+      {'jid': self.current_user.jid}, {'$inc': {
+        'msg_chars': len(msg),
+        'msg_count': 1,
+      }}
+    )
+
   def user_update_presence(self, user):
     if isinstance(user, str):
       user = self.get_user_by_jid(user)
