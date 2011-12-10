@@ -274,9 +274,10 @@ def do_users(self, arg):
     header += _(' (with "%s" inbetween)') % arg
   text = []
 
-  q = connection.User.find(None, ['nick'], sort=[('nick', 1)])
+  q = connection.User.find(None, ['nick', 'msg_chars', 'msg_count'],
+                           sort=[('msg_count', 1)])
   for u in q:
-    text.append('* %s' % u.nick)
+    text.append('* %(nick)s (N=%(msg_count)d, C=%(msg_chars)d)' % u)
 
   n = len(text)
   text.insert(0, header)
