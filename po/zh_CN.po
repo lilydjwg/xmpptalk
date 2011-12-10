@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-10 18:13+0800\n"
+"POT-Creation-Date: 2011-12-10 18:18+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -261,6 +261,10 @@ msgstr "%Y年%m月%d日 %H时%M分%S秒"
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
+#: misc.py:48
+msgid "(Never)"
+msgstr "(永不)"
+
 #: misc.py:51 misc.py:52
 msgid "away"
 msgstr "离开"
@@ -313,6 +317,14 @@ msgstr ""
 "接收私信: %s\n"
 "坏人: [%s]\n"
 "权限: %s"
+
+#: misc.py:101
+msgid "yes"
+msgstr "是"
+
+#: misc.py:101
+msgid "no"
+msgstr "否"
 
 #: models.py:18
 #, python-format
