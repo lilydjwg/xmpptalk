@@ -214,14 +214,16 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     jid = stanza.from_jid
     jid_bare = jid.bare()
     if jid_bare not in self.presence:
+      logging.info('%s[%s] (new)', jid, stanza.show or 'available')
       self.user_update_presence(str(jid_bare))
+    else:
+      logging.info('%s[%s]', jid, stanza.show or 'available')
 
     self.presence[jid_bare][jid.resource] = {
       'show': stanza.show,
       'status': stanza.status,
       'priority': stanza.priority,
     }
-    logging.info('%s[%s]', jid, stanza.show or 'available')
 
     if self.get_user_by_jid(str(jid_bare)) is None and jid_bare != self.jid:
       self.current_jid = jid
