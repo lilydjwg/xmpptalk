@@ -13,3 +13,7 @@ def setup_log_collection():
     'capped': True,
     'size': getattr(config, 'log_size', 524288),
   })
+
+if __name__ == '__main__':
+  setup_log_collection()
+  setup_log_collection()
