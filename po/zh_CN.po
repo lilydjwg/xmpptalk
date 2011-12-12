@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-12 21:38+0800\n"
+"POT-Creation-Date: 2011-12-12 21:47+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -114,6 +114,12 @@ msgstr " <已禁言>"
 #: commands.py:169
 msgid " <stopped>"
 msgstr " <已暂停>"
+
+#: commands.py:181 commands.py:285
+#, python-format
+msgid "%d user listed"
+msgid_plural "%d users listed"
+msgstr[0] "共列出 %d 位用户"
 
 #: commands.py:184
 msgid ""
@@ -325,7 +331,9 @@ msgstr "否"
 msgid ""
 "\n"
 "Online Resources: [%s]"
-msgstr "\n在线资源： [%s]"
+msgstr ""
+"\n"
+"在线资源： [%s]"
 
 #: models.py:18
 #, python-format
@@ -360,7 +368,3 @@ msgstr "（在 %s 前被禁言）"
 #, python-format
 msgid "(stopped until %s) "
 msgstr "（在 %s 前暂停）"
-
-#~ msgid "%d user listed"
-#~ msgid_plural "%d users listed"
-#~ msgstr[0] "共列出 %d 位用户"
