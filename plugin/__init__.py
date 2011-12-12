@@ -57,10 +57,6 @@ def remove_links(self, msg):
   msg = re_link_js.sub('', msg)
   return msg
 
-message_plugin = [
-  debug, autoreply, filter_autoreply, remove_links
-]
-
 def post_code(msg):
   '''将代码贴到网站，返回 URL 地址 或者 None（失败）'''
   form_data = urllib.parse.urlencode({'vimcn': msg}).encode('utf-8')
@@ -95,5 +91,9 @@ def long_text_check(self, msg):
       return True
 
 message_plugin_early = [
+]
+message_plugin = [
+  debug, autoreply, filter_autoreply,
   long_text_check,
+  remove_links,
 ]
