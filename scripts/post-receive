@@ -5,4 +5,4 @@ cd ../xmpptalk
 CUR_VER=$(git log -1 --format="%H")
 git pull
 git diff $CUR_VER..HEAD config.py.sample > diff
-patch config.py config.py.sample
+[ -s diff ] && patch config.py config.py.sample
