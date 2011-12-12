@@ -77,7 +77,7 @@ def show_privileges(flag):
     ret.append(_('sys_admin'))
   return ', '.join(ret)
 
-def user_info(user, show_jid=True):
+def user_info(user, presence, show_jid=True):
   now = NOW()
   ans= _(
     'Nick: %s\n'
@@ -102,6 +102,8 @@ def user_info(user, show_jid=True):
     ', '.join(user['badpeople']),
     show_privileges(user['flag']),
   )
+  if user['jid'] in presence:
+    ans += _('\nOnline Resources: [%s]') % ', '.join(presence[user['jid']].keys())
   if show_jid:
     ans = 'JID: %s\n' % user['jid'] + ans
   return ans

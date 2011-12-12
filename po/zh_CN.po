@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-10 18:18+0800\n"
+"POT-Creation-Date: 2011-12-12 21:38+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -115,12 +115,6 @@ msgstr " <已禁言>"
 msgid " <stopped>"
 msgstr " <已暂停>"
 
-#: commands.py:181 commands.py:283
-#, python-format
-msgid "%d user listed"
-msgid_plural "%d users listed"
-msgstr[0] "共列出 %d 位用户"
-
 #: commands.py:184
 msgid ""
 "send a private message to someone; need two arguments; spaces in nick should "
@@ -137,7 +131,7 @@ msgstr "抱歉，%s 不接受来自你的私信。"
 msgid "_PM_ [%s] "
 msgstr "_私信_ [%s] "
 
-#: commands.py:197 commands.py:294
+#: commands.py:197 commands.py:296
 #, python-format
 msgid "Nobody with the nick \"%s\" found."
 msgstr "没找到名叫“%s”的人。"
@@ -221,7 +215,7 @@ msgstr "显示所有成员；如果给出了参数，只显示包含该参数的
 msgid "all users list"
 msgstr "所有用户列表"
 
-#: commands.py:286
+#: commands.py:288
 msgid "show information about others"
 msgstr "显示关于其他人的信息"
 
@@ -326,6 +320,13 @@ msgstr "是"
 msgid "no"
 msgstr "否"
 
+#: misc.py:106
+#, python-format
+msgid ""
+"\n"
+"Online Resources: [%s]"
+msgstr "\n在线资源： [%s]"
+
 #: models.py:18
 #, python-format
 msgid "wrong jid format: %s"
@@ -359,3 +360,7 @@ msgstr "（在 %s 前被禁言）"
 #, python-format
 msgid "(stopped until %s) "
 msgstr "（在 %s 前暂停）"
+
+#~ msgid "%d user listed"
+#~ msgid_plural "%d users listed"
+#~ msgstr[0] "共列出 %d 位用户"

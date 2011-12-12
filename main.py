@@ -134,12 +134,12 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
   def get_online_users(self):
     ret = [x.jid for x in self.roster if x.subscription == 'both' and \
-           self.presence[x.jid]]
+           self.presence[str(x.jid)]]
     logging.info('%d online buddies: %r', len(ret), ret)
     return ret
 
   def get_xmpp_status(self, jid):
-    return sorted(self.presence[jid].values(), key=lambda x: x['priority'], reverse=True)[0]
+    return sorted(self.presence[str(jid)].values(), key=lambda x: x['priority'], reverse=True)[0]
 
   def xmpp_add_user(self, jid):
     presence = Presence(to_jid=jid, stanza_type='subscribe')
@@ -212,20 +212,20 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       return False
 
     jid = stanza.from_jid
-    jid_bare = jid.bare()
-    if jid_bare not in self.presence:
+    plainjid = str(jid.bare())
+    if plainjid not in self.presence:
       logging.info('%s[%s] (new)', jid, stanza.show or 'available')
-      self.user_update_presence(str(jid_bare))
+      self.user_update_presence(plainjid)
     else:
       logging.info('%s[%s]', jid, stanza.show or 'available')
 
-    self.presence[jid_bare][jid.resource] = {
+    self.presence[plainjid][jid.resource] = {
       'show': stanza.show,
       'status': stanza.status,
       'priority': stanza.priority,
     }
 
-    if self.get_user_by_jid(str(jid_bare)) is None and jid_bare != self.jid:
+    if self.get_user_by_jid(plainjid) is None and plainjid != str(self.jid):
       self.current_jid = jid
       self.handle_userjoin()
 
@@ -234,16 +234,16 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   @presence_stanza_handler('unavailable')
   def handle_presence_unavailable(self, stanza):
     jid = stanza.from_jid
-    bare = jid.bare()
-    if bare in self.presence:
+    plainjid = str(jid.bare())
+    if plainjid in self.presence:
       try:
-        del self.presence[bare][jid.resource]
+        del self.presence[plainjid][jid.resource]
       except KeyError:
         pass
-      if self.presence[bare]:
+      if self.presence[plainjid]:
         logging.info('%s[unavailable] (partly)', jid)
       else:
-        del self.presence[bare]
+        del self.presence[plainjid]
         logging.info('%s[unavailable] (totally)', jid)
     return True
 

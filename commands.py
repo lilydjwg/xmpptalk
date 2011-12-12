@@ -83,7 +83,7 @@ def do_help(self, arg):
 
 @command('iam', _('show information about yourself'))
 def do_iam(self, arg):
-  self.reply(user_info(self.current_user))
+  self.reply(user_info(self.current_user, self.presence))
 
 @command('nick', _('change your nick; show your current nick if no new nick provided'))
 def do_nick(self, new):
@@ -291,7 +291,7 @@ def do_whois(self, arg):
   u = self.get_user_by_nick(nick)
   if u:
     show_jid = int(self.current_user.flag) & PERM_GPADMIN
-    self.reply(user_info(u, show_jid))
+    self.reply(user_info(u, self.presence, show_jid))
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
