@@ -255,7 +255,11 @@ def do_stop(self, arg):
     self.reply(_('Ok, stop cancelled.'))
     return
 
-  dt = NOW() + datetime.timedelta(seconds=n)
+  try:
+    dt = NOW() + datetime.timedelta(seconds=n)
+  except OverflowError:
+    self.reply(_("Oops, it's too long."))
+    return
   # PyMongo again...
   connection.User.collection.update(
     {'jid': self.current_user.jid}, {'$set': {
