@@ -134,7 +134,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
   def get_online_users(self):
     ret = [x.jid for x in self.roster if x.subscription == 'both' and \
-           self.presence[str(x.jid)]]
+           str(x.jid) in self.presence]
     logging.info('%d online buddies: %r', len(ret), ret)
     return ret
 
