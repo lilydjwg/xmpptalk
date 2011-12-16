@@ -55,5 +55,5 @@ help_regex = re.compile(r'^\W{,3}help\s*$')
 
 additional_logging = [
   # handler, level, use_color=False
-  # (logging.FileHandler('xmpp.log'), logging.DEBUG, True)
+  # (logging.FileHandler('xmpp.log'), logging.DEBUG, True),
 ]
