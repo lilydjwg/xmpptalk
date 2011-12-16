@@ -243,7 +243,7 @@ def _setup_logging(hdl=None, level=config.logging_level, color=False):
 
   hdl.setLevel(level)
   hdl.setFormatter(formatter)
-  log.setLevel(level)
+  log.setLevel(logging.DEBUG)
   log.addHandler(hdl)
   logging.info('logging setup')
 
