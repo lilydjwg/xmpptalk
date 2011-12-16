@@ -307,7 +307,7 @@ def main():
     logging.info('enabling trace')
     for logger in ('pyxmpp2.IN', 'pyxmpp2.OUT'):
       logger = logging.getLogger(logger)
-      logger.setLevel(config.logging_level)
+      logger.setLevel(logging.DEBUG)
 
   for logger in (
     'pyxmpp2.mainloop.base', 'pyxmpp2.expdict',
