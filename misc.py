@@ -229,7 +229,7 @@ class TornadoLogFormatter(logging.Formatter):
       formatted = formatted.rstrip() + "\n" + record.exc_text
     return formatted.replace("\n", "\n    ")
 
-def _setup_logging(hdl=None, color=False):
+def _setup_logging(hdl=None, level=config.logging_level, color=False):
   log = logging.getLogger()
   if hdl is None:
     if not getattr(config, 'stderr_logging', True):
@@ -241,14 +241,13 @@ def _setup_logging(hdl=None, color=False):
 
   formatter = TornadoLogFormatter(color=color)
 
-  level = config.logging_level
   hdl.setLevel(level)
   hdl.setFormatter(formatter)
   log.setLevel(level)
   log.addHandler(hdl)
   logging.info('logging setup')
 
-def setup_logging(hdl=None, color=False):
+def setup_logging(hdl=None, level=config.logging_level, color=False):
   _setup_logging()
   for log in config.additional_logging:
     _setup_logging(*log)

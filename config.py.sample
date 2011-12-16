@@ -54,6 +54,6 @@ help_regex = re.compile(r'^\W{,3}help\s*$')
 # stderr_logging = True
 
 additional_logging = [
-  # handler, use_color=False
-  # (logging.FileHandler('/home/lilydjwg/tmpfs/xmpp.log'), True)
+  # handler, level, use_color=False
+  # (logging.FileHandler('xmpp.log'), logging.DEBUG, True)
 ]
