@@ -228,7 +228,7 @@ class UserMixin:
     self._cached_gp = connection.Group.collection.find_and_modify(
       None, {'$set': {'status': value}}, new=True
     )
-    for jid in self.update_on_setstatus:
+    for jid in self.update_on_setstatus.copy():
       self.user_update_presence(jid)
 
   @property
