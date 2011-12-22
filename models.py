@@ -12,6 +12,7 @@ from misc import *
 import config
 
 logger = logging.getLogger(__name__)
+collection_prefix = getattr(config, 'connection_prefix', '')
 
 def validate_jid(jid):
   if not re_jid.match(jid):
@@ -66,7 +67,7 @@ class Document(Doc):
         raise DuplicateKeyError(err['err'], err['code'])
 
 class User(Document):
-  __collection__ = getattr(config, 'collection_user', 'user')
+  __collection__ = collection_prefix + 'user'
   use_schemaless = True
   structure = {
     # name it 'pm' as it's why it exists
@@ -122,7 +123,7 @@ def validate_logtype(t):
   return t in ('msg', 'member', 'sys')
 
 class Log(Document):
-  __collection__ = getattr(config, 'collection_log', 'log')
+  __collection__ = collection_prefix + 'log'
   structure = {
     'time': datetime.datetime,
     'type': str,
@@ -153,7 +154,7 @@ class Log(Document):
     return l
 
 class Group(Document):
-  __collection__ = getattr(config, 'collection_group', 'group')
+  __collection__ = collection_prefix + 'group'
   use_schemaless = True
   structure = {
     'welcome': str,
