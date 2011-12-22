@@ -23,9 +23,7 @@ database = 'test'
 #   port = 27017,
 # )
 # database_auth = ('user', 'pass')
-# collection_user = 'user'
-# collection_log = 'log'
-# collection_group = 'group'
+# collection_prefix = ''
 
 # 中文算两个英文字符宽度
 nick_maxwidth = 20
