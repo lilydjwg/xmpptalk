@@ -1,0 +1,6 @@
+#!/bin/bash
+
+xgettext --keyword=N_:1,2 --from-code=utf-8 -p po `find -type f -name '*.py'`
+cd po && msgmerge -U zh_CN.po messages.po
+cd - > /dev/null
+msgfmt -c -v -o locale/zh_CN/LC_MESSAGES/xmpptalk.mo po/zh_CN.po
