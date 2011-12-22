@@ -277,6 +277,8 @@ def runit(settings):
   bot = ChatBot(JID(config.jid), settings)
   try:
     bot.run()
+    # Connection resets
+    raise Exception
   except SystemExit as e:
     if e.code == CMD_RESTART:
       # restart
