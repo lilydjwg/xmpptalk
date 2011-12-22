@@ -81,6 +81,9 @@ class MessageMixin:
       elif isinstance(ret, str):
         msg = ret
     else:
+      msg = msg.strip()
+      if not msg:
+        return
       self.user_update_msglog(msg)
       msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
       self.user_reset_stop() # self.current_user is reloaded here
