@@ -142,7 +142,7 @@ class UserMixin:
       }}
     )
     self.current_user.reload()
-    self.xmpp_setstatus(self.group_status, to_jid=self.current_jid)
+    self.user_update_presence(self.current_user)
 
   def user_reset_mute(self, user):
     connection.User.collection.update(
@@ -150,7 +150,7 @@ class UserMixin:
         'mute_until': NOW(),
       }}
     )
-    self.xmpp_setstatus(self.group_status, to_jid=user.jid)
+    self.user_update_presence(self.current_user)
 
   def user_update_msglog(self, msg):
     '''Note: This won't reload `self.current_user`'''
@@ -180,13 +180,10 @@ class UserMixin:
       t = (user.stop_until + config.timezoneoffset).strftime(dateformat)
       prefix += _('(stopped until %s) ') % t
 
-    if sec1 > sec2 and sec1 > 0:
-      seconds = sec1
-    elif sec1 < sec2 and sec2 > 0:
-      seconds = sec2
-    else:
+    try:
+      seconds = min(sec for sec in (sec1, sec2) if sec > 0)
+    except ValueError:
       seconds = 0
-
     logger.debug('%s: %d seconds to go; sec1 = %d, sec2 = %d',
                  user.jid, seconds, sec1, sec2)
     self.xmpp_setstatus(
