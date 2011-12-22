@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-22 23:22+0800\n"
+"POT-Creation-Date: 2011-12-22 23:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,7 +128,7 @@ msgstr ""
 msgid "You are currently not joined in this group, message ignored"
 msgstr ""
 
-#: messages.py:87 commands.py:323
+#: messages.py:87 commands.py:327
 #, python-format
 msgid "You are disallowed to speak until %s"
 msgstr ""
@@ -223,7 +223,7 @@ msgstr ""
 msgid "online users list"
 msgstr ""
 
-#: commands.py:153 commands.py:336
+#: commands.py:153 commands.py:340
 #, python-format
 msgid " (with \"%s\" inbetween)"
 msgstr ""
@@ -236,7 +236,7 @@ msgstr ""
 msgid " <stopped>"
 msgstr ""
 
-#: commands.py:181 commands.py:347
+#: commands.py:181 commands.py:351
 #, python-format
 msgid "%d user listed"
 msgid_plural "%d users listed"
@@ -259,7 +259,7 @@ msgstr ""
 msgid "_PM_ [%s] "
 msgstr ""
 
-#: commands.py:197 commands.py:292 commands.py:358
+#: commands.py:197 commands.py:296 commands.py:362
 #, python-format
 msgid "Nobody with the nick \"%s\" found."
 msgstr ""
@@ -320,73 +320,77 @@ msgstr ""
 msgid "How long will you stop receiving messages?"
 msgstr ""
 
-#: commands.py:250 commands.py:287
+#: commands.py:250 commands.py:291
 msgid "Sorry, I can't understand the time you specified."
 msgstr ""
 
-#: commands.py:255
+#: commands.py:257
 msgid "Ok, stop cancelled."
 msgstr ""
 
-#: commands.py:261 commands.py:312
+#: commands.py:259
+msgid "Not stopped yet."
+msgstr ""
+
+#: commands.py:265 commands.py:316
 msgid "Oops, it's too long."
 msgstr ""
 
-#: commands.py:271
+#: commands.py:275
 #, python-format
 msgid "Ok, stop receiving messages until %s."
 msgstr ""
 
-#: commands.py:274
+#: commands.py:278
 msgid ""
 "stop somebody from talking for the specified period of time; useful units: "
 "m, h, d"
 msgstr ""
 
-#: commands.py:281
+#: commands.py:285
 msgid "No time provided."
 msgstr ""
 
-#: commands.py:299
+#: commands.py:303
 msgid "Muting has been cancelled."
 msgstr ""
 
-#: commands.py:301
+#: commands.py:305
 #, python-format
 msgid "Muting for %s has been cancelled."
 msgstr ""
 
-#: commands.py:304
+#: commands.py:308
 #, python-format
 msgid "Ok, mute for \"%s\" cancelled."
 msgstr ""
 
-#: commands.py:306
+#: commands.py:310
 #, python-format
 msgid "\"%s\" not muted yet."
 msgstr ""
 
-#: commands.py:326
+#: commands.py:330
 #, python-format
 msgid "%(nick)s is disallowed to speak until %(time)s."
 msgstr ""
 
-#: commands.py:329
+#: commands.py:333
 #, python-format
 msgid "Ok, mute \"%(nick)s\" until %(time)s."
 msgstr ""
 
-#: commands.py:332
+#: commands.py:336
 msgid ""
 "show all members; if argument given, only nicks with the argument inbetween "
 "will be shown"
 msgstr ""
 
-#: commands.py:334
+#: commands.py:338
 msgid "all users list"
 msgstr ""
 
-#: commands.py:350
+#: commands.py:354
 msgid "show information about others"
 msgstr ""
 

@@ -250,13 +250,17 @@ def do_stop(self, arg):
     self.reply(_("Sorry, I can't understand the time you specified."))
     return
 
+  now = NOW()
   if n == 0:
-    self.user_reset_stop()
-    self.reply(_('Ok, stop cancelled.'))
+    if now < self.current_user.stop_until:
+      self.user_reset_stop()
+      self.reply(_('Ok, stop cancelled.'))
+    else:
+      self.reply(_('Not stopped yet.'))
     return
 
   try:
-    dt = NOW() + datetime.timedelta(seconds=n)
+    dt = now + datetime.timedelta(seconds=n)
   except OverflowError:
     self.reply(_("Oops, it's too long."))
     return
@@ -307,7 +311,7 @@ def do_mute(self, arg):
     return
 
   try:
-    dt = NOW() + datetime.timedelta(seconds=n)
+    dt = now + datetime.timedelta(seconds=n)
   except OverflowError:
     self.reply(_("Oops, it's too long."))
     return
