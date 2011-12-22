@@ -144,6 +144,14 @@ class UserMixin:
     self.current_user.reload()
     self.xmpp_setstatus(self.group_status, to_jid=self.current_jid)
 
+  def user_reset_mute(self, user):
+    connection.User.collection.update(
+      {'jid': user.jid}, {'$set': {
+        'mute_until': NOW(),
+      }}
+    )
+    self.xmpp_setstatus(self.group_status, to_jid=user.jid)
+
   def user_update_msglog(self, msg):
     '''Note: This won't reload `self.current_user`'''
     connection.User.collection.update(

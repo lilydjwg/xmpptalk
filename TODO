@@ -1,5 +1,5 @@
-* mute 命令
 * 对 Talk.v105 进行提示
+* 清理 NOW() 调用
 
 * XMPP
   * 同步数据库和 roster 中的昵称

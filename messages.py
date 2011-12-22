@@ -81,6 +81,11 @@ class MessageMixin:
       elif isinstance(ret, str):
         msg = ret
     else:
+      if NOW() < self.current_user.mute_until:
+        t = (self.current_user.mute_until + \
+             config.timezoneoffset).strftime(dateformat)
+        self.reply(_('You are disallowed to speak until %s') % t)
+        return
       msg = msg.strip()
       if not msg:
         return
@@ -89,9 +94,10 @@ class MessageMixin:
       self.user_reset_stop() # self.current_user is reloaded here
       self.dispatch_message(msg, timestamp)
 
-  def dispatch_message(self, msg, timestamp=None):
+  def dispatch_message(self, msg, timestamp=None, but=None):
     '''dispatch message to group members, also log the message in database'''
-    jid = self.current_user.jid
+    if but is None:
+      but = {self.current_user.jid}
 
     if timestamp:
       dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
@@ -102,7 +108,7 @@ class MessageMixin:
 
     logdb.logmsg(self.current_jid, msg)
     for u in self.get_message_receivers():
-      if u != jid:
+      if str(u) not in but:
         self.send_message(u, msg)
     return True
 

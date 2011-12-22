@@ -271,6 +271,64 @@ def do_stop(self, arg):
   self.reply(_('Ok, stop receiving messages until %s.') % t)
   self.user_update_presence(self.current_user)
 
+@command('mute', _('stop somebody from talking for the specified period of time; useful units: m, h, d'), PERM_GPADMIN)
+def do_mute(self, arg):
+  lex = Lex(arg)
+  nick = lex.get_token()
+  time = lex.instream.read().lstrip()
+
+  if not time:
+    self.reply(_('No time provided.'))
+    return
+
+  try:
+    n = parseTime(time)
+  except ValueError:
+    self.reply(_("Sorry, I can't understand the time you specified."))
+    return
+
+  user = nick and self.get_user_by_nick(nick)
+  if not user:
+    self.reply(_('Nobody with the nick "%s" found.') % nick)
+    return
+
+  now = NOW()
+  if n == 0:
+    if now < user.mute_until:
+      self.user_reset_mute(user)
+      self.send_message(user.jid, _('Muting has been cancelled.'))
+      self.dispatch_message(
+        _('Muting for %s has been cancelled.') % nick,
+        but={self.current_user.jid, user.jid},
+      )
+      self.reply(_('Ok, mute for "%s" cancelled.') % nick)
+    else:
+      self.reply(_('"%s" not muted yet.') % nick)
+    return
+
+  try:
+    dt = NOW() + datetime.timedelta(seconds=n)
+  except OverflowError:
+    self.reply(_("Oops, it's too long."))
+    return
+  user.mute_until = dt
+  # user.save() would complain about float instead of int
+  connection.User.collection.update(
+    {'jid': user.jid}, {'$set': {
+      'mute_until': dt,
+    }}
+  )
+  user.reload()
+  t = (dt + config.timezoneoffset).strftime(dateformat)
+  self.send_message(user.jid, _('You are disallowed to speak until %s') % t)
+  args = dict(nick=nick, time=t)
+  self.dispatch_message(
+    _('%(nick)s is disallowed to speak until %(time)s.') % args,
+    but={self.current_user.jid, user.jid},
+  )
+  self.reply(_('Ok, mute "%(nick)s" until %(time)s.') % args)
+  self.user_update_presence(user)
+
 @command('users', _('show all members; if argument given, only nicks with the argument inbetween will be shown'))
 def do_users(self, arg):
   header = _('all users list')

@@ -107,6 +107,9 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     return True
 
   def send_message(self, receiver, msg):
+    if isinstance(receiver, str):
+      receiver = JID(receiver)
+
     m = Message(
       stanza_type = 'chat',
       from_jid = self.jid,
