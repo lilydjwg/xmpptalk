@@ -344,6 +344,8 @@ def do_users(self, arg):
     None, ['nick', 'msg_chars', 'msg_count'],
     sort=[('msg_count', 1), ('msg_chars', 1), ('nick', 1)])
   for u in q:
+    if arg and u.nick.find(arg) == -1:
+      continue
     text.append('* %(nick)s (N=%(msg_count)d, C=%(msg_chars)d)' % u)
 
   n = len(text)
