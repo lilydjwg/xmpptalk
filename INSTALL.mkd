@@ -5,3 +5,4 @@ DEPENDENCES
 * greenlet
 * modified mongokit
   * pymongo
+    * mongodb
