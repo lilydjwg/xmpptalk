@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-22 23:28+0800\n"
+"POT-Creation-Date: 2011-12-31 16:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgid "%H:%M:%S"
 msgstr ""
 
 #: misc.py:48
-msgid "(Never)"
+msgid "(N/A)"
 msgstr ""
 
 #: misc.py:51 misc.py:52
@@ -113,6 +113,17 @@ msgstr ""
 msgid ""
 "\n"
 "Online Resources: [%s]"
+msgstr ""
+
+#: misc.py:111
+msgid "(Never)"
+msgstr ""
+
+#: misc.py:112
+#, python-format
+msgid ""
+"\n"
+"Last Seen At: %s"
 msgstr ""
 
 #: messages.py:48
@@ -236,7 +247,7 @@ msgstr ""
 msgid " <stopped>"
 msgstr ""
 
-#: commands.py:181 commands.py:351
+#: commands.py:181 commands.py:353
 #, python-format
 msgid "%d user listed"
 msgid_plural "%d users listed"
@@ -259,7 +270,7 @@ msgstr ""
 msgid "_PM_ [%s] "
 msgstr ""
 
-#: commands.py:197 commands.py:296 commands.py:362
+#: commands.py:197 commands.py:296 commands.py:364
 #, python-format
 msgid "Nobody with the nick \"%s\" found."
 msgstr ""
@@ -390,7 +401,7 @@ msgstr ""
 msgid "all users list"
 msgstr ""
 
-#: commands.py:354
+#: commands.py:356
 msgid "show information about others"
 msgstr ""
 

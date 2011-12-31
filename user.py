@@ -200,6 +200,12 @@ class UserMixin:
       except KeyError:
         pass
 
+  def user_disappeared(self, plainjid):
+    connection.User.collection.update(
+      {'jid': plainjid}, {'$set': {
+        'last_seen': NOW(),
+      }}
+    )
   def handle_userjoin(self, action=None):
     '''add the user to database and say Welcome'''
     # TODO: 根据 action 区别处理

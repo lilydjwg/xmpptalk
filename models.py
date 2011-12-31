@@ -79,6 +79,7 @@ class User(Document):
     'join_date': datetime.datetime,
     'stop_until': datetime.datetime,
     'mute_until': datetime.datetime,
+    'last_seen': datetime.datetime,
     'msg_chars': int,
     'msg_count': int,
     'nick': str,
