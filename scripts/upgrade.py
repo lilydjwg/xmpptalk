@@ -6,10 +6,5 @@ sys.path.insert(0, '.')
 from models import connection, User
 
 col = connection[User.__database__][User.__collection__]
-u = col.find_one()
-q = {}
-if 'last_seen' not in u:
-  q['last_seen'] = None
-if 'last_speak' not in u:
-  q['last_speak'] = None
-col.update({}, {'$set': q}, multi=True)
+col.update({'last_seen': {'$exists': False}}, {'$set': {'last_seen': None}}, multi=True)
+col.update({'last_speak': {'$exists': False}}, {'$set': {'last_speak': None}}, multi=True)
