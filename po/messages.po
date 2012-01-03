@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-31 16:48+0800\n"
+"POT-Creation-Date: 2012-01-03 15:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -324,7 +324,9 @@ msgid "current group welcome message: %s"
 msgstr ""
 
 #: commands.py:240
-msgid "stop receiving messages for some time; useful units: m, h, d"
+msgid ""
+"stop receiving messages for some time; useful units: m, h, d. If you stop "
+"for 0 seconds, you wake up."
 msgstr ""
 
 #: commands.py:244
@@ -349,7 +351,9 @@ msgstr ""
 
 #: commands.py:275
 #, python-format
-msgid "Ok, stop receiving messages until %s."
+msgid ""
+"Ok, stop receiving messages until %s. You can change this by another `stop` "
+"command."
 msgstr ""
 
 #: commands.py:278

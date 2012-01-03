@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-31 16:46+0800\n"
+"POT-Creation-Date: 2012-01-03 15:03+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -135,7 +135,9 @@ msgstr "(从来没有)"
 msgid ""
 "\n"
 "Last Seen At: %s"
-msgstr "\n最后一次见到：%s"
+msgstr ""
+"\n"
+"最后一次见到：%s"
 
 #: messages.py:48
 msgid ""
@@ -336,8 +338,10 @@ msgid "current group welcome message: %s"
 msgstr "当前群欢迎消息: %s"
 
 #: commands.py:240
-msgid "stop receiving messages for some time; useful units: m, h, d"
-msgstr "在一段时间内停止接收消息；可使用单位：m, h, d"
+msgid ""
+"stop receiving messages for some time; useful units: m, h, d. If you stop "
+"for 0 seconds, you wake up."
+msgstr "在一段时间内停止接收消息；可使用单位：m, h, d。如果参数为 0，停止将取消。"
 
 #: commands.py:244
 msgid "How long will you stop receiving messages?"
@@ -361,8 +365,10 @@ msgstr "噢哦，这也太久了吧。"
 
 #: commands.py:275
 #, python-format
-msgid "Ok, stop receiving messages until %s."
-msgstr "好的，在 %s 前停止接收消息。"
+msgid ""
+"Ok, stop receiving messages until %s. You can change this by another `stop` "
+"command."
+msgstr "好的，在 %s 前停止接收消息。你可以再使用「stop」命令来更改时间。"
 
 #: commands.py:278
 msgid ""
