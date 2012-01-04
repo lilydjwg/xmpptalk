@@ -368,7 +368,7 @@ msgstr "噢哦，这也太久了吧。"
 msgid ""
 "Ok, stop receiving messages until %s. You can change this by another `stop` "
 "command."
-msgstr "好的，在 %s 前停止接收消息。你可以再使用「stop」命令来更改时间。"
+msgstr "好的，在 %s 前停止接收消息。你可以再次使用「stop」命令来更改时间。"
 
 #: commands.py:278
 msgid ""
