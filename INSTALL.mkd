@@ -5,3 +5,8 @@ DEPENDENCES
 * greenlet
 * modified mongokit
   * pymongo
+    * mongodb
+
+注意事项
+========
+从旧版本升级时注意日志消息中包括「升级」字样的信息！

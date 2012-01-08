@@ -247,6 +247,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         logging.info('%s[unavailable] (partly)', jid)
       else:
         del self.presence[plainjid]
+        self.user_disappeared(plainjid)
         logging.info('%s[unavailable] (totally)', jid)
     return True
 

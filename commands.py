@@ -237,7 +237,7 @@ def do_setwelcome(self, arg):
   self.welcome = arg
   self.reply(_('ok.'))
 
-@command('stop', _('stop receiving messages for some time; useful units: m, h, d'))
+@command('stop', _('stop receiving messages for some time; useful units: m, h, d. If you stop for 0 seconds, you wake up.'))
 def do_stop(self, arg):
   arg = arg.strip()
   if not arg:
@@ -272,7 +272,7 @@ def do_stop(self, arg):
   )
   self.current_user.reload()
   t = (dt + config.timezoneoffset).strftime(dateformat)
-  self.reply(_('Ok, stop receiving messages until %s.') % t)
+  self.reply(_('Ok, stop receiving messages until %s. You can change this by another `stop` command.') % t)
   self.user_update_presence(self.current_user)
 
 @command('mute', _('stop somebody from talking for the specified period of time; useful units: m, h, d'), PERM_GPADMIN)
@@ -344,6 +344,8 @@ def do_users(self, arg):
     None, ['nick', 'msg_chars', 'msg_count'],
     sort=[('msg_count', 1), ('msg_chars', 1), ('nick', 1)])
   for u in q:
+    if arg and u.nick.find(arg) == -1:
+      continue
     text.append('* %(nick)s (N=%(msg_count)d, C=%(msg_chars)d)' % u)
 
   n = len(text)

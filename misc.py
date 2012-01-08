@@ -45,7 +45,7 @@ re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
 dateformat = _('%m-%d %H:%M:%S')
 longdateformat = _('%Y-%m-%d %H:%M:%S')
 timeformat = _('%H:%M:%S')
-until_date = lambda dt, now: (dt + config.timezoneoffset).strftime(longdateformat) if dt > now else _('(Never)')
+until_date = lambda dt, now: (dt + config.timezoneoffset).strftime(longdateformat) if dt > now else _('(N/A)')
 logger = logging.getLogger(__name__)
 
 AWAY    = _('away')
@@ -104,6 +104,12 @@ def user_info(user, presence, show_jid=True):
   )
   if user['jid'] in presence:
     ans += _('\nOnline Resources: [%s]') % ', '.join(presence[user['jid']].keys())
+  else:
+    if user['last_seen']:
+      last_seen = (user['last_seen'] + config.timezoneoffset).strftime(longdateformat)
+    else:
+      last_seen = _('(Never)')
+    ans += _('\nLast Seen At: %s') % last_seen
   if show_jid:
     ans = 'JID: %s\n' % user['jid'] + ans
   return ans

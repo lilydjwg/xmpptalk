@@ -15,5 +15,5 @@ def setup_log_collection():
   })
 
 if __name__ == '__main__':
-  setup_log_collection()
+  setup_user_collection()
   setup_log_collection()

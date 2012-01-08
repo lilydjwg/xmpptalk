@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-22 23:27+0800\n"
+"POT-Creation-Date: 2012-01-03 15:03+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -53,8 +53,8 @@ msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
 #: misc.py:48
-msgid "(Never)"
-msgstr "(永不)"
+msgid "(N/A)"
+msgstr "(无)"
 
 #: misc.py:51 misc.py:52
 msgid "away"
@@ -125,6 +125,19 @@ msgid ""
 msgstr ""
 "\n"
 "在线资源： [%s]"
+
+#: misc.py:111
+msgid "(Never)"
+msgstr "(从来没有)"
+
+#: misc.py:112
+#, python-format
+msgid ""
+"\n"
+"Last Seen At: %s"
+msgstr ""
+"\n"
+"最后一次见到：%s"
 
 #: messages.py:48
 msgid ""
@@ -249,7 +262,7 @@ msgstr " <已禁言>"
 msgid " <stopped>"
 msgstr " <已暂停>"
 
-#: commands.py:181 commands.py:351
+#: commands.py:181 commands.py:353
 #, python-format
 msgid "%d user listed"
 msgid_plural "%d users listed"
@@ -271,7 +284,7 @@ msgstr "抱歉，%s 不接受来自你的私信。"
 msgid "_PM_ [%s] "
 msgstr "_私信_ [%s] "
 
-#: commands.py:197 commands.py:296 commands.py:362
+#: commands.py:197 commands.py:296 commands.py:364
 #, python-format
 msgid "Nobody with the nick \"%s\" found."
 msgstr "没找到名叫“%s”的人。"
@@ -325,8 +338,10 @@ msgid "current group welcome message: %s"
 msgstr "当前群欢迎消息: %s"
 
 #: commands.py:240
-msgid "stop receiving messages for some time; useful units: m, h, d"
-msgstr "在一段时间内停止接收消息；可使用单位：m, h, d"
+msgid ""
+"stop receiving messages for some time; useful units: m, h, d. If you stop "
+"for 0 seconds, you wake up."
+msgstr "在一段时间内停止接收消息；可使用单位：m, h, d。如果参数为 0，停止将取消。"
 
 #: commands.py:244
 msgid "How long will you stop receiving messages?"
@@ -350,8 +365,10 @@ msgstr "噢哦，这也太久了吧。"
 
 #: commands.py:275
 #, python-format
-msgid "Ok, stop receiving messages until %s."
-msgstr "好的，在 %s 前停止接收消息。"
+msgid ""
+"Ok, stop receiving messages until %s. You can change this by another `stop` "
+"command."
+msgstr "好的，在 %s 前停止接收消息。你可以再次使用「stop」命令来更改时间。"
 
 #: commands.py:278
 msgid ""
@@ -402,7 +419,7 @@ msgstr "显示所有成员；如果给出了参数，只显示包含该参数的
 msgid "all users list"
 msgstr "所有用户列表"
 
-#: commands.py:354
+#: commands.py:356
 msgid "show information about others"
 msgstr "显示关于其他人的信息"
 
