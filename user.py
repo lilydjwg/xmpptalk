@@ -229,7 +229,7 @@ class UserMixin:
   def group_status(self):
     gp = self._cached_gp or connection.Group.one()
     if gp is None:
-      return None
+      return ''
     else:
       return gp.get('status', None)
 
