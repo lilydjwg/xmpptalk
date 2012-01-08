@@ -23,8 +23,11 @@ def debug(self, msg):
   if msg == 'cli':
     import builtins
     from cli import repl
+    from pyxmpp2.jid import JID
     old_ = builtins._
-    repl(locals(), 'cmd.txt')
+    g = locals()
+    del g['repl'], g['builtins'], g['old_'], g['msg']
+    repl(g, 'cmd.txt')
     builtins._ = old_
     return True
   elif msg == 'cache_clear':
