@@ -35,7 +35,7 @@ def message_handler_register(func):
 def pingpong(self, msg):
   '''availability test'''
   if msg == 'ping':
-    self.reply('pong at ' + NOW().strftime(timeformat))
+    self.reply('pong at ' + (NOW()+timezoneoffset).strftime(timeformat))
     self.user_reset_stop()
     return True
   return False
