@@ -186,11 +186,10 @@ class UserMixin:
       seconds = 0
     logger.debug('%s: %d seconds to go; sec1 = %d, sec2 = %d',
                  user.jid, seconds, sec1, sec2)
-    if prefix:
-      self.xmpp_setstatus(
-        prefix + self.group_status,
-        to_jid=user.jid,
-      )
+    self.xmpp_setstatus(
+      prefix + self.group_status,
+      to_jid=user.jid,
+    )
     if seconds:
       self.update_on_setstatus.add(user.jid)
       # XXX: Too many handlers?

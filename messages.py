@@ -81,7 +81,8 @@ class MessageMixin:
       elif isinstance(ret, str):
         msg = ret
     else:
-      if NOW() < self.current_user.mute_until:
+      now = NOW()
+      if now < self.current_user.mute_until:
         t = (self.current_user.mute_until + \
              config.timezoneoffset).strftime(dateformat)
         self.reply(_('You are disallowed to speak until %s') % t)
@@ -91,7 +92,8 @@ class MessageMixin:
         return
       self.user_update_msglog(msg)
       msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
-      self.user_reset_stop() # self.current_user is reloaded here
+      if self.current_user.stop_until > now:
+        self.user_reset_stop() # self.current_user is reloaded here
       self.dispatch_message(msg, timestamp)
 
   def dispatch_message(self, msg, timestamp=None, but=None):
