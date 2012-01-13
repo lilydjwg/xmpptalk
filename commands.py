@@ -1,6 +1,7 @@
 from functools import wraps
 import logging
 import datetime
+import struct
 
 from mongokit.schema_document import ValidationError
 
