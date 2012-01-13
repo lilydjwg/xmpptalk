@@ -123,7 +123,11 @@ def do_old(self, arg):
   else:
     num = 50
     t = 60
-  q = connection.Log.find(num, t)
+  try:
+    q = connection.Log.find(num, t)
+  except struct.error:
+    self.reply(_('Overflow!'))
+    return
   if q:
     if NOW() - q[0].time > ONE_DAY:
       format = dateformat
