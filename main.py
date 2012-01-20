@@ -27,7 +27,7 @@ from misc import *
 # models makes use of logging when importting
 setup_logging()
 import config
-from models import connection
+from models import connection, ValidationError
 from messages import MessageMixin
 from user import UserMixin
 
@@ -173,7 +173,11 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     # avoid repeated request
     if bare not in self.subscribes:
       self.current_jid = sender
-      self.handle_userjoin(action=stanza.stanza_type)
+      try:
+        self.handle_userjoin(action=stanza.stanza_type)
+      except ValidationError:
+        #The server is subscribing
+        pass
       self.subscribes[bare] = True
 
     if stanza.stanza_type.endswith('ed'):
@@ -230,7 +234,11 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
     if self.get_user_by_jid(plainjid) is None and plainjid != str(self.jid):
       self.current_jid = jid
-      self.handle_userjoin()
+      try:
+        self.handle_userjoin()
+      except ValidationError:
+        #The server is subscribing
+        pass
 
     return True
 
