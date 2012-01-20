@@ -337,7 +337,7 @@ msgstr "重启中..."
 
 #: commands.py:222
 msgid "get or set the talkbot's status message; use 'None' to clear"
-msgstr "显示或设置群聊机器人的状态；使用“None”来清除"
+msgstr "显示或设置群聊机器人的状态；使用「None」来清除"
 
 #: commands.py:227
 #, python-format
@@ -350,7 +350,7 @@ msgstr "完成。"
 
 #: commands.py:236
 msgid "get or set the group's welcome message; use 'None' to clear"
-msgstr "显示或设置群的欢迎消息；使用“None”来清除"
+msgstr "显示或设置群的欢迎消息；使用「None」来清除"
 
 #: commands.py:241
 #, python-format
