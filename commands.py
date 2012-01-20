@@ -111,7 +111,7 @@ def do_nick(self, new):
       if u != bare:
         self.send_message(u, msg)
 
-@command('old', _('show history in an hour; if argument given, it specifies the number or the time of history entries to show'))
+@command('old', _('show at most 50 history entries in an hour; if argument given, it specifies either the number of entries, or the time period passed from now (format is same as `stop\' command)'))
 def do_old(self, arg):
   arg = arg.strip()
   if arg:
@@ -123,7 +123,7 @@ def do_old(self, arg):
         num = 10000 # give out 10000 entries at most; this should be enough
         t = parseTime(arg) // 60
       except ValueError:
-        self.reply(_('argument should be an integer or time'))
+        self.reply(_('argument should be an integer or time length'))
         return
   else:
     num = 50
