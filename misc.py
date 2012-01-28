@@ -77,7 +77,7 @@ def show_privileges(flag):
     ret.append(_('sys_admin'))
   return ', '.join(ret)
 
-def user_info(user, presence, show_jid=True):
+def user_info(user, presence, show_jid=True, show_lastseen=False):
   now = NOW()
   ans= _(
     'Nick: %s\n'
@@ -102,14 +102,19 @@ def user_info(user, presence, show_jid=True):
     ', '.join(user['badpeople']),
     show_privileges(user['flag']),
   )
+
   if user['jid'] in presence:
     ans += _('\nOnline Resources: [%s]') % ', '.join(presence[user['jid']].keys())
   else:
+    show_lastseen = True
+
+  if show_lastseen:
     if user['last_seen']:
       last_seen = (user['last_seen'] + config.timezoneoffset).strftime(longdateformat)
     else:
       last_seen = _('(Never)')
     ans += _('\nLast Seen At: %s') % last_seen
+
   if show_jid:
     ans = 'JID: %s\n' % user['jid'] + ans
   return ans

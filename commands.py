@@ -84,7 +84,7 @@ def do_help(self, arg):
 
 @command('iam', _('show information about yourself'))
 def do_iam(self, arg):
-  self.reply(user_info(self.current_user, self.presence))
+  self.reply(user_info(self.current_user, self.presence, show_lastseen=True))
 
 @command('nick', _('change your nick; show your current nick if no new nick provided'))
 def do_nick(self, new):
