@@ -113,7 +113,7 @@ def user_info(user, presence, show_jid=True, show_lastseen=False):
       last_seen = (user['last_seen'] + config.timezoneoffset).strftime(longdateformat)
     else:
       last_seen = _('(Never)')
-    ans += _('\nLast Seen At: %s') % last_seen
+    ans += _('\nLast Online: %s') % last_seen
 
   if show_jid:
     ans = 'JID: %s\n' % user['jid'] + ans

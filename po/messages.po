@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-20 16:58+0800\n"
+"POT-Creation-Date: 2012-01-28 22:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,20 +52,20 @@ msgstr ""
 msgid "(stopped until %s) "
 msgstr ""
 
-#: messages.py:48
+#: messages.py:49
 msgid ""
 "Your client is trying OTR encryption, which is not supported by this group."
 msgstr ""
 
-#: messages.py:68
+#: messages.py:69
 msgid "You are not allowed to send messages to this group until invited"
 msgstr ""
 
-#: messages.py:70
+#: messages.py:71
 msgid "You are currently not joined in this group, message ignored"
 msgstr ""
 
-#: messages.py:88 commands.py:336
+#: messages.py:89 commands.py:336
 #, python-format
 msgid "You are disallowed to speak until %s"
 msgstr ""
@@ -148,22 +148,22 @@ msgstr ""
 msgid "no"
 msgstr ""
 
-#: misc.py:106
+#: misc.py:107
 #, python-format
 msgid ""
 "\n"
 "Online Resources: [%s]"
 msgstr ""
 
-#: misc.py:111
+#: misc.py:115
 msgid "(Never)"
 msgstr ""
 
-#: misc.py:112
+#: misc.py:116
 #, python-format
 msgid ""
 "\n"
-"Last Seen At: %s"
+"Last Online: %s"
 msgstr ""
 
 #: commands.py:45
