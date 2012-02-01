@@ -4,6 +4,8 @@ import urllib.request
 import urllib.parse
 import traceback
 
+import config
+
 logger = logging.getLogger(__name__)
 
 re_youren = re.compile(r'有人在?吗.{,3}')
@@ -40,7 +42,7 @@ def autoreply(self, msg):
   if msg in ('test', '测试'):
     self.reply(msg + ' ok.')
   elif len(msg) < 8 and re_youren.match(msg):
-    self.reply('查看在线用户请使用 %sonline 命令。' % self.current_user.prefix)
+    self.reply('查看在线用户请使用 %sonline 命令。' % config.prefix)
   else:
     return False
   return True

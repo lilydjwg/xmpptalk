@@ -85,7 +85,6 @@ def user_info(user, presence, show_jid=True, show_lastseen=False):
     '%d message(s), %d characters in total.\n'
     'Stopped Until: %s\n'
     'Muted Until: %s\n'
-    'Command Prefix: %s\n'
     'Joined At: %s\n'
     'Receive PM: %s\n'
     'Bad People: [%s]\n'
@@ -96,7 +95,6 @@ def user_info(user, presence, show_jid=True, show_lastseen=False):
     user['msg_count'], user['msg_chars'],
     until_date(user['stop_until'], now),
     until_date(user['mute_until'], now),
-    user['prefix'],
     (user['join_date'] + config.timezoneoffset).strftime(longdateformat),
     user['allow_pm'] and _('yes') or _('no'),
     ', '.join(user['badpeople']),

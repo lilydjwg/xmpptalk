@@ -8,3 +8,4 @@ from models import connection, User
 col = connection[User.__database__][User.__collection__]
 col.update({'last_seen': {'$exists': False}}, {'$set': {'last_seen': None}}, multi=True)
 col.update({'last_speak': {'$exists': False}}, {'$set': {'last_speak': None}}, multi=True)
+col.update({'prefix': {'$exists': True}}, {'$unset': {'prefix': 1}}, multi=True)

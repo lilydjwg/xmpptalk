@@ -9,6 +9,7 @@ from mongokit.schema_document import ValidationError
 import logdb
 from models import connection
 from misc import *
+import config
 
 '''
 command handling, should be called from messages.py
@@ -46,7 +47,7 @@ def handle_command(self, msg):
       self.reply(_('No help yet.'))
     return True
 
-  prefix = self.current_user.prefix
+  prefix = config.prefix
   if not msg.startswith(prefix):
     return False
 
@@ -77,7 +78,7 @@ def do_help(self, arg):
     if int(self.current_user.flag) & flags:
       help.append((name, doc))
   help.sort(key=lambda x: x[0])
-  prefix = self.current_user.prefix
+  prefix = config.prefix
   text = [_('***command help***')]
   for name, doc in help:
     text.append('%s%s:\t%s' % (prefix, name, doc))

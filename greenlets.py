@@ -40,7 +40,7 @@ class Welcome(greenlet):
 
     msg = _('Would you like to use "%s" as your nick, '\
             'or use "%snick your_nick" to choose another') % (
-      nick, config.user_default_prefix
+      nick, config.prefix
     )
     s.send_message(jid, msg)
     s.set_user_nick(str(jid.bare()), nick, increase=False)

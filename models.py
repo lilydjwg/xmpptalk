@@ -86,7 +86,6 @@ class User(Document):
     'nick': str,
     'nick_changes': int,
     'nick_lastchange': datetime.datetime,
-    'prefix': str,
   }
   indexes = [{
     'fields': 'jid',
@@ -105,14 +104,12 @@ class User(Document):
     'msg_chars': 0,
     'msg_count': 0,
     'nick_changes': 0,
-    'prefix': config.user_default_prefix,
   }
   required_fields = ['jid']
   validators = {
     'badpeople': lambda x: all(validate_jid(y) for y in x),
     'jid': validate_jid,
     'nick': validate_nick,
-    'prefix': lambda x: 0 < len(x) < 3,
   }
 
 def validate_logtype(t):
