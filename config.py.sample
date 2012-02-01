@@ -29,7 +29,8 @@ database = 'test'
 nick_maxwidth = 20
 nick_max_change = 0
 nick_allowed_symbol = '+-_@.™ '
-user_default_prefix = '-'
+# command prefix
+prefix = '-'
 # how much log we preserve; in bytes
 # about 6 entries per kibibytes
 # log_size = 524288 #default to 512KiB
