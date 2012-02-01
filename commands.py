@@ -377,3 +377,8 @@ def do_whois(self, arg):
 def do_uptime(self, arg):
   out = subprocess.getoutput('uptime')
   self.reply(out)
+
+@command('free', _('invode `free -m` and show its output'))
+def do_free(self, arg):
+  out = subprocess.getoutput('free -m')
+  self.reply(out)
