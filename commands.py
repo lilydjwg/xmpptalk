@@ -2,6 +2,7 @@ from functools import wraps
 import logging
 import datetime
 import struct
+import subprocess
 
 from mongokit.schema_document import ValidationError
 
@@ -372,3 +373,7 @@ def do_whois(self, arg):
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
+@command('uptime', _('invode `uptime` and show its output'))
+def do_uptime(self, arg):
+  out = subprocess.getoutput('uptime')
+  self.reply(out)
