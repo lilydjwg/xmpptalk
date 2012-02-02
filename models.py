@@ -112,32 +112,20 @@ class User(Document):
     'nick': validate_nick,
   }
 
-def validate_logtype(t):
-  '''
-  msg: conversation log
-  nick: nick change
-  sys: system up/down
-  '''
-  #TODO: use sys
-  return t in ('msg', 'member', 'sys')
-
 class Log(Document):
   __collection__ = collection_prefix + 'log'
   structure = {
     'time': datetime.datetime,
-    'type': str,
     'jid': str,
     # This should contain the nickname in case of type == 'msg'
     'msg': str,
   }
   validators = {
     'jid': validate_jid,
-    'type': validate_logtype,
   }
   default_values = {
     'time': NOW,
   }
-  required_fields = ['type']
 
   def find(self, n, in_=None):
     '''
@@ -176,6 +164,12 @@ def init_models():
     logger.error('database authentication failed')
     raise
   connection.register([User, Log, Group])
+
+def logmsg(jid=None, msg=None):
+  u = connection.Log()
+  u.jid = str(jid)
+  u.msg = msg
+  u.save()
 
 init_models()
 del init_models

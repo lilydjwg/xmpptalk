@@ -6,8 +6,7 @@ import subprocess
 
 from mongokit.schema_document import ValidationError
 
-import logdb
-from models import connection
+from models import connection, logmsg
 from misc import *
 import config
 
@@ -108,7 +107,7 @@ def do_nick(self, new):
 
   if old_nick is not None:
     msg = _('%s is now known as %s.') % (old_nick, new_nick)
-    logdb.logmember(self.current_jid, msg)
+    logmsg(self.current_jid, msg)
     for u in self.get_message_receivers():
       if u != bare:
         self.send_message(u, msg)

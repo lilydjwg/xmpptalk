@@ -4,8 +4,7 @@ import datetime
 
 import commands
 import config
-import logdb
-from models import connection
+from models import connection, logmsg
 from misc import *
 
 '''message handling
@@ -109,7 +108,7 @@ class MessageMixin:
         dt += config.timezoneoffset
         msg = '(%s) ' % dt.strftime(timeformat) + msg
 
-    logdb.logmsg(self.current_jid, msg)
+    logmsg(self.current_jid, msg)
     for u in self.get_message_receivers():
       if str(u) not in but:
         self.send_message(u, msg)
