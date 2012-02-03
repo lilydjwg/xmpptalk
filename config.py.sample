@@ -15,6 +15,7 @@ trace = True
 salt = b'anything random is ok.' # used to encryt user's jid, keep this secret!
 logging_level = logging.INFO
 timezoneoffset = datetime.timedelta(hours=8)
+# nick_change_interval = datetime.timedelta(days=10)
 
 # TODO: select a database
 database = 'test'

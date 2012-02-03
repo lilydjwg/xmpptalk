@@ -148,6 +148,7 @@ def hashjid(jid):
 
 escape_map = {}
 
+class Forbidden(Exception): pass
 class Lex:
   def __init__(self, string):
     self.instream = io.StringIO(string)

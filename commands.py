@@ -97,7 +97,7 @@ def do_nick(self, new):
 
   try:
     old_nick = self.set_self_nick(new_nick)
-  except (ValueError, ValidationError) as e:
+  except (ValueError, ValidationError, Forbidden) as e:
     self.reply(_('Error: %s') % e)
     return
 

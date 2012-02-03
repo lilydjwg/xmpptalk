@@ -91,6 +91,11 @@ class UserMixin:
 
     This will reset the nick cache.
     '''
+    now = NOW()
+    if getattr(config, "nick_change_interval", None):
+      if now - self.current_user.nick_lastchange < config.nick_change_interval:
+        raise Forbidden(_("you can't change your nick too often"))
+
     models.validate_nick(nick)
     if self.nick_exists(nick):
       raise ValueError(_('duplicate nick name: %s') % nick)
@@ -99,7 +104,7 @@ class UserMixin:
     update = {
       '$set': {
         'nick': nick,
-        'nick_lastchange': NOW(),
+        'nick_lastchange': now,
       }
     }
     if increase:
