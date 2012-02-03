@@ -93,7 +93,8 @@ class UserMixin:
     '''
     now = NOW()
     if getattr(config, "nick_change_interval", None):
-      if now - self.current_user.nick_lastchange < config.nick_change_interval:
+      if self.current_user.nick_changes and \
+         now - self.current_user.nick_lastchange < config.nick_change_interval:
         raise Forbidden(_("you can't change your nick too often"))
 
     models.validate_nick(nick)
