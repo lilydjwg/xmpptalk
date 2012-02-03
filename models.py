@@ -98,9 +98,9 @@ class User(Document):
   default_values = {
     'flag': PERM_USER,
     'allow_pm': True,
-    'join_date': NOW,
-    'stop_until': NOW,
-    'mute_until': NOW,
+    'join_date': datetime.datetime.utcnow,
+    'stop_until': datetime.datetime.utcnow,
+    'mute_until': datetime.datetime.utcnow,
     'msg_chars': 0,
     'msg_count': 0,
     'nick_changes': 0,
@@ -124,7 +124,7 @@ class Log(Document):
     'jid': validate_jid,
   }
   default_values = {
-    'time': NOW,
+    'time': datetime.datetime.utcnow,
   }
 
   def find(self, n, in_=None):
@@ -132,7 +132,7 @@ class Log(Document):
     find `n` recent messages in `in_` minutes in chronological order.
     '''
     if in_ is not None:
-      after = NOW() - datetime.timedelta(minutes=in_)
+      after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
       query = {'time': {'$gt': after}}
     else:
       query = None

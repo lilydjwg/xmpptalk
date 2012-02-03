@@ -35,7 +35,7 @@ def pingpong(self, msg):
   '''availability test'''
   if msg == 'ping':
     self.reply('pong at ' + \
-               (NOW()+config.timezoneoffset).strftime(longdateformat))
+               (self.now+config.timezoneoffset).strftime(longdateformat))
     self.user_reset_stop()
     return True
   return False
@@ -81,8 +81,7 @@ class MessageMixin:
       elif isinstance(ret, str):
         msg = ret
     else:
-      now = NOW()
-      if now < self.current_user.mute_until:
+      if self.now < self.current_user.mute_until:
         t = (self.current_user.mute_until + \
              config.timezoneoffset).strftime(dateformat)
         self.reply(_('You are disallowed to speak until %s') % t)
@@ -92,7 +91,7 @@ class MessageMixin:
         return
       self.user_update_msglog(msg)
       msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
-      if self.current_user.stop_until > now:
+      if self.current_user.stop_until > self.now:
         self.user_reset_stop() # self.current_user is reloaded here
       self.dispatch_message(msg, timestamp)
 
@@ -103,7 +102,7 @@ class MessageMixin:
 
     if timestamp:
       dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
-      interval = NOW() - dt
+      interval = self.now - dt
       if interval.days == 0:
         dt += config.timezoneoffset
         msg = '(%s) ' % dt.strftime(timeformat) + msg
@@ -116,7 +115,7 @@ class MessageMixin:
 
   def get_message_receivers(self):
     allusers = {u['jid'] for u in connection.User.find({
-      'stop_until': {'$lte': NOW()}
+      'stop_until': {'$lte': self.now}
     }, ['jid'])}
     return [u for u in self.get_online_users() if str(u) in allusers]
 

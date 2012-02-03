@@ -38,7 +38,6 @@ PERM_USER = 1
 PERM_GPADMIN = 2
 PERM_SYSADMIN = 4
 
-NOW = datetime.datetime.utcnow
 DEFAULT_WELOME = _('Welcome to join this group!')
 
 re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
@@ -78,7 +77,7 @@ def show_privileges(flag):
   return ', '.join(ret)
 
 def user_info(user, presence, show_jid=True, show_lastseen=False):
-  now = NOW()
+  now = datetime.datetime.utcnow()
   ans= _(
     'Nick: %s\n'
     'Nick changed %d time(s), last at %s\n'

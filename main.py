@@ -4,6 +4,7 @@
 import sys
 import os
 import logging
+import datetime
 from collections import defaultdict
 from functools import partial
 from xml.etree import ElementTree as ET
@@ -69,6 +70,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.got_roster = True
     q = self.message_queue
     if q:
+      self.now = datetime.datetime.utcnow()
       for sender, stanza in q:
         self.current_jid = sender
         self._cached_jid = None
@@ -93,6 +95,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     sender = stanza.from_jid
     body = stanza.body
     self.current_jid = sender
+    self.now = datetime.datetime.utcnow()
 
     logging.info('[%s] %s', sender, stanza.body)
 
@@ -173,6 +176,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     # avoid repeated request
     if bare not in self.subscribes:
       self.current_jid = sender
+      self.now = datetime.datetime.utcnow()
       try:
         self.handle_userjoin(action=stanza.stanza_type)
       except ValidationError:
@@ -198,6 +202,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     logging.info('%s unsubscribe', stanza.from_jid)
     sender = stanza.from_jid
     self.current_jid = sender
+    self.now = datetime.datetime.utcnow()
     self.handle_userleave(action=stanza.stanza_type)
 
     if stanza.stanza_type.endswith('ed'):
@@ -220,6 +225,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
     jid = stanza.from_jid
     plainjid = str(jid.bare())
+    self.now = datetime.datetime.utcnow()
     if plainjid not in self.presence:
       logging.info('%s[%s] (new)', jid, stanza.show or 'available')
       self.user_update_presence(plainjid)

@@ -135,7 +135,7 @@ def do_old(self, arg):
     self.reply(_('Overflow!'))
     return
   if q:
-    if NOW() - q[0].time > ONE_DAY:
+    if self.now - q[0].time > ONE_DAY:
       format = dateformat
     else:
       format = timeformat
@@ -163,7 +163,7 @@ def do_online(self, arg):
     header += _(' (with "%s" inbetween)') % arg
   text = []
 
-  now = NOW()
+  now = self.now
   for u in self.get_online_users():
     user = connection.User.one({'jid': str(u)})
     if user is None:
@@ -260,7 +260,7 @@ def do_stop(self, arg):
     self.reply(_("Sorry, I can't understand the time you specified."))
     return
 
-  now = NOW()
+  now = self.now
   if n == 0:
     if now < self.current_user.stop_until:
       self.user_reset_stop()
@@ -306,7 +306,7 @@ def do_mute(self, arg):
     self.reply(_('Nobody with the nick "%s" found.') % nick)
     return
 
-  now = NOW()
+  now = self.now
   if n == 0:
     if now < user.mute_until:
       self.user_reset_mute(user)

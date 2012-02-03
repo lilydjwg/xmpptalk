@@ -91,10 +91,9 @@ class UserMixin:
 
     This will reset the nick cache.
     '''
-    now = NOW()
     if getattr(config, "nick_change_interval", None):
       if self.current_user.nick_changes and \
-         now - self.current_user.nick_lastchange < config.nick_change_interval:
+         self.now - self.current_user.nick_lastchange < config.nick_change_interval:
         raise Forbidden(_("you can't change your nick too often"))
 
     models.validate_nick(nick)
@@ -105,7 +104,7 @@ class UserMixin:
     update = {
       '$set': {
         'nick': nick,
-        'nick_lastchange': now,
+        'nick_lastchange': self.now,
       }
     }
     if increase:
@@ -144,7 +143,7 @@ class UserMixin:
   def user_reset_stop(self):
     connection.User.collection.update(
       {'jid': self.current_user.jid}, {'$set': {
-        'stop_until': NOW(),
+        'stop_until': self.now,
       }}
     )
     self.current_user.reload()
@@ -153,7 +152,7 @@ class UserMixin:
   def user_reset_mute(self, user):
     connection.User.collection.update(
       {'jid': user.jid}, {'$set': {
-        'mute_until': NOW(),
+        'mute_until': self.now,
       }}
     )
     self.user_update_presence(self.current_user)
@@ -173,15 +172,14 @@ class UserMixin:
       if not user:
         return
 
-    now = NOW()
     prefix = ''
 
-    sec1 = (user.mute_until - now).total_seconds()
+    sec1 = (user.mute_until - self.now).total_seconds()
     if sec1 > 0:
       t = (user.mute_until + config.timezoneoffset).strftime(dateformat)
       prefix += _('(muted until %s) ') % t
 
-    sec2 = (user.stop_until - now).total_seconds()
+    sec2 = (user.stop_until - self.now).total_seconds()
     if sec2 > 0:
       t = (user.stop_until + config.timezoneoffset).strftime(dateformat)
       prefix += _('(stopped until %s) ') % t
@@ -209,7 +207,7 @@ class UserMixin:
   def user_disappeared(self, plainjid):
     connection.User.collection.update(
       {'jid': plainjid}, {'$set': {
-        'last_seen': NOW(),
+        'last_seen': self.now,
       }}
     )
   def handle_userjoin(self, action=None):
