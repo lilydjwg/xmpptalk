@@ -497,7 +497,7 @@ msgstr "显示关于其他人的信息"
 
 #: commands.py:398
 msgid "invode `uptime` and show its output"
-msgstr "调用 `update` 并显示其输出"
+msgstr "调用 `uptime` 并显示其输出"
 
 #: commands.py:403
 msgid "invode `free -m` and show its output"
