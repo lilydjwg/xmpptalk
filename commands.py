@@ -104,7 +104,7 @@ def do_longhelp(self, arg):
 
 def get_nick_help():
   nick_help = _('change your nick; show your current nick if no new nick provided')
-  if getattr(config, 'nick_change_interval'):
+  if getattr(config, 'nick_change_interval', None):
     d = seconds2time(config.nick_change_interval.total_seconds())
     nick_help += _('. You can only change your nick once in %s') % d
   return nick_help
