@@ -94,7 +94,8 @@ class UserMixin:
     if getattr(config, "nick_change_interval", None):
       if self.current_user.nick_changes and \
          self.now - self.current_user.nick_lastchange < config.nick_change_interval:
-        raise Forbidden(_("you can't change your nick too often"))
+        d = seconds2time(config.nick_change_interval.total_seconds())
+        raise Forbidden(_("you can't change your nick too often; only once in %s is allowed.") % d)
 
     models.validate_nick(nick)
     if self.nick_exists(nick):
@@ -110,10 +111,11 @@ class UserMixin:
     if increase:
       update['$inc'] = {'nick_changes': 1}
 
-    # XXX: mongokit currently does not support find_and_modify
-    return connection.User.collection.find_and_modify(
+    ret = connection.User.collection.find_and_modify(
       {'jid': plainjid}, update
     )
+    self.current_user.reload()
+    return ret
 
   @lru_cache()
   def user_get_nick(self, plainjid):

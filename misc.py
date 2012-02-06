@@ -281,3 +281,17 @@ def parseTime(s):
   else:
     return n * TimeUnitMap[u]
 
+def seconds2time(s):
+  ans = []
+  d, s = divmod(s, 86400)
+  if d:
+    ans.append(N_('%d day', '%d days', d) % d)
+  h, s = divmod(s, 3600)
+  if h:
+    ans.append(N_('%d hour', '%d hours', h) % h)
+  m, s = divmod(s, 60)
+  if m:
+    ans.append(N_('%d minute', '%d minutes', m) % m)
+  if s:
+    ans.append(N_('%d second', '%d seconds', s) % s)
+  return _('  ')[:-1].join(ans)

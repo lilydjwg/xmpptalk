@@ -17,6 +17,7 @@ command handling, should be called from messages.py
 # key is the command name, value is a (func, doc, flags) tuple
 __commands = {}
 logger = logging.getLogger(__name__)
+__brief_help = ('nick', 'pm', 'old', 'online')
 
 def command(name, doc, flags=PERM_USER):
   '''decorate and register a function that handles a command
@@ -70,24 +71,45 @@ def do_about(self, arg):
                'version: %s'
               ) % __version__)
 
-@command('help', _('display this help'))
+@command('help', _('display this brief help'))
 def do_help(self, arg):
   help = []
-  for name, (__, doc, flags) in __commands.items():
-    if int(self.current_user.flag) & flags:
-      help.append((name, doc))
+  for name in __brief_help:
+    __, doc, __ = __commands[name]
+    help.append((name, doc))
   help.sort(key=lambda x: x[0])
   prefix = config.prefix
-  text = [_('***command help***')]
+  text = [_('***brief command help***')]
   for name, doc in help:
     text.append('%s%s:\t%s' % (prefix, name, doc))
+  text.append(_('For a detailed help, use "%slonghelp".') % prefix)
   self.reply('\n'.join(text))
 
 @command('iam', _('show information about yourself'))
 def do_iam(self, arg):
   self.reply(user_info(self.current_user, self.presence, show_lastseen=True))
 
-@command('nick', _('change your nick; show your current nick if no new nick provided'))
+@command('longhelp', _('display this detailed help'))
+def do_longhelp(self, arg):
+  help = []
+  for name, (__, doc, flags) in __commands.items():
+    if int(self.current_user.flag) & flags:
+      help.append((name, doc))
+  help.sort(key=lambda x: x[0])
+  prefix = config.prefix
+  text = [_('***detailed command help***')]
+  for name, doc in help:
+    text.append('%s%s:\t%s' % (prefix, name, doc))
+  self.reply('\n'.join(text))
+
+def get_nick_help():
+  nick_help = _('change your nick; show your current nick if no new nick provided')
+  if getattr(config, 'nick_change_interval'):
+    d = seconds2time(config.nick_change_interval.total_seconds())
+    nick_help += _('. You can only change your nick once in %s') % d
+  return nick_help
+
+@command('nick', get_nick_help())
 def do_nick(self, new):
   new_nick = new.strip()
   if not new_nick:
