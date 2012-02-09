@@ -48,6 +48,7 @@ longdateformat = _('%Y-%m-%d %H:%M:%S')
 timeformat = _('%H:%M:%S')
 until_date = lambda dt, now: (dt + config.timezoneoffset).strftime(longdateformat) if dt > now else _('(N/A)')
 logger = logging.getLogger(__name__)
+lock_fd = [-1]
 
 AWAY    = _('away')
 XAWAY   = _('away')
@@ -265,13 +266,12 @@ def _setup_logging(hdl=None, level=config.logging_level, color=False):
   logging.info('logging setup')
 
 def setup_logging(hdl=None, level=config.logging_level, color=False):
-  global _lock_fd
   f = '/tmp/talkbot.%s' % config.jid.split('/', 1)[0]
-  _lock_fd = os.open(f, os.O_CREAT | os.O_WRONLY)
+  fd = lock_fd[0] = os.open(f, os.O_CREAT | os.O_WRONLY)
   try:
     # FIXME: This works well on Linux and FreeBSD, but may not work well on
     # AIX and OpenBSD
-    fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
   except:
     print('Error locking', f, file=sys.stderr)
     sys.exit(1)

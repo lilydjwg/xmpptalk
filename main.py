@@ -302,6 +302,10 @@ def runit(settings):
       # restart
       bot.disconnect()
       connection.disconnect()
+      try:
+        os.close(lock_fd[0])
+      except:
+        pass
       logging.info('restart...')
       os.execv(sys.executable, [sys.executable] + sys.argv)
   except KeyboardInterrupt:
