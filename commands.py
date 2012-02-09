@@ -141,6 +141,8 @@ def do_old(self, arg):
     try:
       num = int(arg)
       t = None
+      if num == 0:
+        return
     except ValueError:
       try:
         num = 10000 # give out 10000 entries at most; this should be enough
