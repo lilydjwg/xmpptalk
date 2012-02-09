@@ -267,7 +267,7 @@ def _setup_logging(hdl=None, level=config.logging_level, color=False):
 
 def setup_logging(hdl=None, level=config.logging_level, color=False):
   f = '/tmp/talkbot.%s' % config.jid.split('/', 1)[0]
-  fd = lock_fd[0] = os.open(f, os.O_CREAT | os.O_WRONLY)
+  fd = lock_fd[0] = os.open(f, os.O_CREAT | os.O_WRONLY, 0o600)
   try:
     # FIXME: This works well on Linux and FreeBSD, but may not work well on
     # AIX and OpenBSD
