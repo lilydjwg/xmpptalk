@@ -1,6 +1,8 @@
 import re
 import os
+import sys
 import io
+import fcntl
 import time
 import unicodedata
 import hashlib
@@ -241,7 +243,13 @@ class TornadoLogFormatter(logging.Formatter):
 def _setup_logging(hdl=None, level=config.logging_level, color=False):
   log = logging.getLogger()
   if hdl is None:
-    if not getattr(config, 'stderr_logging', True):
+    if not getattr(config, 'stderr_logging', True) or '--fork' in sys.argv:
+      pid = os.fork()
+      if pid > 0:
+        try:
+          print('forked as pid %d' % pid)
+        finally:
+          os._exit(0)
       return
     hdl = logging.StreamHandler()
     # if logging to stderr, determine color automatically
@@ -257,6 +265,16 @@ def _setup_logging(hdl=None, level=config.logging_level, color=False):
   logging.info('logging setup')
 
 def setup_logging(hdl=None, level=config.logging_level, color=False):
+  global _lock_fd
+  f = '/tmp/talkbot.%s' % config.jid.split('/', 1)[0]
+  _lock_fd = os.open(f, os.O_CREAT | os.O_WRONLY)
+  try:
+    # FIXME: This works well on Linux and FreeBSD, but may not work well on
+    # AIX and OpenBSD
+    fcntl.flock(_lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+  except:
+    print('Error locking', f, file=sys.stderr)
+    sys.exit(1)
   _setup_logging()
   for log in config.additional_logging:
     _setup_logging(*log)

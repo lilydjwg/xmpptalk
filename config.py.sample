@@ -50,7 +50,8 @@ settings = dict(
 
 help_regex = re.compile(r'^\W{,3}help\s*$')
 
-# logging to stderr, or setup one by yourself
+# logging to stderr, or fork to background (`--fork' commandline option
+# overrides this)
 # stderr_logging = True
 
 additional_logging = [
