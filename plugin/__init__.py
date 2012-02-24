@@ -18,6 +18,7 @@ filtered_message = (
   '你好，我现在有事情不在，一会再和您联系',
   'A music messaging session has been requested. Please click the MM icon to accept.',
   '请求了音乐信使会话。请单击 MM 图标接受。',
+  '<ding>', # Smack 客户端的「抖屏」
 )
 
 def debug(self, msg):
