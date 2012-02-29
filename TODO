@@ -2,6 +2,8 @@
 * 重构消息处理，返回值使用 STOP 和 CONTINUE
 * 禁言后避免因自动回复出来死循环
 * 取消对 mongokit 的依赖
+* 个人信息（OS, WM, IME, SHELL, etc）
+* 命令行参数（指定配置文件等）
 
 * XMPP
   * 同步数据库和 roster 中的昵称
