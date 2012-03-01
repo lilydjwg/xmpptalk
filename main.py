@@ -245,6 +245,10 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         #The server is subscribing
         pass
 
+    if config.warnv105 and jid.resource.startswith('Talk.v105'):
+      # No need to translate; GTalk only has a v105 for Chinese.
+      self.send_message(jid, '你正在使用非加密版的 GTalk v105。网络上的其它人可能会截获您的消息。请不要这样！')
+
     return True
 
   @presence_stanza_handler('unavailable')
