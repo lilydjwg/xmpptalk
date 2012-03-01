@@ -5,7 +5,6 @@ import datetime
 import pymongo.errors
 
 import models
-from models import connection
 import config
 from greenlets import Welcome
 from misc import *
@@ -27,7 +26,7 @@ class UserMixin:
       return
 
     plainjid = str(self.current_jid.bare())
-    user = connection.User.one({'jid': plainjid})
+    user = models.connection.User.one({'jid': plainjid})
 
     # not in database
     if user is None:
@@ -48,14 +47,14 @@ class UserMixin:
     add new user to database, return the added user; if alreadly exists, query
     and return it
     '''
-    u = connection.User()
+    u = models.connection.User()
     u.jid = plainjid
     if plainjid == config.root:
       u.flag = PERM_USER | PERM_GPADMIN | PERM_SYSADMIN
     try:
       u.save()
     except pymongo.errors.DuplicateKeyError:
-      u = connection.User.one({'jid': plainjid})
+      u = models.connection.User.one({'jid': plainjid})
     return u
 
   def set_user_nick(self, *args, **kwargs):
@@ -111,7 +110,7 @@ class UserMixin:
     if increase:
       update['$inc'] = {'nick_changes': 1}
 
-    ret = connection.User.collection.find_and_modify(
+    ret = models.connection.User.collection.find_and_modify(
       {'jid': plainjid}, update
     )
     self.current_user.reload()
@@ -123,7 +122,7 @@ class UserMixin:
     
     The result is cached so if any of the users's nicks change, call `cache_clear()`.
     Fallback to `self.get_name` if not found in database'''
-    u = connection.User.one({'jid': plainjid}, ['nick'])
+    u = models.connection.User.one({'jid': plainjid}, ['nick'])
     nick = u.nick if u else None
     if nick is None:
       #fallback
@@ -131,19 +130,19 @@ class UserMixin:
     return nick
 
   def nick_exists(self, nick):
-    return connection.User.find_one({'nick': nick}, {}) is not None
+    return models.connection.User.find_one({'nick': nick}, {}) is not None
 
   def get_user_by_nick(self, nick):
     '''returns a `User` object
     
     nick should not be `None` or an arbitrary one will be returned'''
-    return connection.User.find_one({'nick': nick})
+    return models.connection.User.find_one({'nick': nick})
 
   def get_user_by_jid(self, jid):
-    return connection.User.one({'jid': jid})
+    return models.connection.User.one({'jid': jid})
 
   def user_reset_stop(self):
-    connection.User.collection.update(
+    models.connection.User.collection.update(
       {'jid': self.current_user.jid}, {'$set': {
         'stop_until': self.now,
       }}
@@ -152,7 +151,7 @@ class UserMixin:
     self.user_update_presence(self.current_user)
 
   def user_reset_mute(self, user):
-    connection.User.collection.update(
+    models.connection.User.collection.update(
       {'jid': user.jid}, {'$set': {
         'mute_until': self.now,
       }}
@@ -161,7 +160,7 @@ class UserMixin:
 
   def user_update_msglog(self, msg):
     '''Note: This won't reload `self.current_user`'''
-    connection.User.collection.update(
+    models.connection.User.collection.update(
       {'jid': self.current_user.jid}, {'$inc': {
         'msg_chars': len(msg),
         'msg_count': 1,
@@ -207,7 +206,7 @@ class UserMixin:
         pass
 
   def user_disappeared(self, plainjid):
-    connection.User.collection.update(
+    models.connection.User.collection.update(
       {'jid': plainjid}, {'$set': {
         'last_seen': self.now,
       }}
@@ -233,7 +232,7 @@ class UserMixin:
 
   @property
   def group_status(self):
-    gp = self._cached_gp or connection.Group.one()
+    gp = self._cached_gp or models.connection.Group.one()
     if gp is None:
       return ''
     else:
@@ -242,7 +241,7 @@ class UserMixin:
   @group_status.setter
   def group_status(self, value):
     # external change takes effect here
-    self._cached_gp = connection.Group.collection.find_and_modify(
+    self._cached_gp = models.connection.Group.collection.find_and_modify(
       None, {'$set': {'status': value}}, new=True
     )
     for jid in self.update_on_setstatus.copy():
@@ -250,7 +249,7 @@ class UserMixin:
 
   @property
   def welcome(self):
-    gp = self._cached_gp or connection.Group.one()
+    gp = self._cached_gp or models.connection.Group.one()
     if gp is None:
       return DEFAULT_WELOME
     else:
@@ -259,6 +258,6 @@ class UserMixin:
   @welcome.setter
   def welcome(self, value):
     # external change takes effect here
-    self._cached_gp = connection.Group.collection.find_and_modify(
+    self._cached_gp = models.connection.Group.collection.find_and_modify(
       None, {'$set': {'welcome': value}}, new=True
     )

@@ -6,7 +6,8 @@ import subprocess
 
 from mongokit.schema_document import ValidationError
 
-from models import connection, logmsg
+import models
+from models import logmsg
 from misc import *
 import config
 
@@ -154,7 +155,7 @@ def do_old(self, arg):
     num = 50
     t = 60
   try:
-    q = connection.Log.find(num, t)
+    q = models.connection.Log.find(num, t)
   except struct.error:
     self.reply(_('Overflow!'))
     return
@@ -189,7 +190,7 @@ def do_online(self, arg):
 
   now = self.now
   for u in self.get_online_users():
-    user = connection.User.one({'jid': str(u)})
+    user = models.connection.User.one({'jid': str(u)})
     if user is None:
       continue
     nick = user.nick
@@ -299,7 +300,7 @@ def do_stop(self, arg):
     self.reply(_("Oops, it's too long."))
     return
   # PyMongo again...
-  connection.User.collection.update(
+  models.connection.User.collection.update(
     {'jid': self.current_user.jid}, {'$set': {
       'stop_until': dt,
     }}
@@ -351,7 +352,7 @@ def do_mute(self, arg):
     return
   user.mute_until = dt
   # user.save() would complain about float instead of int
-  connection.User.collection.update(
+  models.connection.User.collection.update(
     {'jid': user.jid}, {'$set': {
       'mute_until': dt,
     }}
@@ -374,7 +375,7 @@ def do_users(self, arg):
     header += _(' (with "%s" inbetween)') % arg
   text = []
 
-  q = connection.User.find(
+  q = models.connection.User.find(
     None, ['nick', 'msg_chars', 'msg_count'],
     sort=[('msg_count', 1), ('msg_chars', 1), ('nick', 1)])
   for u in q:

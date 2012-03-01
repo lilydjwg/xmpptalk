@@ -25,10 +25,9 @@ from pyxmpp2.expdict import ExpiringDictionary
 from pyxmpp2.iq import Iq
 
 from misc import *
-# models makes use of logging when importting
-setup_logging()
 import config
-from models import connection, ValidationError
+import models
+from models import ValidationError
 from messages import MessageMixin
 from user import UserMixin
 
@@ -301,7 +300,7 @@ def runit(settings):
     if e.code == CMD_RESTART:
       # restart
       bot.disconnect()
-      connection.disconnect()
+      models.connection.disconnect()
       try:
         os.close(lock_fd[0])
       except:
@@ -314,7 +313,7 @@ def runit(settings):
     bot.disconnect()
 
 def main():
-  gp = connection.Group.one()
+  gp = models.connection.Group.one()
   if gp and gp.status:
     st = gp.status
   else:
@@ -347,4 +346,6 @@ def main():
     runit(settings)
 
 if __name__ == '__main__':
+  setup_logging()
+  models.init()
   main()

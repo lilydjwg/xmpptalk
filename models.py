@@ -148,7 +148,7 @@ class Group(Document):
     'status': str,
   }
 
-def init_models():
+def init():
   global connection
   logger.info('connecting to database...')
   conn_args = getattr(config, 'connection', {})
@@ -170,6 +170,3 @@ def logmsg(jid=None, msg=None):
   u.jid = str(jid)
   u.msg = msg
   u.save()
-
-init_models()
-del init_models
