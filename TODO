@@ -3,6 +3,7 @@
 * 取消对 mongokit 的依赖
 * 个人信息（OS, WM, IME, SHELL, etc）
 * 命令行参数（指定配置文件等）
+* 退出群时发送消息
 
 * XMPP
   * 同步数据库和 roster 中的昵称

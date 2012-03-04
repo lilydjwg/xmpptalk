@@ -245,7 +245,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         #The server is subscribing
         pass
 
-    if config.warnv105 and jid.resource.startswith('Talk.v105'):
+    if config.warnv105 and jid.resource and jid.resource.startswith('Talk.v105'):
       # No need to translate; GTalk only has a v105 for Chinese.
       self.send_message(jid, '警告：你正在使用非加密版的 GTalk v105。网络上的其它人可能会截获您的消息。这样不安全！请使用 GTalk v104 英文版或者其它 XMPP 客户端。\nGTalk 英文版: http://www.google.com/talk/index.html\nPidgin: http://www.pidgin.im/')
 
