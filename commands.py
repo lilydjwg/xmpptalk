@@ -68,9 +68,15 @@ def handle_command(self, msg):
   return True
 @command('about', _('about this software'))
 def do_about(self, arg):
+  secs = config.timezoneoffset.days * 86400 + config.timezoneoffset.seconds
   self.reply(_('xmpptalk is a groupchat bot using XMPP\n'
-               'version: %s'
-              ) % __version__)
+               'version: %s\n'
+               'timezone: %+03d%02d'
+              ) % (
+                __version__,
+                secs // 3600,
+                (secs % 3600) // 60
+              ))
 
 @command('help', _('display this brief help'))
 def do_help(self, arg):
