@@ -18,7 +18,7 @@ command handling, should be called from messages.py
 # key is the command name, value is a (func, doc, flags) tuple
 __commands = {}
 logger = logging.getLogger(__name__)
-__brief_help = ('nick', 'pm', 'old', 'online')
+__brief_help = ('nick', 'pm', 'old', 'online', 'stop')
 
 def command(name, doc, flags=PERM_USER):
   '''decorate and register a function that handles a command
