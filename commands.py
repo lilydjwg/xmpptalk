@@ -96,6 +96,21 @@ def do_help(self, arg):
 def do_iam(self, arg):
   self.reply(user_info(self.current_user, self.presence, show_lastseen=True))
 
+@command('kick', _('kick out someone'), PERM_GPADMIN)
+def do_kick(self, arg):
+  nick = arg.strip()
+  u = self.get_user_by_nick(nick)
+  if u:
+    self.send_message(u.jid, _('Oops, you have been kicked!'))
+    self.user_delete(u)
+    self.reply(_('User %s (%s) has been kicked.') % (nick, u.jid))
+    self.dispatch_message(
+      _('User %s has been kicked.') % nick,
+      but={self.current_user.jid, u.jid},
+    )
+  else:
+    self.reply(_('Nobody with the nick "%s" found.') % nick)
+
 @command('longhelp', _('display this detailed help'))
 def do_longhelp(self, arg):
   help = []

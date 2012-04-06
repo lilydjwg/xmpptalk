@@ -160,6 +160,10 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
     self.client.roster_client.update_item(jid, name, groups)
 
+  def unsubscribe(self, jid):
+    presence = Presence(to_jid=jid, stanza_type='unsubscribe')
+    self.send(presence)
+
   @presence_stanza_handler('subscribe')
   def handle_presence_subscribe(self, stanza):
     logging.info('%s subscribe', stanza.from_jid)
@@ -214,7 +218,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   presence_stanza_handler('unsubscribed')
   def handle_presence_unsubscribed(self, stanza):
     # use the same function
-    logging.info('%s unsubscribe', stanza.from_jid)
+    logging.info('%s unsubscribed', stanza.from_jid)
     return self.handle_presence_unsubscribe(stanza)
 
   @presence_stanza_handler()

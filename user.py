@@ -212,6 +212,9 @@ class UserMixin:
         'last_seen': self.now,
       }}
     )
+  def user_delete(self, user):
+    user.delete()
+    self.unsubscribe(user.jid)
   def handle_userjoin(self, action=None):
     '''add the user to database and say Welcome'''
     # TODO: 根据 action 区别处理
