@@ -213,7 +213,7 @@ def do_online(self, arg):
     if st['show']:
       line += ' (%s)' % xmpp_show_map[st['show']]
     if st['status']:
-      line += ' [%s]' % st['status']
+      line += ' [%s]' % st['status'].strip()
     text.append(line)
 
   text.sort()
