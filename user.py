@@ -147,6 +147,7 @@ class UserMixin:
         'stop_until': self.now,
       }}
     )
+    #FIXME: if self.current_user has been deleted
     self.current_user.reload()
     self.user_update_presence(self.current_user)
 
@@ -189,13 +190,13 @@ class UserMixin:
       seconds = min(sec for sec in (sec1, sec2) if sec > 0)
     except ValueError:
       seconds = 0
-    logger.debug('%s: %d seconds to go; sec1 = %d, sec2 = %d',
+    logger.debug('%s: %r seconds to go; sec1 = %r, sec2 = %r',
                  user.jid, seconds, sec1, sec2)
     self.xmpp_setstatus(
       prefix + self.group_status,
       to_jid=user.jid,
     )
-    if seconds:
+    if seconds > 0.1:
       self.update_on_setstatus.add(user.jid)
       # XXX: Too many handlers?
       self.delayed_call(seconds, self.user_update_presence, user.jid)
