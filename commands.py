@@ -78,7 +78,7 @@ def do_about(self, arg):
                 (secs % 3600) // 60
               ))
 
-@command('help', _('display this brief help'))
+@command('help', _('display a brief help'))
 def do_help(self, arg):
   help = []
   for name in __brief_help:
