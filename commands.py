@@ -78,6 +78,10 @@ def do_about(self, arg):
                 (secs % 3600) // 60
               ))
 
+@command('free', _('invode `free -m` and show its output'))
+def do_free(self, arg):
+  out = subprocess.getoutput('free -m')
+  self.reply(out)
 @command('help', _('display a brief help'))
 def do_help(self, arg):
   help = []
@@ -95,6 +99,23 @@ def do_help(self, arg):
 @command('iam', _('show information about yourself'))
 def do_iam(self, arg):
   self.reply(user_info(self.current_user, self.presence, show_lastseen=True))
+
+@command('invite', _('kick out someone'), PERM_GPADMIN)
+def do_invite(self, arg):
+  jid = arg.strip()
+  try:
+    models.validate_jid(jid)
+  except ValidationError as e:
+    self.reply(_('Error: %s') % str(e))
+    return
+
+  u = self.get_user_by_jid(jid)
+  if u:
+    self.reply(_('This user is already a member in this group, known as %s') % u.nick)
+    return
+
+  self.subscribe(jid)
+  self.reply(_('Invitation sent, please wait for approval.'))
 
 @command('kick', _('kick out someone'), PERM_GPADMIN)
 def do_kick(self, arg):
@@ -409,6 +430,11 @@ def do_users(self, arg):
   text.append(N_('%d user listed', '%d users listed', n) % n)
   self.reply('\n'.join(text))
 
+@command('uptime', _('invode `uptime` and show its output'))
+def do_uptime(self, arg):
+  out = subprocess.getoutput('uptime')
+  self.reply(out)
+
 @command('whois', _('show information about others'))
 def do_whois(self, arg):
   nick = arg.strip()
@@ -419,12 +445,3 @@ def do_whois(self, arg):
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
-@command('uptime', _('invode `uptime` and show its output'))
-def do_uptime(self, arg):
-  out = subprocess.getoutput('uptime')
-  self.reply(out)
-
-@command('free', _('invode `free -m` and show its output'))
-def do_free(self, arg):
-  out = subprocess.getoutput('free -m')
-  self.reply(out)
