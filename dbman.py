@@ -1,3 +1,6 @@
+import models
+models.init()
+
 from models import connection
 from models import User, Log
 import config
