@@ -5,6 +5,7 @@ import struct
 import subprocess
 
 from mongokit.schema_document import ValidationError
+from pyxmpp2.exceptions import JIDError
 
 import models
 from models import logmsg
@@ -105,7 +106,7 @@ def do_invite(self, arg):
   jid = arg.strip()
   try:
     models.validate_jid(jid)
-  except ValidationError as e:
+  except (ValidationError, JIDError) as e:
     self.reply(_('Error: %s') % str(e))
     return
 
