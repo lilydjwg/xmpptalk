@@ -1,0 +1,14 @@
+#!/bin/bash
+
+prefix=/usr/local
+
+mkdir -p $prefix/var/{lib,log}/mongodb
+touch $prefix/var/log/mongodb/mongodb.log
+
+id mongo 2>/dev/null || useradd -d $prefix/var/lib/mongodb -r mongo
+
+chown -R mongo $prefix/var/{lib,log}/mongodb
+
+cd $(basename $0)
+cp ./mongodb.conf.example $prefix/etc/mongodb.log
+[[ prefix = /usr/local ]] || sed -i "s=/usr/local=$prefix=g" $prefix/etc/mongodb.log
