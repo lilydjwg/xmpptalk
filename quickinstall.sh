@@ -139,7 +139,7 @@ install_hg () {
 install_mongo () {
   save_pwd=$PWD
   cd soft
-  name=mongodb-linux-$(arch)-2.0.2
+  name=mongodb-linux-$(uname -m)-2.0.2
   wget -c http://fastdl.mongodb.org/linux/$name.tgz
   tar xzf $name.tgz
   cd $name
