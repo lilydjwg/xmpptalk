@@ -48,6 +48,8 @@ settings = dict(
   # software_version = 'pre-alpha',
   # set this, or default will reveal your actual os
   software_os = 'Linux',
+  # Which IP to connect?
+  # server = '127.0.0.1',
 )
 
 help_regex = re.compile(r'^\W{,3}help\s*$')
