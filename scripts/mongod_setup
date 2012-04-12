@@ -11,4 +11,4 @@ chown -R mongo $prefix/var/{lib,log}/mongodb
 
 cd $(dirname $0)
 cp ./mongodb.conf.example $prefix/etc/mongodb.conf
-[[ prefix = /usr/local ]] || sed -i "s=/usr/local=$prefix=g" $prefix/etc/mongodb.log
+[[ prefix = /usr/local ]] || sed -i "s=/usr/local=$prefix=g" $prefix/etc/mongodb.conf
