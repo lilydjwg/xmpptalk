@@ -28,6 +28,9 @@ class Welcome(greenlet):
     else:
       try:
         nick = stanza.as_xml.find('{vcard-temp}vCard/{vcard-temp}FN').text
+        if nick is None:
+          logger.warn('%s\'s vCard has a `None\' nick: %r', jid, stanza.as_xml)
+          nick = s.get_name(jid)
       except AttributeError: #None
         nick = s.get_name(jid)
 
