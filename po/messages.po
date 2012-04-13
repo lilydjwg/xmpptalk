@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-13 16:49+0800\n"
+"POT-Creation-Date: 2012-04-13 16:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,8 +251,8 @@ msgstr ""
 msgid "show information about yourself"
 msgstr ""
 
-#: commands.py:104 commands.py:121
-msgid "kick out someone"
+#: commands.py:104
+msgid "invite someone to join"
 msgstr ""
 
 #: commands.py:110 commands.py:167
@@ -267,6 +267,10 @@ msgstr ""
 
 #: commands.py:119
 msgid "Invitation sent, please wait for approval."
+msgstr ""
+
+#: commands.py:121
+msgid "kick out someone"
 msgstr ""
 
 #: commands.py:126

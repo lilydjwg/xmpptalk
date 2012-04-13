@@ -101,7 +101,7 @@ def do_help(self, arg):
 def do_iam(self, arg):
   self.reply(user_info(self.current_user, self.presence, show_lastseen=True))
 
-@command('invite', _('kick out someone'), PERM_GPADMIN)
+@command('invite', _('invite someone to join'), PERM_GPADMIN)
 def do_invite(self, arg):
   jid = arg.strip()
   try:

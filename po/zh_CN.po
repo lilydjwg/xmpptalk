@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-13 16:47+0800\n"
+"POT-Creation-Date: 2012-04-13 16:54+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -262,9 +262,9 @@ msgstr "获取详细帮助信息，请使用「%slonghelp」。"
 msgid "show information about yourself"
 msgstr "显示关于自己的信息"
 
-#: commands.py:104 commands.py:121
-msgid "kick out someone"
-msgstr "将某人踢出"
+#: commands.py:104
+msgid "invite someone to join"
+msgstr "邀请某人加入"
 
 #: commands.py:110 commands.py:167
 #, python-format
@@ -279,6 +279,10 @@ msgstr "此用户已经是本群的成员，昵称是 %s"
 #: commands.py:119
 msgid "Invitation sent, please wait for approval."
 msgstr "邀请已经发出，请等待对方接受。"
+
+#: commands.py:121
+msgid "kick out someone"
+msgstr "将某人踢出"
 
 #: commands.py:126
 msgid "Oops, you have been kicked!"
