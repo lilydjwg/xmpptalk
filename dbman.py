@@ -17,6 +17,11 @@ def setup_log_collection():
     'size': getattr(config, 'log_size', 524288),
   })
 
+def setup_group_collection():
+  col = connection[Group.__database__][Group.__collection__]
+  col.insert({'welcome': None, 'status': None})
+
 if __name__ == '__main__':
   setup_user_collection()
   setup_log_collection()
+  setup_group_collection()
