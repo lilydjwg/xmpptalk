@@ -54,7 +54,7 @@ class UserMixin:
     try:
       u.save()
     except pymongo.errors.DuplicateKeyError:
-      u = models.connection.User.one({'jid': plainjid})
+      return False
     return u
 
   def set_user_nick(self, *args, **kwargs):
@@ -222,9 +222,11 @@ class UserMixin:
 
     self._cached_jid = None
     u = self.db_add_user(plainjid)
-
-    Welcome(self.current_jid, self)
-    logger.info('%s joined', plainjid)
+    if u is False:
+      logger.warn('%s already in database', plainjid)
+    else:
+      Welcome(self.current_jid, self)
+      logger.info('%s joined', plainjid)
 
   def handle_userleave(self, action=None):
     '''user has left, delete the user from database'''
