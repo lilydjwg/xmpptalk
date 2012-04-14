@@ -104,7 +104,7 @@ def do_iam(self, arg):
 @command('invite', _('invite someone to join'), PERM_GPADMIN)
 def do_invite(self, arg):
   arg = arg.strip()
-  jid, args = arg.split()
+  jid, *args = arg.split()
   try:
     models.validate_jid(jid)
   except (ValidationError, JIDError) as e:
