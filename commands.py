@@ -103,7 +103,8 @@ def do_iam(self, arg):
 
 @command('invite', _('invite someone to join'), PERM_GPADMIN)
 def do_invite(self, arg):
-  jid = arg.strip()
+  arg = arg.strip()
+  jid, args = arg.split()
   try:
     models.validate_jid(jid)
   except (ValidationError, JIDError) as e:
@@ -111,7 +112,7 @@ def do_invite(self, arg):
     return
 
   u = self.get_user_by_jid(jid)
-  if u:
+  if u and not (args and args[0] == '-f'):
     self.reply(_('This user is already a member in this group, known as %s') % u.nick)
     return
 
