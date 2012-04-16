@@ -19,7 +19,7 @@ command handling, should be called from messages.py
 # key is the command name, value is a (func, doc, flags) tuple
 __commands = {}
 logger = logging.getLogger(__name__)
-__brief_help = ('nick', 'pm', 'old', 'online', 'stop')
+__brief_help = ('nick', 'pm', 'old', 'online', 'stop', 'quit')
 
 def command(name, doc, flags=PERM_USER):
   '''decorate and register a function that handles a command
@@ -277,12 +277,10 @@ def do_pm(self, arg):
   else:
     self.reply(_("arguments error: please give the user's nick and the message you want to send"))
 
-@command('quit', _('quit the bot'), PERM_SYSADMIN)
+@command('quit', _('quit the group; only Gtalk users need this, other client users may just remove the buddy.'))
 def do_quit(self, arg):
-  self.reply(_('Quitting...'))
-  self.dispatch_message(_('Quitting by %s...') % \
-                        self.user_get_nick(str(self.current_jid.bare())))
-  raise SystemExit(CMD_QUIT)
+  self.user_delete(u)
+  self.reply(_('See you!'))
 
 @command('restart', _('restart the process'), PERM_SYSADMIN)
 def do_restart(self, arg):
@@ -315,6 +313,13 @@ def do_setwelcome(self, arg):
     arg = None
   self.welcome = arg
   self.reply(_('ok.'))
+
+@command('shutdown', _('shutdown the bot'), PERM_SYSADMIN)
+def do_shutdown(self, arg):
+  self.reply(_('Shutting down...'))
+  self.dispatch_message(_('Shutting down by %s...') % \
+                        self.user_get_nick(str(self.current_jid.bare())))
+  raise SystemExit(CMD_QUIT)
 
 @command('stop', _('stop receiving messages for some time; useful units: m, h, d. If you stop for 0 seconds, you wake up.'))
 def do_stop(self, arg):

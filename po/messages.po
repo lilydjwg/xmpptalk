@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-13 16:54+0800\n"
+"POT-Creation-Date: 2012-04-16 23:13+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgstr ""
 msgid "You are currently not joined in this group, message ignored"
 msgstr ""
 
-#: messages.py:88 commands.py:405
+#: messages.py:88 commands.py:411
 #, python-format
 msgid "You are disallowed to speak until %s"
 msgstr ""
@@ -255,274 +255,284 @@ msgstr ""
 msgid "invite someone to join"
 msgstr ""
 
-#: commands.py:110 commands.py:167
+#: commands.py:111 commands.py:168
 #, python-format
 msgid "Error: %s"
 msgstr ""
 
-#: commands.py:115
+#: commands.py:116
 #, python-format
 msgid "This user is already a member in this group, known as %s"
 msgstr ""
 
-#: commands.py:119
+#: commands.py:120
 msgid "Invitation sent, please wait for approval."
 msgstr ""
 
-#: commands.py:121
+#: commands.py:122
 msgid "kick out someone"
 msgstr ""
 
-#: commands.py:126
+#: commands.py:127
 msgid "Oops, you have been kicked!"
 msgstr ""
 
-#: commands.py:128
+#: commands.py:129
 #, python-format
 msgid "User %s (%s) has been kicked."
 msgstr ""
 
-#: commands.py:130
+#: commands.py:131
 #, python-format
 msgid "User %s has been kicked."
 msgstr ""
 
-#: commands.py:134 commands.py:275 commands.py:374 commands.py:447
+#: commands.py:135 commands.py:276 commands.py:380 commands.py:453
 #, python-format
 msgid "Nobody with the nick \"%s\" found."
 msgstr ""
 
-#: commands.py:136
+#: commands.py:137
 msgid "display this detailed help"
 msgstr ""
 
-#: commands.py:144
+#: commands.py:145
 msgid "***detailed command help***"
 msgstr ""
 
-#: commands.py:150
+#: commands.py:151
 msgid "change your nick; show your current nick if no new nick provided"
 msgstr ""
 
-#: commands.py:153
+#: commands.py:154
 #, python-format
 msgid ". You can only change your nick once in %s"
 msgstr ""
 
-#: commands.py:161
+#: commands.py:162
 #, python-format
 msgid "Your current nick is: %s"
 msgstr ""
 
-#: commands.py:172
+#: commands.py:173
 #, python-format
 msgid "Your nick name has changed to \"%s\"!"
 msgstr ""
 
-#: commands.py:175
+#: commands.py:176
 #, python-format
 msgid "%s is now known as %s."
 msgstr ""
 
-#: commands.py:181
+#: commands.py:182
 msgid ""
 "show at most 50 history entries in an hour; if argument given, it specifies "
 "either the number of entries, or the time period passed from now (format is "
 "same as `stop' command)"
 msgstr ""
 
-#: commands.py:195
+#: commands.py:196
 msgid "argument should be an integer or time length"
 msgstr ""
 
-#: commands.py:203
+#: commands.py:204
 msgid "Overflow!"
 msgstr ""
 
-#: commands.py:211
+#: commands.py:212
 msgid "No history entries match your criteria"
 msgstr ""
 
-#: commands.py:227
+#: commands.py:228
 msgid ""
 "show online user list; if argument given, only nicks with the argument "
 "inbetween will be shown"
 msgstr ""
 
-#: commands.py:229
+#: commands.py:230
 msgid "online users list"
 msgstr ""
 
-#: commands.py:231 commands.py:418
+#: commands.py:232 commands.py:424
 #, python-format
 msgid " (with \"%s\" inbetween)"
 msgstr ""
 
-#: commands.py:245
+#: commands.py:246
 msgid " <muted>"
 msgstr ""
 
-#: commands.py:247
+#: commands.py:248
 msgid " <stopped>"
 msgstr ""
 
-#: commands.py:259 commands.py:431
+#: commands.py:260 commands.py:437
 #, python-format
 msgid "%d user listed"
 msgid_plural "%d users listed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: commands.py:262
+#: commands.py:263
 msgid ""
 "send a private message to someone; need two arguments; spaces in nick should "
 "be escaped or quote the nick"
 msgstr ""
 
-#: commands.py:271
+#: commands.py:272
 #, python-format
 msgid "Sorry, %s does not accept private messages from you."
 msgstr ""
 
-#: commands.py:273
+#: commands.py:274
 #, python-format
 msgid "_PM_ [%s] "
 msgstr ""
 
-#: commands.py:277
+#: commands.py:278
 msgid ""
 "arguments error: please give the user's nick and the message you want to send"
 msgstr ""
 
-#: commands.py:279
-msgid "quit the bot"
+#: commands.py:280
+msgid ""
+"quit the group; only Gtalk users need this, other client users may just "
+"remove the buddy."
 msgstr ""
 
-#: commands.py:281
-msgid "Quitting..."
+#: commands.py:283
+msgid "See you!"
 msgstr ""
 
-#: commands.py:282
-#, python-format
-msgid "Quitting by %s..."
-msgstr ""
-
-#: commands.py:286
+#: commands.py:285
 msgid "restart the process"
 msgstr ""
 
-#: commands.py:288
+#: commands.py:287
 msgid "Restarting..."
 msgstr ""
 
-#: commands.py:291
+#: commands.py:290
 msgid "get or set the talkbot's status message; use 'None' to clear"
 msgstr ""
 
-#: commands.py:296
+#: commands.py:295
 #, python-format
 msgid "current group status: %s"
 msgstr ""
 
-#: commands.py:303 commands.py:316
+#: commands.py:302 commands.py:315
 msgid "ok."
 msgstr ""
 
-#: commands.py:305
+#: commands.py:304
 msgid "get or set the group's welcome message; use 'None' to clear"
 msgstr ""
 
-#: commands.py:310
+#: commands.py:309
 #, python-format
 msgid "current group welcome message: %s"
 msgstr ""
 
-#: commands.py:318
+#: commands.py:317
+msgid "shutdown the bot"
+msgstr ""
+
+#: commands.py:319
+msgid "Shutting down..."
+msgstr ""
+
+#: commands.py:320
+#, python-format
+msgid "Shutting down by %s..."
+msgstr ""
+
+#: commands.py:324
 msgid ""
 "stop receiving messages for some time; useful units: m, h, d. If you stop "
 "for 0 seconds, you wake up."
 msgstr ""
 
-#: commands.py:322
+#: commands.py:328
 msgid "How long will you stop receiving messages?"
 msgstr ""
 
-#: commands.py:328 commands.py:369
+#: commands.py:334 commands.py:375
 msgid "Sorry, I can't understand the time you specified."
 msgstr ""
 
-#: commands.py:335
+#: commands.py:341
 msgid "Ok, stop cancelled."
 msgstr ""
 
-#: commands.py:337
+#: commands.py:343
 msgid "Not stopped yet."
 msgstr ""
 
-#: commands.py:343 commands.py:394
+#: commands.py:349 commands.py:400
 msgid "Oops, it's too long."
 msgstr ""
 
-#: commands.py:353
+#: commands.py:359
 #, python-format
 msgid ""
 "Ok, stop receiving messages until %s. You can change this by another `stop` "
 "command."
 msgstr ""
 
-#: commands.py:356
+#: commands.py:362
 msgid ""
 "stop somebody from talking for the specified period of time; useful units: "
 "m, h, d"
 msgstr ""
 
-#: commands.py:363
+#: commands.py:369
 msgid "No time provided."
 msgstr ""
 
-#: commands.py:381
+#: commands.py:387
 msgid "Muting has been cancelled."
 msgstr ""
 
-#: commands.py:383
+#: commands.py:389
 #, python-format
 msgid "Muting for %s has been cancelled."
 msgstr ""
 
-#: commands.py:386
+#: commands.py:392
 #, python-format
 msgid "Ok, mute for \"%s\" cancelled."
 msgstr ""
 
-#: commands.py:388
+#: commands.py:394
 #, python-format
 msgid "\"%s\" not muted yet."
 msgstr ""
 
-#: commands.py:408
+#: commands.py:414
 #, python-format
 msgid "%(nick)s is disallowed to speak until %(time)s."
 msgstr ""
 
-#: commands.py:411
+#: commands.py:417
 #, python-format
 msgid "Ok, mute \"%(nick)s\" until %(time)s."
 msgstr ""
 
-#: commands.py:414
+#: commands.py:420
 msgid ""
 "show all members; if argument given, only nicks with the argument inbetween "
 "will be shown"
 msgstr ""
 
-#: commands.py:416
+#: commands.py:422
 msgid "all users list"
 msgstr ""
 
-#: commands.py:434
+#: commands.py:440
 msgid "invode `uptime` and show its output"
 msgstr ""
 
-#: commands.py:439
+#: commands.py:445
 msgid "show information about others"
 msgstr ""
