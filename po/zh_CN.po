@@ -1,7 +1,7 @@
 # Chinese translations for xmpptalk package.
 # Copyright (C) 2011 THE xmpptalk'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the xmpptalk package.
-#  <lilydjwg@gmail.com>, 2011.
+#  <lilydjwg@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
