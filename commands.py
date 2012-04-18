@@ -90,7 +90,9 @@ def do_about(self, arg):
   secs = config.timezoneoffset.days * 86400 + config.timezoneoffset.seconds
   self.reply(_('xmpptalk is a groupchat bot using XMPP\n'
                'version: %s\n'
-               'timezone: %+03d%02d'
+               'timezone: %+03d%02d\n'
+               'https://github.com/lilydjwg/xmpptalk\n'
+               'https://bitbucket.org/lilydjwg/xmpptalk'
               ) % (
                 __version__,
                 secs // 3600,
