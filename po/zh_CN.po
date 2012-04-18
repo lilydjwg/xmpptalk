@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-16 23:12+0800\n"
+"POT-Creation-Date: 2012-04-18 19:51+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -17,123 +17,123 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:19
+#: models.py:37
 #, python-format
 msgid "wrong jid format: %s"
 msgstr "错误的 JID 格式: %s"
 
-#: models.py:25
+#: models.py:43
 msgid "no nickname provided"
 msgstr "没有给出昵称"
 
-#: models.py:28
+#: models.py:46
 #, python-format
 msgid "nickname too long (%d-character width), max is %d"
 msgstr "昵称太长（%d 字符宽度），最大允许值是 %d"
 
-#: models.py:35
+#: models.py:53
 #, python-format
 msgid "nickname `%s' contains disallowed character: '%c'"
 msgstr "昵称“%s”包含非法字符: “%c”"
 
-#: user.py:97
+#: user.py:115
 #, python-format
 msgid "you can't change your nick too often; only once in %s is allowed."
 msgstr "昵称更改不能太频繁；只允许在每 %s 内更改一次"
 
-#: user.py:101
+#: user.py:119
 #, python-format
 msgid "duplicate nick name: %s"
 msgstr "重复的昵称: %s"
 
-#: user.py:182
+#: user.py:200
 #, python-format
 msgid "(muted until %s) "
 msgstr "（在 %s 前被禁言）"
 
-#: user.py:187
+#: user.py:205
 #, python-format
 msgid "(stopped until %s) "
 msgstr "（在 %s 前暂停）"
 
-#: messages.py:49
+#: messages.py:67
 msgid ""
 "Your client is trying OTR encryption, which is not supported by this group."
 msgstr "你的客户端正在尝试使用 OTR 加密，但本群并不支持。"
 
-#: messages.py:69
+#: messages.py:87
 msgid "You are not allowed to send messages to this group until invited"
 msgstr "在被邀请前你不能向本群发送消息"
 
-#: messages.py:71
+#: messages.py:89
 msgid "You are currently not joined in this group, message ignored"
 msgstr "你还没有加入本群，此消息被忽略"
 
-#: messages.py:88 commands.py:411
+#: messages.py:106 commands.py:431
 #, python-format
 msgid "You are disallowed to speak until %s"
 msgstr "在 %s 之前你不允许发言。"
 
-#: greenlets.py:44
+#: greenlets.py:62
 #, python-format
 msgid ""
 "Would you like to use \"%s\" as your nick, or use \"%snick your_nick\" to "
 "choose another"
 msgstr "你要不要使用“%s”作为你的昵称，还是使用“%snick 你的昵称”来选择另一个"
 
-#: misc.py:43
+#: misc.py:61
 msgid "Welcome to join this group!"
 msgstr "欢迎加入本群！"
 
-#: misc.py:46
+#: misc.py:64
 msgid "%m-%d %H:%M:%S"
 msgstr "%m月%d日 %H:%M:%S"
 
-#: misc.py:47
+#: misc.py:65
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr "%Y年%m月%d日 %H时%M分%S秒"
 
-#: misc.py:48
+#: misc.py:66
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
-#: misc.py:49
+#: misc.py:67
 msgid "(N/A)"
 msgstr "(无)"
 
-#: misc.py:53 misc.py:54
+#: misc.py:71 misc.py:72
 msgid "away"
 msgstr "离开"
 
-#: misc.py:55
+#: misc.py:73
 msgid "dnd"
 msgstr "忙碌"
 
-#: misc.py:56
+#: misc.py:74
 msgid "online"
 msgstr "在线"
 
-#: misc.py:57
+#: misc.py:75
 msgid "chatty"
 msgstr "和我说话吧"
 
-#: misc.py:58
+#: misc.py:76
 msgid "offline"
 msgstr "离线"
 
-#: misc.py:77
+#: misc.py:95
 msgid "member"
 msgstr "成员"
 
-#: misc.py:79
+#: misc.py:97
 msgid "group_admin"
 msgstr "群管理员"
 
-#: misc.py:81
+#: misc.py:99
 msgid "sys_admin"
 msgstr "系统管理员"
 
-#: misc.py:87
+#: misc.py:105
 #, python-format
 msgid ""
 "Nick: %s\n"
@@ -156,15 +156,15 @@ msgstr ""
 "坏人: [%s]\n"
 "权限: %s"
 
-#: misc.py:103
+#: misc.py:121
 msgid "yes"
 msgstr "是"
 
-#: misc.py:103
+#: misc.py:121
 msgid "no"
 msgstr "否"
 
-#: misc.py:109
+#: misc.py:127
 #, python-format
 msgid ""
 "\n"
@@ -173,11 +173,11 @@ msgstr ""
 "\n"
 "在线资源： [%s]"
 
-#: misc.py:117
+#: misc.py:135
 msgid "(Never)"
 msgstr "(从来没有)"
 
-#: misc.py:118
+#: misc.py:136
 #, python-format
 msgid ""
 "\n"
@@ -186,156 +186,160 @@ msgstr ""
 "\n"
 "最后在线时间：%s"
 
-#: misc.py:308
+#: misc.py:326
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d天"
 
-#: misc.py:311
+#: misc.py:329
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d小时"
 
-#: misc.py:314
+#: misc.py:332
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d分"
 
-#: misc.py:316
+#: misc.py:334
 #, python-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d秒"
 
-#: misc.py:317
+#: misc.py:335
 msgid "  "
 msgstr " "
 
-#: commands.py:49
+#: commands.py:67
 msgid "No help yet."
 msgstr "还没有帮助。"
 
-#: commands.py:60
+#: commands.py:78
 msgid "No command specified."
 msgstr "没有指定命令。"
 
-#: commands.py:68
+#: commands.py:86
 msgid "No such command found."
 msgstr "没有这个命令。"
 
-#: commands.py:70
+#: commands.py:88
 msgid "about this software"
 msgstr "关于本软件"
 
-#: commands.py:73
+#: commands.py:91
 #, python-format
 msgid ""
 "xmpptalk is a groupchat bot using XMPP\n"
 "version: %s\n"
-"timezone: %+03d%02d"
+"timezone: %+03d%02d\n"
+"https://github.com/lilydjwg/xmpptalk\n"
+"https://bitbucket.org/lilydjwg/xmpptalk"
 msgstr ""
 "xmpptalk 是使用 XMPP 协议的群聊软件\n"
 "版本: %s\n"
-"时区: %+03d%02d"
+"时区: %+03d%02d\n"
+"https://github.com/lilydjwg/xmpptalk\n"
+"https://bitbucket.org/lilydjwg/xmpptalk"
 
-#: commands.py:82
+#: commands.py:102
 msgid "invode `free -m` and show its output"
 msgstr "调用 `free -m` 并显示其输出"
 
-#: commands.py:86
+#: commands.py:106
 msgid "display a brief help"
 msgstr "显示简要帮助"
 
-#: commands.py:94
+#: commands.py:114
 msgid "***brief command help***"
 msgstr "***简要命令指南***"
 
-#: commands.py:97
+#: commands.py:117
 #, python-format
 msgid "For a detailed help, use \"%slonghelp\"."
 msgstr "获取详细帮助信息，请使用「%slonghelp」。"
 
-#: commands.py:100
+#: commands.py:120
 msgid "show information about yourself"
 msgstr "显示关于自己的信息"
 
-#: commands.py:104
+#: commands.py:124
 msgid "invite someone to join"
 msgstr "邀请某人加入"
 
-#: commands.py:111 commands.py:168
+#: commands.py:131 commands.py:188
 #, python-format
 msgid "Error: %s"
 msgstr "错误: %s"
 
-#: commands.py:116
+#: commands.py:136
 #, python-format
 msgid "This user is already a member in this group, known as %s"
 msgstr "此用户已经是本群的成员，昵称是 %s"
 
-#: commands.py:120
+#: commands.py:140
 msgid "Invitation sent, please wait for approval."
 msgstr "邀请已经发出，请等待对方接受。"
 
-#: commands.py:122
+#: commands.py:142
 msgid "kick out someone"
 msgstr "将某人踢出"
 
-#: commands.py:127
+#: commands.py:147
 msgid "Oops, you have been kicked!"
 msgstr "噢哦，你被踢了！"
 
-#: commands.py:129
+#: commands.py:149
 #, python-format
 msgid "User %s (%s) has been kicked."
 msgstr "用户 %s（%s）已经被踢出。"
 
-#: commands.py:131
+#: commands.py:151
 #, python-format
 msgid "User %s has been kicked."
 msgstr "用户 %s 已被踢出本群。"
 
-#: commands.py:135 commands.py:276 commands.py:380 commands.py:453
+#: commands.py:155 commands.py:296 commands.py:400 commands.py:473
 #, python-format
 msgid "Nobody with the nick \"%s\" found."
 msgstr "没找到名叫“%s”的人。"
 
-#: commands.py:137
+#: commands.py:157
 msgid "display this detailed help"
 msgstr "显示本详细帮助"
 
-#: commands.py:145
+#: commands.py:165
 msgid "***detailed command help***"
 msgstr "***详细命令指南***"
 
-#: commands.py:151
+#: commands.py:171
 msgid "change your nick; show your current nick if no new nick provided"
 msgstr "更改你的昵称；如果没有给出新昵称则显示当前昵称"
 
-#: commands.py:154
+#: commands.py:174
 #, python-format
 msgid ". You can only change your nick once in %s"
 msgstr "。在 %s 内只能更改一次昵称"
 
-#: commands.py:162
+#: commands.py:182
 #, python-format
 msgid "Your current nick is: %s"
 msgstr "你现在的昵称是: %s"
 
-#: commands.py:173
+#: commands.py:193
 #, python-format
 msgid "Your nick name has changed to \"%s\"!"
 msgstr "你的昵称已经更改为“%s”！"
 
-#: commands.py:176
+#: commands.py:196
 #, python-format
 msgid "%s is now known as %s."
 msgstr "%s 的昵称已更改为 %s。"
 
-#: commands.py:182
+#: commands.py:202
 msgid ""
 "show at most 50 history entries in an hour; if argument given, it specifies "
 "either the number of entries, or the time period passed from now (format is "
@@ -344,208 +348,208 @@ msgstr ""
 "显示一小时内的最多50条历史消息；如果给出了参数，该参数要么指定历史消息的条"
 "数，要么指定距现在的时间"
 
-#: commands.py:196
+#: commands.py:216
 msgid "argument should be an integer or time length"
 msgstr "参数应当是整数或者时间长度"
 
-#: commands.py:204
+#: commands.py:224
 msgid "Overflow!"
 msgstr "溢出！"
 
-#: commands.py:212
+#: commands.py:232
 msgid "No history entries match your criteria"
 msgstr "没有符合的聊天记录。"
 
-#: commands.py:228
+#: commands.py:248
 msgid ""
 "show online user list; if argument given, only nicks with the argument "
 "inbetween will be shown"
 msgstr "显示在线用户列表；如果给出了参数，只显示包含该参数的昵称"
 
-#: commands.py:230
+#: commands.py:250
 msgid "online users list"
 msgstr "在线用户列表"
 
-#: commands.py:232 commands.py:424
+#: commands.py:252 commands.py:444
 #, python-format
 msgid " (with \"%s\" inbetween)"
 msgstr " （包含“%s”）"
 
-#: commands.py:246
+#: commands.py:266
 msgid " <muted>"
 msgstr " <已禁言>"
 
-#: commands.py:248
+#: commands.py:268
 msgid " <stopped>"
 msgstr " <已暂停>"
 
-#: commands.py:260 commands.py:437
+#: commands.py:280 commands.py:457
 #, python-format
 msgid "%d user listed"
 msgid_plural "%d users listed"
 msgstr[0] "共列出 %d 位用户"
 
-#: commands.py:263
+#: commands.py:283
 msgid ""
 "send a private message to someone; need two arguments; spaces in nick should "
 "be escaped or quote the nick"
 msgstr "给某人发私信；需要两个参数；昵称中的空格应该转义或者加引号"
 
-#: commands.py:272
+#: commands.py:292
 #, python-format
 msgid "Sorry, %s does not accept private messages from you."
 msgstr "抱歉，%s 不接受来自你的私信。"
 
-#: commands.py:274
+#: commands.py:294
 #, python-format
 msgid "_PM_ [%s] "
 msgstr "_私信_ [%s] "
 
-#: commands.py:278
+#: commands.py:298
 msgid ""
 "arguments error: please give the user's nick and the message you want to send"
 msgstr "参数错误: 请指定用户的昵称和你要发送的消息"
 
-#: commands.py:280
+#: commands.py:300
 msgid ""
 "quit the group; only Gtalk users need this, other client users may just "
 "remove the buddy."
 msgstr "退出本群；仅 Gtalk 用户需要如此操作，其它客户端用户删除好友即可。"
 
-#: commands.py:283
+#: commands.py:303
 msgid "See you!"
 msgstr "再见！"
 
-#: commands.py:285
+#: commands.py:305
 msgid "restart the process"
 msgstr "重启此进程"
 
-#: commands.py:287
+#: commands.py:307
 msgid "Restarting..."
 msgstr "重启中..."
 
-#: commands.py:290
+#: commands.py:310
 msgid "get or set the talkbot's status message; use 'None' to clear"
 msgstr "显示或设置群聊机器人的状态；使用「None」来清除"
 
-#: commands.py:295
+#: commands.py:315
 #, python-format
 msgid "current group status: %s"
 msgstr "当前群状态: %s"
 
-#: commands.py:302 commands.py:315
+#: commands.py:322 commands.py:335
 msgid "ok."
 msgstr "完成。"
 
-#: commands.py:304
+#: commands.py:324
 msgid "get or set the group's welcome message; use 'None' to clear"
 msgstr "显示或设置群的欢迎消息；使用「None」来清除"
 
-#: commands.py:309
+#: commands.py:329
 #, python-format
 msgid "current group welcome message: %s"
 msgstr "当前群欢迎消息: %s"
 
-#: commands.py:317
+#: commands.py:337
 msgid "shutdown the bot"
 msgstr "关闭此机器人"
 
-#: commands.py:319
+#: commands.py:339
 msgid "Shutting down..."
 msgstr "关闭中..."
 
-#: commands.py:320
+#: commands.py:340
 #, python-format
 msgid "Shutting down by %s..."
 msgstr "被 %s 关闭中..."
 
-#: commands.py:324
+#: commands.py:344
 msgid ""
 "stop receiving messages for some time; useful units: m, h, d. If you stop "
 "for 0 seconds, you wake up."
 msgstr ""
 "在一段时间内停止接收消息；可使用单位：m, h, d。如果参数为 0，停止将取消。"
 
-#: commands.py:328
+#: commands.py:348
 msgid "How long will you stop receiving messages?"
 msgstr "你想停止接收消息多久？"
 
-#: commands.py:334 commands.py:375
+#: commands.py:354 commands.py:395
 msgid "Sorry, I can't understand the time you specified."
 msgstr "抱歉，我无法理解你说的时间。"
 
-#: commands.py:341
+#: commands.py:361
 msgid "Ok, stop cancelled."
 msgstr "好的，暂停已取消。"
 
-#: commands.py:343
+#: commands.py:363
 msgid "Not stopped yet."
 msgstr "并没有暂停。"
 
-#: commands.py:349 commands.py:400
+#: commands.py:369 commands.py:420
 msgid "Oops, it's too long."
 msgstr "噢哦，这也太久了吧。"
 
-#: commands.py:359
+#: commands.py:379
 #, python-format
 msgid ""
 "Ok, stop receiving messages until %s. You can change this by another `stop` "
 "command."
 msgstr "好的，在 %s 前停止接收消息。你可以再次使用「stop」命令来更改时间。"
 
-#: commands.py:362
+#: commands.py:382
 msgid ""
 "stop somebody from talking for the specified period of time; useful units: "
 "m, h, d"
 msgstr "禁言；可使用单位：m, h, d"
 
-#: commands.py:369
+#: commands.py:389
 msgid "No time provided."
 msgstr "没有给出时间。"
 
-#: commands.py:387
+#: commands.py:407
 msgid "Muting has been cancelled."
 msgstr "禁言已解除。"
 
-#: commands.py:389
+#: commands.py:409
 #, python-format
 msgid "Muting for %s has been cancelled."
 msgstr "%s 的禁言已被解除。"
 
-#: commands.py:392
+#: commands.py:412
 #, python-format
 msgid "Ok, mute for \"%s\" cancelled."
 msgstr "好的，已解除对「%s」的禁言。"
 
-#: commands.py:394
+#: commands.py:414
 #, python-format
 msgid "\"%s\" not muted yet."
 msgstr "「%s」未被禁言。"
 
-#: commands.py:414
+#: commands.py:434
 #, python-format
 msgid "%(nick)s is disallowed to speak until %(time)s."
 msgstr "%(nick)s 被禁言到 %(time)s。"
 
-#: commands.py:417
+#: commands.py:437
 #, python-format
 msgid "Ok, mute \"%(nick)s\" until %(time)s."
 msgstr "好的，在 %(time)s 前禁止「%(nick)s」发言。"
 
-#: commands.py:420
+#: commands.py:440
 msgid ""
 "show all members; if argument given, only nicks with the argument inbetween "
 "will be shown"
 msgstr "显示所有成员；如果给出了参数，只显示包含该参数的昵称"
 
-#: commands.py:422
+#: commands.py:442
 msgid "all users list"
 msgstr "所有用户列表"
 
-#: commands.py:440
+#: commands.py:460
 msgid "invode `uptime` and show its output"
 msgstr "调用 `uptime` 并显示其输出"
 
-#: commands.py:445
+#: commands.py:465
 msgid "show information about others"
 msgstr "显示关于其他人的信息"
