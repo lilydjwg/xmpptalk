@@ -299,7 +299,7 @@ def do_pm(self, arg):
 
 @command('quit', _('quit the group; only Gtalk users need this, other client users may just remove the buddy.'))
 def do_quit(self, arg):
-  self.user_delete(u)
+  self.user_delete(self.current_user)
   self.reply(_('See you!'))
 
 @command('restart', _('restart the process'), PERM_SYSADMIN)
