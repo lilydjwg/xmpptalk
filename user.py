@@ -233,7 +233,7 @@ class UserMixin:
   def user_delete(self, user):
     user.delete()
     self.unsubscribe(user.jid)
-    self.unsubscribed(user.jid, type='unsubscribed')
+    self.unsubscribe(user.jid, type='unsubscribed')
   def handle_userjoin(self, action=None):
     '''add the user to database and say Welcome'''
     # TODO: 根据 action 区别处理
