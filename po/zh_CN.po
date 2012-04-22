@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 01:01+0800\n"
+"POT-Creation-Date: 2012-04-23 01:23+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -74,11 +74,11 @@ msgstr "你还没有加入本群，此消息被忽略"
 msgid "You are disallowed to speak until %s"
 msgstr "在 %s 之前你不允许发言。"
 
-#: greenlets.py:63
+#: greenlets.py:65
 #, python-format
 msgid ""
 "Your nick is default to \"%s\", you can use \"%snick new_nick\" to choose "
-"another"
+"another."
 msgstr "你的昵称默认为「%s」，使用「%snick 新昵称」来修改。"
 
 #: misc.py:61
