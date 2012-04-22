@@ -42,7 +42,10 @@ class Welcome(greenlet):
     s.send_message(jid, s.welcome)
     s.get_vcard(jid, self.switch)
     stanza = self.parent.switch()
-    if use_roster_nick or stanza.stanza_type == 'error':
+    if use_roster_nick:
+      nick = s.get_name(jid)
+    elif stanza.stanza_type == 'error':
+      logger.warn('failed to get vCard')
       nick = s.get_name(jid)
     else:
       for path in nick_paths:
@@ -53,7 +56,7 @@ class Welcome(greenlet):
             break
       else:
         nick = s.get_name(jid)
-        logger.warn('failed to get nick from vCard: %r', stanza.as_xml())
+        logger.warn('failed to get nick from vCard')
 
     while s.nick_exists(nick):
       nick += '_'
