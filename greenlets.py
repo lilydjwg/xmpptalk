@@ -25,7 +25,7 @@ import models
 from misc import *
 
 logger = logging.getLogger(__name__)
-nick_paths = ('{vcard-temp}vCard/{vcard-temp}FN', '{vcard-temp}vCard/{vcard-temp}N/FAMILY')
+nick_paths = ('{vcard-temp}vCard/{vcard-temp}FN', '{vcard-temp}vCard/{vcard-temp}N/{vcard-temp}FAMILY')
 
 class Welcome(greenlet):
   def __init__(self, jid, xmpp, use_roster_nick=False):
