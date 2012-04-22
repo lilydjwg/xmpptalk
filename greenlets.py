@@ -49,6 +49,7 @@ class Welcome(greenlet):
         if nick is None:
           logger.warn('%s\'s vCard has a `None\' nick: %r', jid, stanza.as_xml)
           nick = s.get_name(jid)
+        logger.info('got nick from vCard: %s', nick)
       except AttributeError: #None
         nick = s.get_name(jid)
 
