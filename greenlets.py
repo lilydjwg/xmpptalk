@@ -46,14 +46,14 @@ class Welcome(greenlet):
       nick = s.get_name(jid)
     else:
       for path in nick_paths:
-        nickel = stanza.as_xml.find(path)
+        nickel = stanza.as_xml().find(path)
         if nickel:
           nick = nickel.text
           if nick:
             break
       else:
         nick = s.get_name(jid)
-        logger.warn('failed to get nick from vCard: %r', stanza.as_xml)
+        logger.warn('failed to get nick from vCard: %r', stanza.as_xml())
 
     while s.nick_exists(nick):
       nick += '_'
