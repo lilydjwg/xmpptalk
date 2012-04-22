@@ -49,7 +49,7 @@ class UserMixin:
     # not in database
     if user is None:
       user = self.db_add_user(plainjid)
-      Welcome(self.current_jid, self, use_roster_nick=True)
+      Welcome(self.current_jid, self)
 
     self._cached_jid = self.current_jid
     self._cached_user = user
