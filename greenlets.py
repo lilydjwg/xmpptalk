@@ -47,7 +47,7 @@ class Welcome(greenlet):
     else:
       for path in nick_paths:
         nickel = stanza.as_xml().find(path)
-        if nickel:
+        if nickel is not None:
           nick = nickel.text
           if nick:
             break
