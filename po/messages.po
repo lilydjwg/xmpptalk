@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-18 19:52+0800\n"
+"POT-Creation-Date: 2012-04-23 01:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,11 +75,11 @@ msgstr ""
 msgid "You are disallowed to speak until %s"
 msgstr ""
 
-#: greenlets.py:62
+#: greenlets.py:63
 #, python-format
 msgid ""
-"Would you like to use \"%s\" as your nick, or use \"%snick your_nick\" to "
-"choose another"
+"Your nick is default to \"%s\", you can use \"%snick new_nick\" to choose "
+"another"
 msgstr ""
 
 #: misc.py:61
@@ -402,7 +402,7 @@ msgid ""
 "remove the buddy."
 msgstr ""
 
-#: commands.py:303
+#: commands.py:302
 msgid "See you!"
 msgstr ""
 

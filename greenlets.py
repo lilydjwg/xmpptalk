@@ -60,8 +60,8 @@ class Welcome(greenlet):
     except models.ValidationError:
       nick = hashjid(jid)
 
-    msg = _('Would you like to use "%s" as your nick, '\
-            'or use "%snick your_nick" to choose another') % (
+    msg = _('Your nick is default to "%s", '\
+            'you can use "%snick new_nick" to choose another') % (
       nick, config.prefix
     )
     s.send_message(jid, msg)
