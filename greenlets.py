@@ -25,6 +25,7 @@ import models
 from misc import *
 
 logger = logging.getLogger(__name__)
+nick_paths = ('{vcard-temp}vCard/{vcard-temp}FN', '{vcard-temp}vCard/{vcard-temp}N/FAMILY')
 
 class Welcome(greenlet):
   def __init__(self, jid, xmpp, use_roster_nick=False):
@@ -44,14 +45,15 @@ class Welcome(greenlet):
     if use_roster_nick or stanza.stanza_type == 'error':
       nick = s.get_name(jid)
     else:
-      try:
-        nick = stanza.as_xml.find('{vcard-temp}vCard/{vcard-temp}FN').text
-        if nick is None:
-          logger.warn('%s\'s vCard has a `None\' nick: %r', jid, stanza.as_xml)
-          nick = s.get_name(jid)
-        logger.info('got nick from vCard: %s', nick)
-      except AttributeError: #None
+      for path in nick_paths:
+        nickel = stanza.as_xml.find(path)
+        if nickel:
+          nick = nickel.text
+          if nick:
+            break
+      else:
         nick = s.get_name(jid)
+        logger.warn('failed to get nick from vCard: %r', stanza.as_xml)
 
     while s.nick_exists(nick):
       nick += '_'
@@ -61,7 +63,7 @@ class Welcome(greenlet):
       nick = hashjid(jid)
 
     msg = _('Your nick is default to "%s", '\
-            'you can use "%snick new_nick" to choose another') % (
+            'you can use "%snick new_nick" to choose another.') % (
       nick, config.prefix
     )
     s.send_message(jid, msg)
