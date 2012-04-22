@@ -220,6 +220,9 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         pass
       self.subscribes[bare] = True
 
+    if stanza.stanza_type.endswith('ed'):
+      return stanza.make_accept_response()
+
     if invited is False:
       presence = Presence(to_jid=stanza.from_jid.bare(),
                           stanza_type='subscribe')
@@ -229,7 +232,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def handle_presence_subscribed(self, stanza):
     # use the same function
     logging.info('%s subscribed', stanza.from_jid)
-    return stanza.make_accept_response()
+    return self.handle_presence_subscribe(stanza)
 
   @presence_stanza_handler('unsubscribe')
   def handle_presence_unsubscribe(self, stanza):
@@ -321,7 +324,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def get_vcard(self, jid, callback):
     '''callback is used as both result handler and error handler'''
     q = Iq(
-      to_jid = jid,
+      to_jid = jid.bare(),
       stanza_type = 'get'
     )
     vc = ET.Element("{vcard-temp}vCard")
