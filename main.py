@@ -179,6 +179,12 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def update_roster(self, jid, name=NO_CHANGE, groups=NO_CHANGE):
     self.client.roster_client.update_item(jid, name, groups)
 
+  def removeInvitation(self):
+    for ri in self.roster.values():
+      if ri.ask is not None:
+        self.client.roster_client.remove_item(ri.jid)
+        logging.info('%s removed', ri.jid)
+
   def unsubscribe(self, jid, type='unsubscribe'):
     presence = Presence(to_jid=jid, stanza_type=type)
     self.send(presence)
