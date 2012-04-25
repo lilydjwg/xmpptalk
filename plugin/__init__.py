@@ -39,19 +39,8 @@ filtered_message = (
   '<ding>', # Smack 客户端的「抖屏」
 )
 
-def debug(self, msg):
-  '''debug things; unregister in production!'''
-  if msg == 'cli':
-    import builtins
-    from cli import repl
-    from pyxmpp2.jid import JID
-    old_ = builtins._
-    g = locals()
-    del g['repl'], g['builtins'], g['old_'], g['msg']
-    repl(g, 'cmd.txt')
-    builtins._ = old_
-    return True
-  elif msg == 'cache_clear':
+def cache_clear(self, msg):
+  if msg == 'cache_clear':
     self.user_get_nick.cache_clear()
     self.reply('ok.')
     return True
@@ -117,7 +106,7 @@ def long_text_check(self, msg):
 message_plugin_early = [
 ]
 message_plugin = [
-  debug, autoreply, filter_autoreply,
+  cache_clear, autoreply, filter_autoreply,
   long_text_check,
   remove_links,
 ]

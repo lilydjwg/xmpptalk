@@ -17,6 +17,7 @@
 # along with xmpptalk.  If not, see <http://www.gnu.org/licenses/>.
 #
 from functools import wraps
+import sys
 import logging
 import datetime
 import struct
@@ -98,6 +99,21 @@ def do_about(self, arg):
                 secs // 3600,
                 (secs % 3600) // 60
               ))
+
+@command('debug', _('suspend and open debug console'), PERM_SYSADMIN)
+def do_debug(self, arg):
+  if sys.stdin.isatty():
+    import builtins
+    from cli import repl
+    from pyxmpp2.jid import JID
+    old_ = builtins._
+    g = locals()
+    del g['repl'], g['builtins'], g['old_'], g['arg']
+    repl(g, 'cmd.txt')
+    builtins._ = old_
+  else:
+    self.reply(_('Error: stdin is not terminal.'))
+  return True
 
 @command('free', _('invode `free -m` and show its output'))
 def do_free(self, arg):
