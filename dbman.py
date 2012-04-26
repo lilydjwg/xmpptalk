@@ -20,7 +20,7 @@ import models
 models.init()
 
 from models import connection
-from models import User, Log
+from models import User, Log, Group
 import config
 
 def setup_user_collection():
