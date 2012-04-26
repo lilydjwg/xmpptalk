@@ -108,6 +108,9 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def message_received(self, stanza):
     if stanza.stanza_type != 'chat':
       return True
+    if not stanza.body:
+      logging.info("%s message: %s", stanza.from_jid, stanza.serialize())
+      return True
 
     sender = stanza.from_jid
     body = stanza.body
