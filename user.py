@@ -258,10 +258,7 @@ class UserMixin:
   @property
   def group_status(self):
     gp = self._cached_gp or models.connection.Group.one()
-    if gp is None:
-      return ''
-    else:
-      return gp.get('status', '')
+    return gp.get('status', '')
 
   @group_status.setter
   def group_status(self, value):
@@ -275,10 +272,7 @@ class UserMixin:
   @property
   def welcome(self):
     gp = self._cached_gp or models.connection.Group.one()
-    if gp is None:
-      return DEFAULT_WELOME
-    else:
-      return gp.get('welcome', DEFAULT_WELOME)
+    return gp.get('welcome') or DEFAULT_WELOME
 
   @welcome.setter
   def welcome(self, value):
