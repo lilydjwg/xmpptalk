@@ -261,7 +261,7 @@ class UserMixin:
     if gp is None:
       return ''
     else:
-      return gp.get('status', None)
+      return gp.get('status', '')
 
   @group_status.setter
   def group_status(self, value):
