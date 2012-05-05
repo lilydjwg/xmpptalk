@@ -57,7 +57,7 @@ def pingpong(self, msg):
     self.reply('pong at %s (%s)' % (
       dt.strftime(longdateformat),
       WEEKDAYSTR[dt.weekday()],
-    )
+    ))
     self.user_reset_stop()
     return True
   return False
