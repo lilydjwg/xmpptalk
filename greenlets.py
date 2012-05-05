@@ -40,6 +40,7 @@ class Welcome(greenlet):
 
   def run(self, jid, s, use_roster_nick):
     s.send_message(jid, s.welcome)
+    #FIXME: 超时处理
     s.get_vcard(jid, self.switch)
     stanza = self.parent.switch()
     if use_roster_nick:

@@ -53,8 +53,11 @@ def message_handler_register(func):
 def pingpong(self, msg):
   '''availability test'''
   if msg == 'ping':
-    self.reply('pong at ' + \
-               (self.now+config.timezoneoffset).strftime(longdateformat))
+    dt = self.now+config.timezoneoffset
+    self.reply('pong at %s (%s)' % (
+      dt.strftime(longdateformat),
+      WEEKDAYSTR[dt.weekday()],
+    )
     self.user_reset_stop()
     return True
   return False
