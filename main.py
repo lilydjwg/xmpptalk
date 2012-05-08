@@ -202,23 +202,24 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     sender = stanza.from_jid
     bare = sender.bare()
 
-    invited = self.invited.get(bare, False)
-    if invited is not False:
-      if invited is 2:
-        self.invited[bare] = 1
-      else:
-        del self.invited[bare]
-        return stanza.make_accept_response()
-      # We won't deny inivted members
-      self.handle_userjoin_before()
-    else:
-      if config.private and str(bare) != config.root:
-        return stanza.make_deny_response()
-      if not self.handle_userjoin_before():
-        return stanza.make_deny_response()
-
     # avoid repeated request
     if bare not in self.subscribes:
+      invited = self.invited.get(bare, False)
+      if invited is not False:
+        if invited == 2:
+          self.invited[bare] = 1
+        else:
+          del self.invited[bare]
+          return stanza.make_accept_response()
+        # We won't deny inivted members
+        self.handle_userjoin_before()
+      else:
+        if config.private and str(bare) != config.root:
+          self.send_message(_('Sorry, this is a private group, and you are not invited.'))
+          return stanza.make_deny_response()
+        if not self.handle_userjoin_before():
+          return stanza.make_deny_response()
+
       self.current_jid = sender
       self.now = datetime.datetime.utcnow()
       try:
