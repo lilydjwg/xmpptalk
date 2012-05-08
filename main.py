@@ -215,7 +215,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         self.handle_userjoin_before()
       else:
         if config.private and str(bare) != config.root:
-          self.send_message(_('Sorry, this is a private group, and you are not invited.'))
+          self.send_message(sender, _('Sorry, this is a private group, and you are not invited.'))
           return stanza.make_deny_response()
         if not self.handle_userjoin_before():
           return stanza.make_deny_response()
