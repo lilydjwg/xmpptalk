@@ -203,6 +203,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     bare = sender.bare()
 
     # avoid repeated request
+    invited = False
     if bare not in self.subscribes:
       invited = self.invited.get(bare, False)
       if invited is not False:
