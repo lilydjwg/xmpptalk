@@ -391,7 +391,7 @@ def do_stop(self, arg):
     }}
   )
   self.current_user.reload()
-  t = (dt + config.timezoneoffset).strftime(dateformat)
+  t = (dt + config.timezoneoffset).strftime(longdateformat)
   self.reply(_('Ok, stop receiving messages until %s. You can change this by another `stop` command.') % t)
   self.user_update_presence(self.current_user)
 
