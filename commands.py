@@ -320,6 +320,7 @@ def do_quit(self, arg):
 
 @command('restart', _('restart the process'), PERM_SYSADMIN)
 def do_restart(self, arg):
+  self.xmpp_setstatus(_('Restarting...'))
   self.reply(_('Restarting...'))
   raise SystemExit(CMD_RESTART)
 
