@@ -3,6 +3,7 @@
 * 取消对 mongokit 的依赖
 * 在群重启/关闭时的 presence 中附带消息
 * 命令行参数（指定配置文件等）
+* 支持 HTML 消息
 
 * XMPP
   * 同步数据库和 roster 中的昵称
