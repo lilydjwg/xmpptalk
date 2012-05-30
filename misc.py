@@ -69,7 +69,7 @@ logger = logging.getLogger(__name__)
 lock_fd = [-1]
 
 AWAY    = _('away')
-XAWAY   = _('away')
+XAWAY   = _('far away')
 BUSY    = _('dnd')
 ONLINE  = _('online')
 CHAT    = _('chatty')
