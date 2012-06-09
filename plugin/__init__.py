@@ -69,9 +69,10 @@ def remove_links(self, msg):
   if len(links) != 1:
     msg = re_link.sub('', msg)
   msg = re_link_js.sub('', msg)
-  msg = re_repeating_char.sub(r'\1\1\1', msg)
-  self.reply(_('Too many repeating characters, cleaned up to: ') + msg)
-  return msg
+  new_msg = re_repeating_char.sub(r'\1\1\1', msg)
+  if msg != new_msg:
+    self.reply(_('Too many repeating characters, cleaned up to: ') + new_msg)
+  return new_msg
 
 def post_code(msg):
   '''将代码贴到网站，返回 URL 地址 或者 None（失败）'''
