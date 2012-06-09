@@ -1,4 +1,6 @@
 dbpath=/usr/local/var/lib/mongodb
 logpath=/usr/local/var/log/mongodb/mongodb.log
 logappend=true
-auth = true
+#auth = true
+#smallfiles = true
+#nojournal = true
