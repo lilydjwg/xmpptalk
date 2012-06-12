@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 re_youren = re.compile(r'有人在?吗.{,3}')
 re_link = re.compile(r' <https?://(?!i.imgur.com/)[^>]+>')
 re_link_js = re.compile(r' <javascript:[^>]+>')
-re_repeating_char = re.compile(r'(\D)\1{4,}')
+re_repeating_char = re.compile(r'([^\d\s])\1{4,}')
 
 filtered_message = (
   "I'm currently away and will reply as soon as I return to eBuddy on my iPod touch",
