@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 re_youren = re.compile(r'有人在?吗.{,3}')
 re_link = re.compile(r' <https?://(?!i.imgur.com/)[^>]+>')
 re_link_js = re.compile(r' <javascript:[^>]+>')
-re_repeating_char = re.compile(r'([^\d\s])\1{4,}')
 
 filtered_message = (
   "I'm currently away and will reply as soon as I return to eBuddy on my iPod touch",
@@ -69,10 +68,7 @@ def remove_links(self, msg):
   if len(links) != 1:
     msg = re_link.sub('', msg)
   msg = re_link_js.sub('', msg)
-  new_msg = re_repeating_char.sub(r'\1\1\1', msg)
-  if msg != new_msg:
-    self.reply(_('Too many repeating characters, cleaned up to: ') + new_msg)
-  return new_msg
+  return msg
 
 def post_code(msg):
   '''将代码贴到网站，返回 URL 地址 或者 None（失败）'''
