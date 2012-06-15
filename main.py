@@ -49,6 +49,11 @@ from models import ValidationError
 from messages import MessageMixin
 from user import UserMixin
 
+if getattr(config, 'conn_lost_interval_minutes'):
+  conn_lost_interval = datetime.timedelta(minutes=config.conn_lost_interval_minutes)
+else:
+  conn_lost_interval = None
+
 class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   got_roster = False
   message_queue = None
@@ -275,7 +280,12 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.now = datetime.datetime.utcnow()
     if plainjid not in self.presence:
       logging.info('%s[%s] (new)', jid, stanza.show or 'available')
+      self.current_jid = jid
       self.user_update_presence(plainjid)
+      if conn_lost_interval and self.current_user.last_seen and \
+         self.now - self.current_user.last_seen < conn_lost_interval:
+        logging.info('(This is a re-connection.)')
+        self.send_lost_message()
     else:
       logging.info('%s[%s]', jid, stanza.show or 'available')
 
@@ -286,7 +296,6 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     }
 
     if self.get_user_by_jid(plainjid) is None and plainjid != str(self.jid):
-      self.current_jid = jid
       try:
         self.handle_userjoin()
       except ValidationError:

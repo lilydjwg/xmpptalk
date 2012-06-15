@@ -141,6 +141,24 @@ class MessageMixin:
     }, ['jid'])}
     return [u for u in self.get_online_users() if str(u) in allusers]
 
+  def send_lost_message(self):
+    q = models.connection.Log.find(9999, self.current_user.last_seen)
+    if not q:
+      return
+
+    text = [_('Messages while you lost the connection:')]
+    for l in q:
+      try:
+        m = '%s %s' % (
+          (l.time + config.timezoneoffset).strftime(timeformat),
+          l.msg,
+        )
+      except AttributeError:
+        logger.warn('malformed log messages: %r', l)
+        continue
+      text.append(m)
+    self.reply('\n'.join(text))
+
 try:
   from plugin import message_plugin_early
   for h in message_plugin_early:
