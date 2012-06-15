@@ -49,7 +49,7 @@ from models import ValidationError
 from messages import MessageMixin
 from user import UserMixin
 
-if getattr(config, 'conn_lost_interval_minutes'):
+if getattr(config, 'conn_lost_interval_minutes', False):
   conn_lost_interval = datetime.timedelta(minutes=config.conn_lost_interval_minutes)
 else:
   conn_lost_interval = None
