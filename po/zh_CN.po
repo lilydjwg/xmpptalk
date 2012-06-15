@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-09 23:20+0800\n"
+"POT-Creation-Date: 2012-06-16 00:43+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: main.py:219
+#: main.py:224
 msgid "Sorry, this is a private group, and you are not invited."
 msgstr "抱歉，这是个私有群，而你未收到邀请。"
 
@@ -78,16 +78,16 @@ msgstr "你还没有加入本群，此消息被忽略"
 msgid "You are disallowed to speak until %s"
 msgstr "在 %s 之前你不允许发言。"
 
+#: messages.py:149
+msgid "Messages while you lost the connection:"
+msgstr "你掉线期间的消息："
+
 #: greenlets.py:69
 #, python-format
 msgid ""
 "Your nick is default to \"%s\", you can use \"%snick new_nick\" to choose "
 "another."
 msgstr "你的昵称默认为「%s」，使用「%snick 新昵称」来修改。"
-
-#: plugin/__init__.py:73
-msgid "Too many repeating characters, cleaned up to: "
-msgstr "太多的重复字符，已经清理为："
 
 #: misc.py:61
 msgid "Welcome to join this group!"
@@ -601,3 +601,6 @@ msgstr "调用 `uptime` 并显示其输出"
 #: commands.py:482
 msgid "show information about others"
 msgstr "显示关于其他人的信息"
+
+#~ msgid "Too many repeating characters, cleaned up to: "
+#~ msgstr "太多的重复字符，已经清理为："
