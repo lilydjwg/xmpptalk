@@ -142,6 +142,9 @@ class MessageMixin:
     return [u for u in self.get_online_users() if str(u) in allusers]
 
   def send_lost_message(self):
+    if self.now <= self.current_user.stop_until:
+      return
+
     q = models.connection.Log.find(9999, self.current_user.last_seen)
     if not q:
       return
