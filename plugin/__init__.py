@@ -37,6 +37,7 @@ filtered_message = (
   'A music messaging session has been requested. Please click the MM icon to accept.',
   '请求了音乐信使会话。请单击 MM 图标接受。',
   '<ding>', # Smack 客户端的「抖屏」
+  '我已通过IM+登录在我的iPad。现在IM+已关闭，我会在IM+下次启动时看到你的消息。',
 )
 
 def cache_clear(self, msg):
