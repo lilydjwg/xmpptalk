@@ -30,7 +30,7 @@ re_youren = re.compile(r'有人在?吗.{,3}')
 re_link = re.compile(r' <https?://(?!i.imgur.com/)[^>]+>')
 re_link_js = re.compile(r' <javascript:[^>]+>')
 
-filtered_message = (
+filtered_message = {
   "I'm currently away and will reply as soon as I return to eBuddy on my iPod touch",
   'This is an autoreply: I am currently not available. Please leave your message, and I will get back to you as soon as possible.',
   '你好，我现在有事情不在，一会再和您联系',
@@ -38,7 +38,7 @@ filtered_message = (
   '请求了音乐信使会话。请单击 MM 图标接受。',
   '<ding>', # Smack 客户端的「抖屏」
   '我已通过IM+登录在我的iPad。现在IM+已关闭，我会在IM+下次启动时看到你的消息。',
-)
+}
 
 def cache_clear(self, msg):
   if msg == 'cache_clear':
