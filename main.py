@@ -279,13 +279,14 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     plainjid = str(jid.bare())
     self.now = datetime.datetime.utcnow()
     if plainjid not in self.presence:
-      logging.info('%s[%s] (new)', jid, stanza.show or 'available')
+      type = 'new'
       self.current_jid = jid
       self.user_update_presence(plainjid)
       if conn_lost_interval and self.current_user.last_seen and \
          self.now - self.current_user.last_seen < conn_lost_interval:
-        logging.info('(This is a re-connection.)')
+        type = 'reconnect'
         self.send_lost_message()
+      logging.info('%s[%s] (%s)', jid, stanza.show or 'available', type)
     else:
       logging.info('%s[%s]', jid, stanza.show or 'available')
 
