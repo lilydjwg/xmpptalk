@@ -278,7 +278,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     jid = stanza.from_jid
     plainjid = str(jid.bare())
     self.now = datetime.datetime.utcnow()
-    if plainjid not in self.presence:
+    if plainjid not in self.presence and plainjid != str(self.jid):
       type = 'new'
       self.current_jid = jid
       self.user_update_presence(plainjid)
