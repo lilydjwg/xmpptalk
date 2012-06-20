@@ -108,6 +108,6 @@ message_plugin_early = [
 ]
 message_plugin = [
   cache_clear, autoreply, filter_autoreply,
-  long_text_check,
   remove_links,
+  long_text_check,
 ]
