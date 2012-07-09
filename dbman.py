@@ -30,10 +30,11 @@ def setup_user_collection():
 def setup_log_collection():
   db = connection[Log.__database__]
   #http://www.mongodb.org/display/DOCS/Capped+Collections
-  db.create_collection(Log.__collection__, {
-    'capped': True,
-    'size': getattr(config, 'log_size', 524288),
-  })
+  db.create_collection(
+    Log.__collection__,
+    capped=True,
+    size=getattr(config, 'log_size', 524288),
+)
 
 def setup_group_collection():
   col = connection[Group.__database__][Group.__collection__]
