@@ -102,7 +102,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         except AttributeError:
           timestamp = None
         self.handle_message(stanza.body, timestamp)
-      self.message_queue = None
+      self.message_queue = self.__class__.message_queue = None
 
   @event_handler(RosterReceivedEvent)
   def roster_received(self, stanze):
@@ -375,6 +375,7 @@ def runit(settings):
   except KeyboardInterrupt:
     pass
   finally:
+    ChatBot.message_queue = bot.message_queue
     bot.disconnect()
 
 def main():
