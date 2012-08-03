@@ -302,6 +302,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
     if self.get_user_by_jid(plainjid) is None and plainjid != str(self.jid):
       try:
+        self.current_jid = jid
         self.handle_userjoin()
       except ValidationError:
         #The server is subscribing
