@@ -170,6 +170,23 @@ def do_kick(self, arg):
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
+@command('kickw', _('kick out someone with specified message'), PERM_GPADMIN)
+def do_kickwith(self, arg):
+  lex = Lex(arg)
+  nick = lex.get_token()
+  u = self.get_user_by_nick(nick)
+  if u:
+    msg = lex.instream.read().lstrip()
+    self.send_message(u.jid, msg)
+    self.user_delete(u)
+    self.reply(_('User %s (%s) has been kicked.') % (nick, u.jid))
+    self.dispatch_message(
+      _('User %s has been kicked.') % nick,
+      but={self.current_user.jid, u.jid},
+    )
+  else:
+    self.reply(_('Nobody with the nick "%s" found.') % nick)
+
 @command('longhelp', _('display this detailed help'))
 def do_longhelp(self, arg):
   help = []
