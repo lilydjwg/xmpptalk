@@ -57,6 +57,7 @@ else:
 class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   got_roster = False
   message_queue = None
+  ignore = set()
 
   def __init__(self, jid, settings):
     if 'software_name' not in settings:
@@ -123,6 +124,9 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.now = datetime.datetime.utcnow()
 
     logging.info('[%s] %s', sender, stanza.body)
+    if str(sender.bare()) in self.ignore:
+      logging.info('(The above message is ignored on purpose)')
+      return True
 
     if not self.got_roster:
       if not self.message_queue:

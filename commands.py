@@ -184,6 +184,7 @@ def do_kickwith(self, arg):
       _('User %s has been kicked.') % nick,
       but={self.current_user.jid, u.jid},
     )
+    self.ignore.add(u.jid)
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
