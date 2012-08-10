@@ -150,14 +150,15 @@ class Log(Document):
     find `n` recent messages in `in_` minutes in chronological order.
     '''
     if in_ is not None:
+      utcnow = datetime.datetime.utcnow()
       if isinstance(in_, datetime.datetime):
         after = in_
       else:
-        after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
+        after = utcnow - datetime.timedelta(minutes=in_)
       if isinstance(in_to, datetime.datetime):
         before = in_to
       else:
-        before = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_to)
+        before = utcnow - datetime.timedelta(minutes=in_to)
       query = {'time': {'$gt': after, '$lt': before}}
     else:
       query = None
