@@ -154,10 +154,10 @@ class Log(Document):
         after = in_
       else:
         after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
-      if isinstance(in_, datetime.datetime):
+      if isinstance(in_to, datetime.datetime):
         before = in_to
       else:
-        before = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
+        before = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_to)
       query = {'time': {'$gt': after, '$lt': before}}
     else:
       query = None
