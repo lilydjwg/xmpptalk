@@ -262,12 +262,18 @@ def do_old(self, arg):
         t2 = None
         if num1 == 0:
           return
+        if num1 < num2:
+          tmp=num1; num1=num2; num2=tmp
       except ValueError:
         try:
           num1 = 10000 # give out 10000 entries at most; this should be enough
           num2 = 0
           t1 = parseTime(arg[0]) // 60
           t2 = parseTime(arg[1]) // 60
+          if t1 == 0:
+            return
+          if t1 < t2:
+            tmp=t1; t1=t2; t2=tmp
         except ValueError:
           self.reply(_('argument should be an integer or time length'))
           return
