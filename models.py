@@ -162,9 +162,9 @@ class Log(Document):
       query = {'time': {'$gt': after, '$lt': before}}
     else:
       query = None
-    l = list(super().find(query).sort('$natural', -1).limit(n))
+    l = list(super().find(query).sort('$natural', -1).limit(n))[nto:]
     l.reverse()
-    return l[nto:]
+    return l
 
 class Group(Document):
   __collection__ = collection_prefix + 'group'
