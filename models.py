@@ -145,7 +145,7 @@ class Log(Document):
     'time': datetime.datetime.utcnow,
   }
 
-  def find(self, n, in_=None):
+  def find(self, n, in_=None, nto=0, in_to=0):
     '''
     find `n` recent messages in `in_` minutes in chronological order.
     '''
@@ -154,12 +154,16 @@ class Log(Document):
         after = in_
       else:
         after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
-      query = {'time': {'$gt': after}}
+      if isinstance(in_, datetime.datetime):
+        before = in_to
+      else:
+        before = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
+      query = {'time': {'$gt': after, '$lt': before}}
     else:
       query = None
     l = list(super().find(query).sort('$natural', -1).limit(n))
     l.reverse()
-    return l
+    return l[nto:]
 
 class Group(Document):
   __collection__ = collection_prefix + 'group'
