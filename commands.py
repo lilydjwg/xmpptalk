@@ -265,7 +265,7 @@ def do_old(self, arg):
         if num1 == 0:
           return
         if num1 < num2:
-          tmp=num1; num1=num2; num2=tmp
+          num1, num2 = num2, num1
       except ValueError:
         try:
           num1 = 10000 # give out 10000 entries at most; this should be enough
@@ -275,7 +275,7 @@ def do_old(self, arg):
           if t1 == 0:
             return
           if t1 < t2:
-            tmp=t1; t1=t2; t2=tmp
+            t1, t2 = t2, t1
         except ValueError:
           self.reply(_('argument should be an integer or time length'))
           return
