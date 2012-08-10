@@ -251,6 +251,8 @@ def do_old(self, arg):
           num2 = 0
           t1 = parseTime(arg[0]) // 60
           t2 = 0
+          if t1 == 0:
+            return
         except ValueError:
           self.reply(_('argument should be an integer or time length'))
           return
