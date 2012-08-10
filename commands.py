@@ -236,7 +236,7 @@ def do_nick(self, new):
 @command('old', _('show at most 50 history entries in an hour; if argument given, it specifies either the number of entries, or the time period passed from now (format is same as `stop\' command)'))
 def do_old(self, arg):
   arg = arg.strip().split()
-  if arg[0]:
+  if arg:
     if len(arg)<2:
       try:
         num1 = int(arg[0])
