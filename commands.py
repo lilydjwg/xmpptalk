@@ -256,7 +256,7 @@ def do_old(self, arg):
         except ValueError:
           self.reply(_('argument should be an integer or time length'))
           return
-     else:
+    else:
       try:
         num1 = int(arg[0])
         num2 = int(arg[1])
