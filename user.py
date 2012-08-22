@@ -231,6 +231,7 @@ class UserMixin:
       }}
     )
   def user_delete(self, user):
+    logger.info('User %s (%s) left', user.nick, user.jid)
     user.delete()
     self.unsubscribe(user.jid)
     self.unsubscribe(user.jid, type='unsubscribed')
