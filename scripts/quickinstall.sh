@@ -125,9 +125,9 @@ install_pyxmpp2 () {
 install_pymongo () {
   save_pwd=$PWD
   cd soft
-  wget -c http://pypi.python.org/packages/source/p/pymongo3/pymongo3-1.9b1.tar.gz
-  tar xzf pymongo3-1.9b1.tar.gz
-  cd pymongo3-1.9b1
+  wget -c http://pypi.python.org/packages/source/p/pymongo/pymongo-2.2.1.tar.gz
+  tar xzf pymongo-2.2.1.tar.gz
+  cd pymongo-2.2.1
   python3 setup.py install
   cd "$save_pwd"
 }
