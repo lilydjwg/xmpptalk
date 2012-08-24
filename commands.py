@@ -507,3 +507,6 @@ def do_whois(self, arg):
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
+@command('say', _("Just say!"))
+def do_whois(self,arg):
+  self.reply(arg)
