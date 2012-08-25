@@ -523,3 +523,7 @@ def do_whois(self, arg):
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
 
+@command('say', _("Just say!"))
+def do_say(self,arg):
+  for u in self.get_online_users():
+    self.send_message(u.jid, "[" + self.current_user.nick + "] " + arg)
