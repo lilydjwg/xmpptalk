@@ -164,11 +164,15 @@ def hashjid(jid):
   confidential
   '''
   m = hashlib.md5()
-  bare = '%s/%s' % (jid.local, jid.domain)
+  if isinstance(jid, str):
+    username, domain = jid.split('@')
+  else:
+    username, domain = jid.local, jid.domain
+  bare = '%s/%s' % (username, domain)
   m.update(bare.encode())
   m.update(config.salt)
   domain = m.hexdigest()[:6]
-  return '%s@%s' % (jid.local[:config.nick_maxwidth-7], domain)
+  return '%s@%s' % (username[:config.nick_maxwidth-7], domain)
 
 escape_map = {}
 

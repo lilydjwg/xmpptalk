@@ -291,6 +291,9 @@ def do_online(self, arg):
     user = models.connection.User.one({'jid': str(u)})
     if user is None:
       continue
+    if user.nick is None:
+      user.nick = hashjid(user.jid)
+      user.save()
     nick = user.nick
     if arg and nick.find(arg) == -1:
       continue
@@ -493,6 +496,9 @@ def do_users(self, arg):
     None, ['nick', 'msg_chars', 'msg_count'],
     sort=[('msg_count', 1), ('msg_chars', 1), ('nick', 1)])
   for u in q:
+    if u.nick is None:
+      u.nick = hashjid(u.jid)
+      u.save()
     if arg and u.nick.find(arg) == -1:
       continue
     text.append('* %(nick)s (N=%(msg_count)d, C=%(msg_chars)d)' % u)
