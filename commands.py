@@ -342,6 +342,16 @@ def do_restart(self, arg):
   self.reply(_('Restarting...'))
   raise SystemExit(CMD_RESTART)
 
+@command('say', _('send the following text literally'))
+def do_say(self, arg):
+  #FIXME: duplicate code of MessageMixin.handle_message
+  msg = arg
+  self.user_update_msglog(msg)
+  msg = '[%s] ' % self.user_get_nick(str(self.current_jid.bare())) + msg
+  if self.current_user.stop_until > self.now:
+    self.user_reset_stop() # self.current_user is reloaded here
+  self.dispatch_message(msg)
+
 @command('setstatus', _("get or set the talkbot's status message; use 'None' to clear"), PERM_GPADMIN)
 def do_setstatus(self, arg):
   st = self.group_status
