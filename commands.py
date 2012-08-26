@@ -115,6 +115,23 @@ def do_debug(self, arg):
     self.reply(_('Error: stdin is not terminal.'))
   return True
 
+@command('dm', _('send a direct message to someone; need two arguments; spaces in nick should be escaped or quote the nick; note that direct messages will alse be logged and can be reviewed by admins'))
+def do_dm(self, arg):
+  lex = Lex(arg)
+  nick = lex.get_token()
+  msg = lex.instream.read().lstrip()
+  if nick and msg:
+    u = self.get_user_by_nick(nick)
+    if u:
+      if not u.allow_pm or str(self.current_jid.bare()) in u.badpeople:
+        self.reply(_('Sorry, %s does not accept direct messages from you.') % nick)
+      else:
+        self.send_message(u.jid, _('_DM_ [%s] ') % self.current_user.nick + msg)
+    else:
+      self.reply(_('Nobody with the nick "%s" found.') % nick)
+  else:
+    self.reply(_("arguments error: please give the user's nick and the message you want to send"))
+
 @command('free', _('invode `free -m` and show its output'))
 def do_free(self, arg):
   out = subprocess.getoutput('free -m')
@@ -317,22 +334,9 @@ def do_online(self, arg):
   text.append(N_('%d user listed', '%d users listed', n) % n)
   self.reply('\n'.join(text))
 
-@command('pm', _('send a private message to someone; need two arguments; spaces in nick should be escaped or quote the nick'))
+@command('pm', _('deprecated, use the "dm" command instead.'))
 def do_pm(self, arg):
-  lex = Lex(arg)
-  nick = lex.get_token()
-  msg = lex.instream.read().lstrip()
-  if nick and msg:
-    u = self.get_user_by_nick(nick)
-    if u:
-      if not u.allow_pm or str(self.current_jid.bare()) in u.badpeople:
-        self.reply(_('Sorry, %s does not accept private messages from you.') % nick)
-      else:
-        self.send_message(u.jid, _('_PM_ [%s] ') % self.current_user.nick + msg)
-    else:
-      self.reply(_('Nobody with the nick "%s" found.') % nick)
-  else:
-    self.reply(_("arguments error: please give the user's nick and the message you want to send"))
+  self.reply(_('This command is deprecated. Please use the "dm" command instead.'))
 
 @command('quit', _('quit the group; only Gtalk users need this, other client users may just remove the buddy.'))
 def do_quit(self, arg):
