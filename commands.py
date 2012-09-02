@@ -252,25 +252,57 @@ def do_nick(self, new):
 
 @command('old', _('show at most 50 history entries in an hour; if argument given, it specifies either the number of entries, or the time period passed from now (format is same as `stop\' command)'))
 def do_old(self, arg):
-  arg = arg.strip()
+  arg = arg.strip().split()
   if arg:
-    try:
-      num = int(arg)
-      t = None
-      if num == 0:
-        return
-    except ValueError:
+    if len(arg)<2:
       try:
-        num = 10000 # give out 10000 entries at most; this should be enough
-        t = parseTime(arg) // 60
+        num1 = int(arg[0])
+        num2 = 0
+        t1 = None
+        t2 = None
+        if num1 == 0:
+          return
       except ValueError:
-        self.reply(_('argument should be an integer or time length'))
-        return
+        try:
+          num1 = 10000 # give out 10000 entries at most; this should be enough
+          num2 = 0
+          t1 = parseTime(arg[0]) // 60
+          t2 = 0
+          if t1 == 0:
+            return
+        except ValueError:
+          self.reply(_('argument should be an integer or time length'))
+          return
+    else:
+      try:
+        num1 = int(arg[0])
+        num2 = int(arg[1])
+        t1 = None
+        t2 = None
+        if num1 == 0:
+          return
+        if num1 < num2:
+          num1, num2 = num2, num1
+      except ValueError:
+        try:
+          num1 = 10000 # give out 10000 entries at most; this should be enough
+          num2 = 0
+          t1 = parseTime(arg[0]) // 60
+          t2 = parseTime(arg[1]) // 60
+          if t1 == 0:
+            return
+          if t1 < t2:
+            t1, t2 = t2, t1
+        except ValueError:
+          self.reply(_('argument should be an integer or time length'))
+          return
   else:
-    num = 50
-    t = 60
+    num1 = 50
+    num2 = 0
+    t1 = 60
+    t2 = 0
   try:
-    q = models.connection.Log.find(num, t)
+    q = models.connection.Log.find(num1, t1, num2, t2)
   except struct.error:
     self.reply(_('Overflow!'))
     return

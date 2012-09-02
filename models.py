@@ -145,19 +145,24 @@ class Log(Document):
     'time': datetime.datetime.utcnow,
   }
 
-  def find(self, n, in_=None):
+  def find(self, n, in_=None, nto=0, in_to=0):
     '''
     find `n` recent messages in `in_` minutes in chronological order.
     '''
     if in_ is not None:
+      utcnow = datetime.datetime.utcnow()
       if isinstance(in_, datetime.datetime):
         after = in_
       else:
-        after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
-      query = {'time': {'$gt': after}}
+        after = utcnow - datetime.timedelta(minutes=in_)
+      if isinstance(in_to, datetime.datetime):
+        before = in_to
+      else:
+        before = utcnow - datetime.timedelta(minutes=in_to)
+      query = {'time': {'$gt': after, '$lt': before}}
     else:
       query = None
-    l = list(super().find(query).sort('$natural', -1).limit(n))
+    l = list(super().find(query).sort('$natural', -1).limit(n))[nto:]
     l.reverse()
     return l
 
