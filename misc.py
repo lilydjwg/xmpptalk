@@ -74,6 +74,7 @@ BUSY    = _('dnd')
 ONLINE  = _('online')
 CHAT    = _('chatty')
 OFFLINE = _('offline')
+UNAVAILABLE = _('unavailable')
 
 xmpp_show_map = {
   '':     ONLINE,
@@ -82,6 +83,7 @@ xmpp_show_map = {
   'xa':   XAWAY,
   'chat': CHAT,
   'offline': OFFLINE,
+  'unavailable': UNAVAILABLE,
 }
 
 ONE_DAY = datetime.timedelta(hours=24)

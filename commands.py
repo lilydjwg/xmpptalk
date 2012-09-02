@@ -323,7 +323,11 @@ def do_online(self, arg):
 
     st = self.get_xmpp_status(u)
     if st['show']:
-      line += ' (%s)' % xmpp_show_map[st['show']]
+      try:
+        line += ' (%s)' % xmpp_show_map[st['show']]
+      except KeyError:
+        line += _(' (unknown)')
+        logger.warn('unknown XMPP show: %s', st['show'])
     if st['status']:
       line += ' [%s]' % st['status'].strip()
     text.append(line)
