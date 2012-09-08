@@ -54,10 +54,7 @@ def pingpong(self, msg):
   '''availability test'''
   if msg == 'ping':
     dt = self.now+config.timezoneoffset
-    self.reply('pong at %s (%s)' % (
-      dt.strftime(longdateformat),
-      WEEKDAYSTR[dt.weekday()],
-    ))
+    self.reply('pong at %s' % dt.strftime('%c'))
     self.user_reset_stop()
     return True
   return False

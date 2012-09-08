@@ -90,8 +90,6 @@ ONE_DAY = datetime.timedelta(hours=24)
 CMD_QUIT = 1
 CMD_RESTART = 2
 
-WEEKDAYSTR = (_("Monday"), _("Tuesday"), _("Wednesday"), _("Thursday"), _("Friday"), _("Saturday"), _("Sunday"))
-
 def show_privileges(flag):
   flag = int(flag)
   ret = []
