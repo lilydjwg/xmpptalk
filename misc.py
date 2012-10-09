@@ -309,7 +309,7 @@ def setup_logging(hdl=None, level=config.logging_level, color=False):
   for log in config.additional_logging:
     _setup_logging(*log)
 
-re_timeParser = re.compile(r'^(\d+)([smhd])?$')
+re_timeParser = re.compile(r'(\d+)([smhd]?)')
 TimeUnitMap = {
   '':  1,
   's': 1,
@@ -318,16 +318,16 @@ TimeUnitMap = {
   'd': 86400,
 }
 def parseTime(s):
-  '''convert 3s，5d，1h，6m to seconds'''
-  m = re_timeParser.match(s)
-  if m is None:
-    raise ValueError('not a time')
-  n = int(m.group(1))
-  u = m.group(2)
-  if u is None:
-    return n
-  else:
-    return n * TimeUnitMap[u]
+  '''convert 3s，5d，1h30m，6m to seconds'''
+  pos = 0
+  t = 0
+  while pos < len(s):
+    m = re_timeParser.match(s, pos)
+    if m is None:
+      raise ValueError('bad time period: %s' % s)
+    t += int(m.group(1)) * TimeUnitMap[m.group(2)]
+    pos = m.end()
+  return t
 
 def seconds2time(s):
   ans = []
