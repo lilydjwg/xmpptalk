@@ -50,6 +50,8 @@ try:
   gettext.textdomain(APP_NAME)
   builtins._ = gettext.gettext
   builtins.N_ = gettext.ngettext
+  import locale
+  locale.setlocale(locale.LC_ALL, '')
 except ImportError:
   builtins._ = lambda s: s
   builtins.N_ = lambda a, b, n: a if n == 1 else b
