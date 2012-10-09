@@ -2,7 +2,6 @@ DEPENDENCES
 ===========
 * pyxmpp2
   * dnspython
-* greenlet
 * modified mongokit
   * pymongo
     * mongodb

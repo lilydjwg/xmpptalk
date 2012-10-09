@@ -24,7 +24,7 @@ import pymongo.errors
 
 import models
 import config
-from greenlets import Welcome
+from welcome import Welcome
 from misc import *
 
 logger = logging.getLogger(__name__)

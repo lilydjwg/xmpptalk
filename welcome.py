@@ -18,8 +18,6 @@
 #
 import logging
 
-from greenlet import greenlet
-
 import config
 import models
 from misc import *
@@ -27,7 +25,7 @@ from misc import *
 logger = logging.getLogger(__name__)
 nick_paths = ('{vcard-temp}vCard/{vcard-temp}FN', '{vcard-temp}vCard/{vcard-temp}N/{vcard-temp}FAMILY')
 
-class Welcome(greenlet):
+class Welcome:
   def __init__(self, jid, xmpp, use_roster_nick=False):
     '''
     `jid` is a full `JID`, `xmpp` is the bot itself
@@ -35,15 +33,18 @@ class Welcome(greenlet):
     `use_roster_nick` indicates if roster nick (or hashed jid) is preferred
     because the user has alreadly joined but not in database
     '''
-    super().__init__()
-    self.switch(jid, xmpp, use_roster_nick)
+    self.s = s = xmpp
+    self.use_roster_nick = use_roster_nick
+    self.jid = jid
 
-  def run(self, jid, s, use_roster_nick):
     s.send_message(jid, s.welcome)
     #FIXME: 超时处理
-    s.get_vcard(jid, self.switch)
-    stanza = self.parent.switch()
-    if use_roster_nick:
+    s.get_vcard(jid, self.vcard_got)
+
+  def vcard_got(self, stanza):
+    jid = self.jid
+    s = self.s
+    if self.use_roster_nick:
       nick = s.get_name(jid)
     elif stanza.stanza_type == 'error':
       logger.warn('failed to get vCard')
