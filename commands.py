@@ -254,18 +254,17 @@ def do_nick(self, new):
 def do_old(self, arg):
   arg = arg.strip()
   if arg:
-    try:
-      num = int(arg)
-      t = None
-      if num == 0:
-        return
-    except ValueError:
+    for f in (oldNum, oldTime, oldSince):
       try:
-        num = 10000 # give out 10000 entries at most; this should be enough
-        t = parseTime(arg) // 60
+        num, t = f(self, arg)
+        if num == 0 and t is None:
+          return
+        break
       except ValueError:
-        self.reply(_('argument should be an integer or time length'))
-        return
+        continue
+    else:
+      self.reply(_('can\'t understand your log lookup request'))
+      return
   else:
     num = 50
     t = 60
@@ -530,4 +529,15 @@ def do_whois(self, arg):
     self.reply(user_info(u, self.presence, show_jid))
   else:
     self.reply(_('Nobody with the nick "%s" found.') % nick)
+
+def oldNum(self, arg):
+  return int(arg), None
+
+def oldTime(self, arg):
+  return 10000, parseTime(arg) // 60 + 1
+
+def oldSince(self, arg):
+  if arg[0] != '+':
+    raise ValueError
+  return 10000, secondsSince(arg, self.now) // 60 + 1
 

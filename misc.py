@@ -343,3 +343,17 @@ def seconds2time(s):
   if s:
     ans.append(N_('%d second', '%d seconds', s) % s)
   return _('  ')[:-1].join(ans)
+
+re_timeSince = re.compile(r'\+(\d+-\d+ )?(\d+:\d+)')
+def secondsSince(s, now):
+  m = re_timeSince.match(s)
+  if m is None:
+    raise ValueError
+  if m.group(1) is None:
+    d = now.strftime('%Y-%m-%d ')
+  else:
+    d = now.strftime('%Y-') + m.group(1)
+  dt = datetime.datetime.strptime(d + m.group(2), '%Y-%m-%d %H:%M') - config.timezoneoffset
+  if dt > now:
+    dt.year -= 1
+  return (now-dt).total_seconds()
