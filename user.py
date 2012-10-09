@@ -235,6 +235,7 @@ class UserMixin:
     user.delete()
     self.unsubscribe(user.jid)
     self.unsubscribe(user.jid, type='unsubscribed')
+
   def handle_userjoin(self, action=None):
     '''add the user to database and say Welcome'''
     # TODO: 根据 action 区别处理
