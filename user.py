@@ -251,11 +251,8 @@ class UserMixin:
 
   def handle_userleave(self, action=None):
     '''user has left, delete the user from database'''
-    # TODO: 根据 action 区别处理
-    self.current_user.delete()
+    self.user_delete(self.current_user)
     self._cached_jid = None
-
-    logger.info('%s left', self.current_jid)
 
   @property
   def group_status(self):
