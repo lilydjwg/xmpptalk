@@ -162,6 +162,9 @@ install_mongokit () {
   git clone git://github.com/namlook/mongokit.git
   cd mongokit
   python3 setup.py install
+  dir=$(python3 -c 'import imp; print(imp.find_module("mongokit")[1])')
+  cd "$dir"
+  2to3 -w .
   cd "$save_pwd"
 }
 
