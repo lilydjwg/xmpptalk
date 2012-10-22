@@ -166,10 +166,7 @@ install_mongokit () {
 }
 
 install_self () {
-  save_pwd=$PWD
-  cd soft
   git clone git://github.com/lilydjwg/xmpptalk.git
-  cd "$save_pwd"
 }
 
 mkdir -p soft
@@ -187,6 +184,6 @@ python3 -c 'import pyxmpp2' 2>/dev/null || install_pyxmpp2
 python3 -c 'import pymongo' 2>/dev/null || install_pymongo
 which mongo >/dev/null || install_mongo
 python3 -c 'import mongokit' 2>/dev/null || install_mongokit
-[ -x ./main.py ] || install_self
+[ -x xmpptalk/main.py ] || install_self
 
 echo "Everything done!"
