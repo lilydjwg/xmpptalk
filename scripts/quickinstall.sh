@@ -58,36 +58,36 @@ install_python27 () {
   cd "$save_pwd"
 }
 
-install_python32 () {
+install_python3 () {
   which xz >/dev/null || install_xz
   save_pwd=$PWD
   cd soft
-  wget -c http://www.python.org/ftp/python/3.2.2/Python-3.2.2.tar.xz
-  xz -d < Python-3.2.2.tar.xz | tar x
-  cd Python-3.2.2
+  wget -c http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tar.xz
+  xz -d < Python-3.3.0.tar.xz | tar x
+  cd Python-3.3.0
   save_lang=$LANG
   export LANG=en_US.UTF-8
-  ./configure --enable-shared --with-threads --with-computed-gotos --enable-ipv6 --with-wide-unicode --with-system-expat --with-system-ffi
+  ./configure --enable-shared --with-threads --with-computed-gotos --enable-ipv6 --with-system-expat --with-system-ffi
   make
   make altinstall
   export LANG=$save_lang
   ldconfig /usr/local/lib
-  cd /usr/local/bin; ln -s python3.2 python3
+  cd /usr/local/bin; ln -s python3.3 python3
   cd "$save_pwd"
 }
 
 ln_py3 () {
   which python3 >/dev/null || {
-    cd /usr/local/bin; ln -s python3.2 python3;
+    cd /usr/local/bin; ln -s $1 python3; cd -
   }
 }
 
 install_distribute () {
   save_pwd=$PWD
   cd soft
-  wget -c 'http://pypi.python.org/packages/source/d/distribute/distribute-0.6.24.tar.gz#md5=17722b22141aba8235787f79800cc452'
-  tar xzf distribute-0.6.24.tar.gz
-  cd distribute-0.6.24
+  wget -c 'http://pypi.python.org/packages/source/d/distribute/distribute-0.6.30.tar.gz#md5=17722b22141aba8235787f79800cc452'
+  tar xzf distribute-0.6.30.tar.gz
+  cd distribute-0.6.30
   python3 setup.py install
   cd "$save_pwd"
 }
@@ -95,9 +95,9 @@ install_distribute () {
 install_git () {
   save_pwd=$PWD
   cd soft
-  wget -c http://git-core.googlecode.com/files/git-1.7.9.1.tar.gz
-  tar xzf git-1.7.9.1.tar.gz
-  cd git-1.7.9.1
+  wget -c https://github.com/git/git/tarball/v1.8.0 -O git-v1.8.0.tar.gz
+  tar xzf git-v1.8.0.tar.gz
+  cd git-v1.8.0
   ./configure
   make
   make install
@@ -125,39 +125,30 @@ install_pyxmpp2 () {
 install_pymongo () {
   save_pwd=$PWD
   cd soft
-  wget -c http://pypi.python.org/packages/source/p/pymongo/pymongo-2.2.1.tar.gz
-  tar xzf pymongo-2.2.1.tar.gz
-  cd pymongo-2.2.1
+  wget -c http://pypi.python.org/packages/source/p/pymongo/pymongo-2.3.tar.gz
+  tar xzf pymongo-2.3.tar.gz
+  cd pymongo-2.3
   python3 setup.py install
   cd "$save_pwd"
 }
 
-install_greenlet () {
-  save_pwd=$PWD
-  cd soft
-  hg clone https://bitbucket.org/ambroff/greenlet
-  cd greenlet
-  python3 setup.py install
-  cd "$save_pwd"
-}
-
-install_hg () {
-  {
-    which python >/dev/null && python -c 'import sys; sys.exit(sys.version_info < (2, 4))';
-  } || install_python27
-  save_pwd=$PWD
-  cd soft
-  wget -c http://mercurial.selenic.com/release/mercurial-2.1.tar.gz
-  tar xzf mercurial-2.1.tar.gz
-  cd mercurial-2.1
-  make install-bin
-  cd "$save_pwd"
-}
+# install_hg () {
+#   {
+#     which python >/dev/null && python -c 'import sys; sys.exit(sys.version_info < (2, 4))';
+#   } || install_python27
+#   save_pwd=$PWD
+#   cd soft
+#   wget -c http://mercurial.selenic.com/release/mercurial-2.2.3.tar.gz
+#   tar xzf mercurial-2.2.3.tar.gz
+#   cd mercurial-2.2.3
+#   make install-bin
+#   cd "$save_pwd"
+# }
 
 install_mongo () {
   save_pwd=$PWD
   cd soft
-  name=mongodb-linux-$(uname -m)-2.0.2
+  name=mongodb-linux-$(uname -m)-2.2.0
   wget -c http://fastdl.mongodb.org/linux/$name.tgz
   tar xzf $name.tgz
   cd $name
@@ -166,38 +157,34 @@ install_mongo () {
 }
 
 install_mongokit () {
-  which xz >/dev/null || install_xz
   save_pwd=$PWD
   cd soft
-  wget -c http://lilydjwg.is-programmer.com/user_files/lilydjwg/File/mongokit-lily.tar.xz
-  mkdir -p mongokit-lily
-  cd mongokit-lily
-  xz -d < ../mongokit-lily.tar.xz | tar x
-  cd ..
-  mkdir -p /usr/local/lib/python3.2/site-packages
-  cp -r mongokit-lily /usr/local/lib/python3.2/site-packages/mongokit
+  git clone git://github.com/namlook/mongokit.git
+  cd mongokit
+  python3 setup.py install
   cd "$save_pwd"
 }
 
 install_self () {
-  which xz >/dev/null || install_xz
   save_pwd=$PWD
   cd soft
-  wget -c http://lilydjwg.is-programmer.com/user_files/lilydjwg/File/xmpptalk_a040700.tar.xz
-  xz -d < xmpptalk_a040700.tar.xz | tar x -C "$save_pwd"
-  # git clone git://github.com/lilydjwg/xmpptalk.git
+  git clone git://github.com/lilydjwg/xmpptalk.git
   cd "$save_pwd"
 }
 
 mkdir -p soft
-which python3.2 >/dev/null && ln_py3 || { which python3 >/dev/null && python3 -c 'import sys; sys.exit(sys.version_info.minor < 2)'; } || install_python32
+if which python3.2 >/dev/null; then
+  ln_py3 $(which python3.2)
+elif which python3.3 >/dev/null; then
+  ln_py3 $(which python3.3)
+else
+  install_python3
+fi
 python3 -c 'import setuptools' 2>/dev/null || install_distribute
 which git >/dev/null || install_git
 python3 -c 'import dns' 2>/dev/null || install_dns
 python3 -c 'import pyxmpp2' 2>/dev/null || install_pyxmpp2
 python3 -c 'import pymongo' 2>/dev/null || install_pymongo
-which hg >/dev/null || install_hg
-python3 -c 'import greenlet' 2>/dev/null || install_greenlet
 which mongo >/dev/null || install_mongo
 python3 -c 'import mongokit' 2>/dev/null || install_mongokit
 [ -x ./main.py ] || install_self
