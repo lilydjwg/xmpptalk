@@ -359,7 +359,7 @@ def secondsSince(s, now):
   ret = (now-dt).total_seconds()
   if dt > now:
     if m.group(1) is None:
-      ret -= 86400 # yesterday
+      ret += 86400 # yesterday
     else:
       # last year
       dt = datetime.datetime(dt.year-1, dt.month, dt.day, dt.hour, dt.minute, dt.second)
