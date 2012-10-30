@@ -356,6 +356,12 @@ def secondsSince(s, now):
   else:
     d = now.strftime('%Y-') + m.group(1)
   dt = datetime.datetime.strptime(d + m.group(2), '%Y-%m-%d %H:%M') - config.timezoneoffset
+  ret = (now-dt).total_seconds()
   if dt > now:
-    dt.year -= 1
-  return (now-dt).total_seconds()
+    if m.group(1) is None:
+      ret -= 86400 # yesterday
+    else:
+      # last year
+      dt = datetime.datetime(dt.year-1, dt.month, dt.day, dt.hour, dt.minute, dt.second)
+      ret = (now-dt).total_seconds()
+  return ret
