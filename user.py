@@ -225,6 +225,9 @@ class UserMixin:
         pass
 
   def user_disappeared(self, plainjid):
+    if plainjid == self.current_user.jid:
+      self.current_user.last_seen == self.now
+
     models.connection.User.collection.update(
       {'jid': plainjid}, {'$set': {
         'last_seen': self.now,
