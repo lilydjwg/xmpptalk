@@ -254,7 +254,7 @@ def do_nick(self, new):
 def do_old(self, arg):
   arg = arg.strip()
   if arg:
-    for f in (oldNum, oldTime, oldSince):
+    for f in (oldNum, oldTime, oldOffline, oldSince):
       try:
         num, t = f(self, arg)
         if num == 0 and t is None:
@@ -541,3 +541,10 @@ def oldSince(self, arg):
     raise ValueError
   return 10000, secondsSince(arg, self.now) // 60 + 1
 
+def oldOffline(self, arg):
+  if arg != '+':
+    raise ValueError
+  try:
+    return 10000, (self.now - self.current_user.last_seen).total_seconds() // 60 + 1
+  except TypeError:
+    return 50, 60
