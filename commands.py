@@ -17,6 +17,7 @@
 # along with xmpptalk.  If not, see <http://www.gnu.org/licenses/>.
 #
 from functools import wraps
+from itertools import takewhile
 import sys
 import logging
 import datetime
@@ -72,7 +73,11 @@ def handle_command(self, msg):
   if not msg.startswith(prefix):
     return False
 
-  cmds = msg[len(prefix):].split(None, 1)
+  msg = msg[len(prefix):]
+  if len(tuple(takewhile(lambda x: not x.isidentifier() or x == '_', msg))) > 1:
+    return False
+
+  cmds = msg.split(None, 1)
   try:
     cmd = cmds[0]
   except IndexError:
