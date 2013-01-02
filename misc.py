@@ -349,12 +349,13 @@ def seconds2time(s):
 re_timeSince = re.compile(r'\+(\d+-\d+ )?(\d+:\d+)')
 def secondsSince(s, now):
   m = re_timeSince.match(s)
+  localnow = now + config.timezoneoffset
   if m is None:
     raise ValueError
   if m.group(1) is None:
-    d = now.strftime('%Y-%m-%d ')
+    d = localnow.strftime('%Y-%m-%d ')
   else:
-    d = now.strftime('%Y-') + m.group(1)
+    d = localnow.strftime('%Y-') + m.group(1)
   dt = datetime.datetime.strptime(d + m.group(2), '%Y-%m-%d %H:%M') - config.timezoneoffset
   ret = (now-dt).total_seconds()
   if dt > now:
