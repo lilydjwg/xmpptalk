@@ -7,4 +7,13 @@ the `quickinstall.sh` script under `scripts/` directory, but it may fail.
 After you set up everything (including the configuration) to run this program,
 be sure you run `dbman.py` first.
 
+DEPENDENCES
+===========
+* Python 3.2+
+* pyxmpp2
+  * dnspython
+* (modified?) mongokit
+  * pymongo
+    * mongodb
+
 [XMPP]: http://xmpp.org/
