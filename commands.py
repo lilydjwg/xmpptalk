@@ -275,7 +275,7 @@ def do_old(self, arg):
     t = 60
   try:
     q = models.connection.Log.find(num, t)
-  except struct.error:
+  except (struct.error, OverflowError):
     self.reply(_('Overflow!'))
     return
   if q:
