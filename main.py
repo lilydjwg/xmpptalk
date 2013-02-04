@@ -108,7 +108,11 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   @event_handler(RosterReceivedEvent)
   def roster_received(self, stanze):
     self.delayed_call(2, self.handle_early_message)
+    self.delayed_call(getattr(config, 'reconnect_timeout', 24 * 3600), self.signal_connect)
     return True
+
+  def signal_connect(self):
+    raise Exception('reconnect')
 
   @message_stanza_handler()
   def message_received(self, stanza):
@@ -320,7 +324,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def handle_presence_unavailable(self, stanza):
     jid = stanza.from_jid
     plainjid = str(jid.bare())
-    if plainjid in self.presence:
+    if plainjid in self.presence and plainjid != str(self.jid):
       try:
         del self.presence[plainjid][jid.resource]
       except KeyError:
