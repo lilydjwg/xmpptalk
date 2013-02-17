@@ -112,7 +112,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     return True
 
   def signal_connect(self):
-    raise Exception('reconnect')
+    logging.info('Schedule to re-connecting...')
+    self.client.disconnect()
 
   @message_stanza_handler()
   def message_received(self, stanza):
