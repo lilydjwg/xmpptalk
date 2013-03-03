@@ -86,7 +86,7 @@ def check_auth(self, msg):
   if config.private:
     self.reply(_('You are not allowed to send messages to this group until invited'))
   else:
-    self.reply(_('You are currently not joined in this group, message ignored'))
+    self.reply(_('You are currently not joined in this group, message ignored. Your client should prompt you if you want add this bot to your buddylist. If not, this is a bug, contact the admin please.'))
     self.xmpp_add_user(bare)
   return True
 
