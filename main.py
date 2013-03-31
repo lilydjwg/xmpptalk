@@ -23,6 +23,8 @@ import sys
 import os
 import logging
 import datetime
+import argparse
+import configparser
 from collections import defaultdict
 from functools import partial
 from xml.etree import ElementTree as ET
@@ -421,7 +423,35 @@ def main():
   else:
     runit(settings)
 
+def read_config(file, config=configparser.ConfigParser()):
+  read = config.read(file)
+  if not read:
+    raise argparse.ArgumentTypeError('failed to read config file %r' % file)
+  return config
+
+def parse_command_line():
+  parser = argparse.ArgumentParser(description='XMPP chatroom')
+  parser.add_argument('--procname', metavar='NAME',
+                      help='set the process name if setproctitle is available')
+  parser.add_argument('--fork', action='store_true', default=False,
+                      help='fork and daemonize')
+  parser.add_argument('--pidfile', metavar='FILE',
+                      help='write pid to a file. Default to /tmp/{JID}.pid')
+  parser.add_argument('config', type=read_config,
+                      help='specify your config file. required.')
+  args = parser.parse_args()
+
+def setup_process(args):
+  if args.procname:
+    try:
+      import setproctitle
+      setproctitle.setproctitle(args.procname)
+      del setproctitle
+    except ImportError:
+      pass
+
 if __name__ == '__main__':
-  setup_logging()
-  models.init()
-  main()
+  args = parse_command_line()
+  # setup_logging()
+  # models.init()
+  # main()

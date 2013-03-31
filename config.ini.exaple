@@ -1,0 +1,86 @@
+; vim:se ft=dosini:
+
+[account]
+; your bot's full JID
+;jid = somebot@jabber.org/bot
+jid = 
+password = 
+
+; your (admin's) bare JID
+;root = mail@example.com
+
+; type a random string below
+secret = anything random is ok.
+
+starttls = true
+tls_verify_peer = false
+
+;software_name = xmpptalk
+;software_version = 0.1
+; set this, or default will reveal your actual os
+software_os = Linux
+; you can specify server IP to connect instead of using DNS
+;server = 127.0.0.1
+
+[database]
+; below is the only one currently supported
+type = mongodb
+dbname = test
+host = localhost
+port = 27017
+;user = user
+;pass = password
+
+[localization]
+; timezone offset in hours. e.g. write 8 if CST (+0800) is desired
+timezone_offset = 8
+
+; locale. default to the one in environmental variables
+locale = zh_CN
+
+[logging]
+; "simple" logging will use config in this file, and "file" will use
+; a seperate logging config file (see the documentation on Python's logging)
+type = simple
+;file = mylogging.ini
+
+[logging_console]
+; logging level for console. only used when non-daemon
+; can be one of: debug, info, warn, error.
+; default is info.
+type = 
+level = info
+
+[logging_file]
+; any section whose starts with "logging_" is treated as a logging config
+
+; currently only type=file is supported
+type = file
+level = debug
+; environmental variables in file names are expanded
+destination = /tmp/xmpp.log
+color = true
+
+[misc]
+; only allow users to change her nicks in some time. no limit by default.
+; value is in days
+;nick_change_interval_days = 10
+
+; how wide is a nick allowed. wide CJK characters are considered as 2 each
+nick_maxwidth = 20
+
+; extra allowed symbols in nicks
+nick_allowed_symbol = +-_@.™ 
+
+; command prefix
+cmd_prefix = -
+
+; if message matches the following regex, the help message will be sent
+help_regex = ^\W{,3}help\s*$
+
+; if a user goes offline and then quickly online again, we resend her missed
+; messages. value is in minutes.
+conn_lost_interval_mins = 10
+
+; should we warn about the unsecurity about unencrypted GTalk v105?
+warnv105 = true
