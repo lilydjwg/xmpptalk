@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # vim:fileencoding=utf-8
 #
-# (C) Copyright 2012 lilydjwg <lilydjwg@gmail.com>
+# (C) Copyright 2012-2013 lilydjwg <lilydjwg@gmail.com>
 #
 # This file is part of xmpptalk.
 #
