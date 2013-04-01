@@ -1,4 +1,4 @@
-**xmpptalk** is a [XMPP][XMPP] bot to make a chatroom writing in Python 3.2+.
+**xmpptalk** is an [XMPP][XMPP] bot to make a chatroom writing in Python 3.2+.
 
 Note that it is still in development. It can work well although lacking of some
 features, but currently installing it is not quite easy. You may read and try
