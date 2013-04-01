@@ -25,6 +25,8 @@ import logging
 import datetime
 import argparse
 import configparser
+import base64
+import hashlib
 from collections import defaultdict
 from functools import partial
 from xml.etree import ElementTree as ET
@@ -61,7 +63,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   message_queue = None
   ignore = set()
 
-  def __init__(self, jid, settings):
+  def __init__(self, jid, settings, botsettings=None):
     if 'software_name' not in settings:
       settings['software_name'] = self.__class__.__name__
     if 'software_version' not in settings:
@@ -71,6 +73,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.presence = defaultdict(dict)
     self.subscribes = ExpiringDictionary(default_timeout=5)
     self.invited = {}
+    self.avatar_hash = None
+    self.settings = botsettings
 
   def run(self):
     self.client.connect()
@@ -111,6 +115,9 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def roster_received(self, stanze):
     self.delayed_call(2, self.handle_early_message)
     self.delayed_call(getattr(config, 'reconnect_timeout', 24 * 3600), self.signal_connect)
+    nick, avatar_type, avatar_file = (getattr(config, x, None) for x in ('nick', 'avatar_type', 'avatar_file'))
+    if nick or (avatar_type and avatar_file):
+      self.set_vcard(nick, (avatar_type, avatar_file))
     return True
 
   def signal_connect(self):
@@ -356,19 +363,65 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     except KeyError:
       return hashjid(jid)
 
-  def get_vcard(self, jid, callback):
+  def get_vcard(self, jid=None, callback=None):
     '''callback is used as both result handler and error handler'''
     q = Iq(
-      to_jid = jid.bare(),
-      stanza_type = 'get'
+      to_jid = jid and jid.bare(),
+      stanza_type = 'get',
     )
     vc = ET.Element("{vcard-temp}vCard")
     q.add_payload(vc)
-    self.stanza_processor.set_response_handlers(q, callback, callback)
+    if callback:
+      self.stanza_processor.set_response_handlers(q, callback, callback)
     self.send(q)
 
-def runit(settings):
-  bot = ChatBot(JID(config.jid), settings)
+  def set_vcard(self, nick=None, avatar=None):
+    self.get_vcard(callback=partial(self._set_vcard, nick, avatar))
+
+  def _set_vcard(self, nick=None, avatar=None, stanza=None):
+    #FIXME: This doesn't seem to work with jabber.org
+    q = Iq(
+      from_jid = self.jid,
+      stanza_type = 'set',
+    )
+    vc = ET.Element("{vcard-temp}vCard")
+    if nick is not None:
+      n = ET.SubElement(vc, '{vcard-temp}FN')
+      n.text = nick
+    if avatar is not None:
+      type, picfile = avatar
+      photo = ET.SubElement(vc, '{vcard-temp}PHOTO')
+      t = ET.SubElement(photo, '{vcard-temp}TYPE')
+      t.text = type
+      d = ET.SubElement(photo, '{vcard-temp}BINVAL')
+      data = open(picfile, 'rb').read()
+      d.text = base64.b64encode(data).decode('ascii')
+      self.avatar_hash = hashlib.new('sha1', data).hexdigest()
+
+    q.add_payload(vc)
+    self.stanza_processor.set_response_handlers(
+      q, self._set_vcard_callback, self._set_vcard_callback)
+    self.send(q)
+
+  def _set_vcard_callback(self, stanza):
+    if stanza.stanza_type == 'error':
+      logging.error('failed to set my vCard.')
+    else:
+      logging.info('my vCard set.')
+      self.update_presence()
+
+  def update_presence(self):
+    #TODO: update for individual users
+    presence = self.settings['presence']
+    x = ET.Element('{vcard-temp:x:update}x')
+    if self.avatar_hash:
+      photo = ET.SubElement(x, '{vcard-temp:x:update}photo')
+      photo.text = self.avatar_hash
+    presence.add_payload(x)
+    self.send(presence)
+
+def runit(settings, mysettings):
+  bot = ChatBot(JID(config.jid), settings, mysettings)
   try:
     bot.run()
     # Connection resets
@@ -401,6 +454,9 @@ def main():
     initial_presence = Presence(priority=30, status=st),
     poll_interval = 3,
   )
+  botsettings = {
+    'presence': settings['initial_presence'],
+  }
   settings.update(config.settings)
   settings = XMPPSettings(settings)
 
@@ -419,9 +475,9 @@ def main():
       logger.setLevel(max((logging.INFO, config.logging_level)))
 
   if config.logging_level > logging.DEBUG:
-    restart_if_failed(runit, 3, args=(settings,))
+    restart_if_failed(runit, 3, args=(settings, botsettings))
   else:
-    runit(settings)
+    runit(settings, botsettings)
 
 def read_config(file, config=configparser.ConfigParser()):
   read = config.read(file)
