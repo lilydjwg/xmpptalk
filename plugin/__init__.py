@@ -80,7 +80,7 @@ def post_code(msg):
   '''将代码贴到网站，返回 URL 地址 或者 None（失败）'''
   form_data = urllib.parse.urlencode({'vimcn': msg}).encode('utf-8')
   try:
-    result = urllib.request.urlopen('http://p.vim-cn.com/', form_data)
+    result = urllib.request.urlopen('http://p.gocmd.net/', form_data)
     return result.read().decode('utf-8').strip() + '/text' # 默认当作纯文本高亮
   except:
     logger.error(traceback.format_exc())
