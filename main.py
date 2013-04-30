@@ -295,8 +295,11 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
     jid = stanza.from_jid
     plainjid = str(jid.bare())
+    if plainjid == str(self.jid):
+      return
+
     self.now = datetime.datetime.utcnow()
-    if plainjid not in self.presence and plainjid != str(self.jid):
+    if plainjid not in self.presence:
       type = 'new'
       self.current_jid = jid
       self.user_update_presence(plainjid)
@@ -306,6 +309,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
         self.send_lost_message()
       logging.info('%s[%s] (%s)', jid, stanza.show or 'available', type)
     else:
+      if jid.resource not in self.presence[plainjid]:
+        self.user_update_presence(plainjid)
       logging.info('%s[%s]', jid, stanza.show or 'available')
 
     self.presence[plainjid][jid.resource] = {
@@ -314,7 +319,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       'priority': stanza.priority,
     }
 
-    if self.get_user_by_jid(plainjid) is None and plainjid != str(self.jid):
+    if self.get_user_by_jid(plainjid) is None:
       try:
         self.current_jid = jid
         self.handle_userjoin()
