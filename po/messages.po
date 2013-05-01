@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-03 21:40+0800\n"
+"POT-Creation-Date: 2013-05-01 15:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: main.py:233
+#: main.py:252
 msgid "Sorry, this is a private group, and you are not invited."
+msgstr ""
+
+#: main.py:559
+#, python-format
+msgid "error: another process with pid %d is already run."
 msgstr ""
 
 #: models.py:37
@@ -86,67 +91,67 @@ msgstr ""
 msgid "Messages while you lost the connection:"
 msgstr ""
 
-#: misc.py:63
+#: misc.py:40
 msgid "Welcome to join this group!"
 msgstr ""
 
-#: misc.py:66
+#: misc.py:43
 msgid "%m-%d %H:%M:%S"
 msgstr ""
 
-#: misc.py:67
+#: misc.py:44
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr ""
 
-#: misc.py:68
+#: misc.py:45
 msgid "%H:%M:%S"
 msgstr ""
 
-#: misc.py:69
+#: misc.py:46
 msgid "(N/A)"
 msgstr ""
 
-#: misc.py:73
+#: misc.py:50
 msgid "away"
 msgstr ""
 
-#: misc.py:74
+#: misc.py:51
 msgid "far away"
 msgstr ""
 
-#: misc.py:75
+#: misc.py:52
 msgid "dnd"
 msgstr ""
 
-#: misc.py:76
+#: misc.py:53
 msgid "online"
 msgstr ""
 
-#: misc.py:77
+#: misc.py:54
 msgid "chatty"
 msgstr ""
 
-#: misc.py:78
+#: misc.py:55
 msgid "offline"
 msgstr ""
 
-#: misc.py:79
+#: misc.py:56
 msgid "unavailable"
 msgstr ""
 
-#: misc.py:99
+#: misc.py:76
 msgid "member"
 msgstr ""
 
-#: misc.py:101
+#: misc.py:78
 msgid "group_admin"
 msgstr ""
 
-#: misc.py:103
+#: misc.py:80
 msgid "sys_admin"
 msgstr ""
 
-#: misc.py:109
+#: misc.py:86
 #, python-format
 msgid ""
 "Nick: %s\n"
@@ -160,61 +165,61 @@ msgid ""
 "Privileges: %s"
 msgstr ""
 
-#: misc.py:125
+#: misc.py:102
 msgid "yes"
 msgstr ""
 
-#: misc.py:125
+#: misc.py:102
 msgid "no"
 msgstr ""
 
-#: misc.py:131
+#: misc.py:108
 #, python-format
 msgid ""
 "\n"
 "Online Resources: [%s]"
 msgstr ""
 
-#: misc.py:139
+#: misc.py:116
 msgid "(Never)"
 msgstr ""
 
-#: misc.py:140
+#: misc.py:117
 #, python-format
 msgid ""
 "\n"
 "Last Online: %s"
 msgstr ""
 
-#: misc.py:338
+#: misc.py:315
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: misc.py:341
+#: misc.py:318
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: misc.py:344
+#: misc.py:321
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: misc.py:346
+#: misc.py:323
 #, python-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: misc.py:347
+#: misc.py:324
 msgid "  "
 msgstr ""
 

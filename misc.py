@@ -25,7 +25,6 @@ import time
 import unicodedata
 import hashlib
 from functools import lru_cache
-import builtins
 import datetime
 import logging
 import curses
@@ -33,28 +32,6 @@ import curses
 import config
 
 '''constants and simple functions'''
-
-__version__ = 'pre-alpha'
-
-# install to builtin namespace
-builtins.__version__ = __version__
-
-# for i18n support
-try:
-  import gettext
-  APP_NAME = "xmpptalk"
-  LOCALE_DIR = os.path.abspath("locale")
-  if not os.path.exists(LOCALE_DIR):
-      LOCALE_DIR = "/usr/share/locale"
-  gettext.bindtextdomain(APP_NAME, LOCALE_DIR)
-  gettext.textdomain(APP_NAME)
-  builtins._ = gettext.gettext
-  builtins.N_ = gettext.ngettext
-  import locale
-  locale.setlocale(locale.LC_ALL, '')
-except ImportError:
-  builtins._ = lambda s: s
-  builtins.N_ = lambda a, b, n: a if n == 1 else b
 
 PERM_USER = 1
 PERM_GPADMIN = 2

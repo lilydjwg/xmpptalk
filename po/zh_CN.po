@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-03 21:40+0800\n"
+"POT-Creation-Date: 2013-05-01 15:55+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -17,9 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: main.py:233
+#: main.py:252
 msgid "Sorry, this is a private group, and you are not invited."
 msgstr "抱歉，这是个私有群，而你未收到邀请。"
+
+#: main.py:559
+#, python-format
+msgid "error: another process with pid %d is already run."
+msgstr "错误：另一个进程（pid %d）已经在运行。"
 
 #: models.py:37
 #, python-format
@@ -87,67 +92,67 @@ msgstr "在 %s 之前你不允许发言。"
 msgid "Messages while you lost the connection:"
 msgstr "你掉线期间的消息："
 
-#: misc.py:63
+#: misc.py:40
 msgid "Welcome to join this group!"
 msgstr "欢迎加入本群！"
 
-#: misc.py:66
+#: misc.py:43
 msgid "%m-%d %H:%M:%S"
 msgstr "%m月%d日 %H:%M:%S"
 
-#: misc.py:67
+#: misc.py:44
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr "%Y年%m月%d日 %H时%M分%S秒"
 
-#: misc.py:68
+#: misc.py:45
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
-#: misc.py:69
+#: misc.py:46
 msgid "(N/A)"
 msgstr "(无)"
 
-#: misc.py:73
+#: misc.py:50
 msgid "away"
 msgstr "离开"
 
-#: misc.py:74
+#: misc.py:51
 msgid "far away"
 msgstr "远远离开"
 
-#: misc.py:75
+#: misc.py:52
 msgid "dnd"
 msgstr "忙碌"
 
-#: misc.py:76
+#: misc.py:53
 msgid "online"
 msgstr "在线"
 
-#: misc.py:77
+#: misc.py:54
 msgid "chatty"
 msgstr "和我说话吧"
 
-#: misc.py:78
+#: misc.py:55
 msgid "offline"
 msgstr "离线"
 
-#: misc.py:79
+#: misc.py:56
 msgid "unavailable"
 msgstr "无法使用"
 
-#: misc.py:99
+#: misc.py:76
 msgid "member"
 msgstr "成员"
 
-#: misc.py:101
+#: misc.py:78
 msgid "group_admin"
 msgstr "群管理员"
 
-#: misc.py:103
+#: misc.py:80
 msgid "sys_admin"
 msgstr "系统管理员"
 
-#: misc.py:109
+#: misc.py:86
 #, python-format
 msgid ""
 "Nick: %s\n"
@@ -170,15 +175,15 @@ msgstr ""
 "坏人: [%s]\n"
 "权限: %s"
 
-#: misc.py:125
+#: misc.py:102
 msgid "yes"
 msgstr "是"
 
-#: misc.py:125
+#: misc.py:102
 msgid "no"
 msgstr "否"
 
-#: misc.py:131
+#: misc.py:108
 #, python-format
 msgid ""
 "\n"
@@ -187,11 +192,11 @@ msgstr ""
 "\n"
 "在线资源： [%s]"
 
-#: misc.py:139
+#: misc.py:116
 msgid "(Never)"
 msgstr "(从来没有)"
 
-#: misc.py:140
+#: misc.py:117
 #, python-format
 msgid ""
 "\n"
@@ -200,31 +205,31 @@ msgstr ""
 "\n"
 "最后在线时间：%s"
 
-#: misc.py:338
+#: misc.py:315
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d天"
 
-#: misc.py:341
+#: misc.py:318
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d小时"
 
-#: misc.py:344
+#: misc.py:321
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d分"
 
-#: misc.py:346
+#: misc.py:323
 #, python-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d秒"
 
-#: misc.py:347
+#: misc.py:324
 msgid "  "
 msgstr " "
 

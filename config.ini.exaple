@@ -35,8 +35,8 @@ port = 27017
 ; timezone offset in hours. e.g. write 8 if CST (+0800) is desired
 timezone_offset = 8
 
-; locale. default to the one in environmental variables
-locale = zh_CN
+; language. default to the one in environmental variables
+; language = zh_CN
 
 [logging]
 ; "simple" logging will use config in this file, and "file" will use

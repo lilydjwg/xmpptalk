@@ -19,6 +19,8 @@
 # along with xmpptalk.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+__version__ = '0.1a'
+
 import sys
 import os
 import logging
@@ -30,6 +32,8 @@ import hashlib
 from collections import defaultdict
 from functools import partial
 from xml.etree import ElementTree as ET
+import tempfile
+import builtins
 
 import pyxmpp2.exceptions
 from pyxmpp2.jid import JID
@@ -46,6 +50,12 @@ from pyxmpp2.ext.version import VersionProvider
 from pyxmpp2.expdict import ExpiringDictionary
 from pyxmpp2.iq import Iq
 
+mydir = os.path.dirname(__file__)
+sys.path.append(os.path.join(mydir, 'lib'))
+import pidfile
+
+builtins._ = lambda x: x
+builtins.N_ = lambda a, b, n: a if n == 1 else b
 from misc import *
 import config
 import models
@@ -497,12 +507,13 @@ def parse_command_line():
   parser.add_argument('--fork', action='store_true', default=False,
                       help='fork and daemonize')
   parser.add_argument('--pidfile', metavar='FILE',
-                      help='write pid to a file. Default to /tmp/{JID}.pid')
+                      help='write pid to a file. Default to %s/{JID}.pid' % \
+                      tempfile.gettempdir())
   parser.add_argument('config', type=read_config,
                       help='specify your config file. required.')
-  args = parser.parse_args()
+  return parser.parse_args()
 
-def setup_process(args):
+def setup_procname(args):
   if args.procname:
     try:
       import setproctitle
@@ -511,8 +522,48 @@ def setup_process(args):
     except ImportError:
       pass
 
+def setup_language(args):
+  builtins.__version__ = __version__
+  try:
+    import gettext
+    APP_NAME = "xmpptalk"
+    LOCALE_DIR = os.path.abspath(os.path.join(mydir, "locale"))
+    if not os.path.isdir(LOCALE_DIR):
+      LOCALE_DIR = "/usr/share/locale"
+
+    lo = args.config['localization'].get('language', '')
+    if lo:
+      lang = gettext.translation(APP_NAME, LOCALE_DIR, languages=[lo])
+    else:
+      lang = gettext.translation(APP_NAME, LOCALE_DIR)
+    lang.install()
+    builtins.N_ = lang.ngettext
+  except (ImportError, FileNotFoundError):
+    builtins._ = lambda s: s
+    builtins.N_ = lambda a, b, n: a if n == 1 else b
+
+def setup_process(args):
+  if args.fork:
+    pidcls = pidfile.Daemonized
+  else:
+    pidcls = pidfile.PIDFile
+
+  pidf = args.pidfile or os.path.join(
+    tempfile.gettempdir(), '%s.pid' % args.config['account']['jid'])
+
+  try:
+    with pidcls(pidf):
+      print('ok!', pidf)
+      import time
+      time.sleep(4)
+  except pidfile.AlreadyRun as e:
+    sys.exit(_('error: another process with pid %d is already run.') % e.pid)
+
 if __name__ == '__main__':
   args = parse_command_line()
+  setup_procname(args)
+  setup_language(args)
+  setup_process(args)
   # setup_logging()
   # models.init()
   # main()
