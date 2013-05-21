@@ -148,7 +148,7 @@ install_pymongo () {
 install_mongo () {
   save_pwd=$PWD
   cd soft
-  name=mongodb-linux-$(uname -m)-2.2.0
+  name=mongodb-linux-$(uname -m)-2.4.3
   wget -c http://fastdl.mongodb.org/linux/$name.tgz
   tar xzf $name.tgz
   cd $name
