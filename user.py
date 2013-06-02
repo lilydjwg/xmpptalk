@@ -151,10 +151,8 @@ class UserMixin:
     return models.connection.User.find_one({'nick': nick}, {}) is not None
 
   def get_user_by_nick(self, nick):
-    '''returns a `User` object
-    
-    nick should not be `None` or an arbitrary one will be returned'''
-    return models.connection.User.find_one({'nick': nick})
+    #TODO to be removed
+    return get_user_by_nick(nick)
 
   def get_user_by_jid(self, jid):
     return models.connection.User.one({'jid': jid})
@@ -282,3 +280,9 @@ class UserMixin:
     self._cached_gp = models.connection.Group.collection.find_and_modify(
       None, {'$set': {'welcome': value}}, new=True
     )
+
+def get_user_by_nick(nick):
+  '''returns a `User` object
+
+  nick should not be `None` or an arbitrary one will be returned'''
+  return models.connection.User.find_one({'nick': nick})

@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2012 lilydjwg <lilydjwg@gmail.com>
+# (C) Copyright 2013 lilydjwg <lilydjwg@gmail.com>
 #
 # This file is part of xmpptalk.
 #
@@ -366,3 +366,18 @@ def secondsSince(s, now):
       dt = datetime.datetime(dt.year-1, dt.month, dt.day, dt.hour, dt.minute, dt.second)
       ret = (now-dt).total_seconds()
   return ret
+
+import contextlib
+import signal
+
+@contextlib.contextmanager
+def execution_timeout(timeout):
+  def timed_out(signum, sigframe):
+    raise TimeoutError
+
+  old_hdl = signal.signal(signal.SIGALRM, timed_out)
+  old_itimer = signal.setitimer(signal.ITIMER_REAL, timeout, 0)
+  yield
+  signal.setitimer(signal.ITIMER_REAL, *old_itimer)
+  signal.signal(signal.SIGALRM, old_hdl)
+
