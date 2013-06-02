@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2013 lilydjwg <lilydjwg@gmail.com>
+# (C) Copyright 2012-2013 lilydjwg <lilydjwg@gmail.com>
 #
 # This file is part of xmpptalk.
 #

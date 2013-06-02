@@ -3,8 +3,8 @@
 [account]
 ; your bot's full JID
 ;jid = somebot@jabber.org/bot
-jid = 
-password = 
+jid =
+password =
 
 ; your (admin's) bare JID
 ;root = mail@example.com
@@ -48,7 +48,7 @@ type = simple
 ; logging level for console. only used when non-daemon
 ; can be one of: debug, info, warn, error.
 ; default is info.
-type = 
+type =
 level = info
 
 [logging_file]
@@ -70,7 +70,7 @@ color = true
 nick_maxwidth = 20
 
 ; extra allowed symbols in nicks
-nick_allowed_symbol = +-_@.™ 
+nick_allowed_symbol = +-_@.™
 
 ; command prefix
 cmd_prefix = -
