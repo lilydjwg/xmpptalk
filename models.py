@@ -129,37 +129,6 @@ class User(Document):
     'nick': validate_nick,
   }
 
-class Log(Document):
-  __collection__ = collection_prefix + 'log'
-  structure = {
-    'time': datetime.datetime,
-    'jid': str,
-    # This should contain the nickname in case of type == 'msg'
-    'msg': str,
-  }
-  validators = {
-    'jid': validate_jid,
-  }
-  default_values = {
-    'time': datetime.datetime.utcnow,
-  }
-
-  def find(self, n, in_=None):
-    '''
-    find `n` recent messages in `in_` minutes in chronological order.
-    '''
-    if in_ is not None:
-      if isinstance(in_, datetime.datetime):
-        after = in_
-      else:
-        after = datetime.datetime.utcnow() - datetime.timedelta(minutes=in_)
-      query = {'time': {'$gt': after}}
-    else:
-      query = None
-    l = list(super().find(query).sort('$natural', -1).limit(n))
-    l.reverse()
-    return l
-
 class Group(Document):
   __collection__ = collection_prefix + 'group'
   use_schemaless = True
@@ -178,9 +147,3 @@ def init():
     logger.error('database authentication failed')
     raise
   connection.register([User, Log, Group])
-
-def logmsg(jid=None, msg=None):
-  u = connection.Log()
-  u.jid = str(jid)
-  u.msg = msg
-  u.save()
