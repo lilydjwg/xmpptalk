@@ -20,5 +20,6 @@ Changes from Previous Version
 Here are some user-noticeable changes from previous 'pre-alpha' version:
 
 * `collection_prefix` is removed (and never worked)
+* no longer depends on mongokit
 
 [XMPP]: http://xmpp.org/
