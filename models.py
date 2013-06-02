@@ -30,7 +30,6 @@ from misc import *
 import config
 
 logger = logging.getLogger(__name__)
-collection_prefix = getattr(config, 'connection_prefix', '')
 
 def validate_jid(jid):
   if not re_jid.match(jid):
@@ -170,12 +169,6 @@ class Group(Document):
   }
 
 def init():
-  global connection
-  logger.info('connecting to database...')
-  conn_args = getattr(config, 'connection', {})
-  connection = Connection(**conn_args)
-  logger.info('database connected')
-
   if getattr(config, 'database_auth', None):
     logger.info('authenticating...')
     connection[config.database].authenticate(*config.database_auth)

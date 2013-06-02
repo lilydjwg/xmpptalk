@@ -12,8 +12,13 @@ DEPENDENCES
 * Python 3.2+
 * pyxmpp2
   * dnspython
-* (modified?) mongokit
-  * pymongo
-    * mongodb
+* pymongo
+  * mongodb
+
+Changes from Previous Version
+===============================
+Here are some user-noticeable changes from previous 'pre-alpha' version:
+
+* `collection_prefix` is removed (and never worked)
 
 [XMPP]: http://xmpp.org/
