@@ -22,9 +22,6 @@ import sys
 import io
 import fcntl
 import time
-import unicodedata
-import hashlib
-from functools import lru_cache
 import datetime
 import logging
 import curses
@@ -39,7 +36,6 @@ PERM_SYSADMIN = 4
 
 DEFAULT_WELOME = _('Welcome to join this group!')
 
-re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
 dateformat = _('%m-%d %H:%M:%S')
 longdateformat = _('%Y-%m-%d %H:%M:%S')
 timeformat = _('%H:%M:%S')
@@ -119,39 +115,6 @@ def user_info(user, presence, show_jid=True, show_lastseen=False):
   if show_jid:
     ans = 'JID: %s\n' % user['jid'] + ans
   return ans
-
-def width(s, ambiwidth=2):
-  if ambiwidth == 2:
-    double = ('W', 'A')
-  elif ambiwidth == 1:
-    double = ('W',)
-  else:
-    raise ValueError('ambiwidth should be either 1 or 2')
-
-  count = 0
-  for i in s:
-    if unicodedata.east_asian_width(i) in double:
-      count += 2
-      continue
-    count += 1
-  return count
-
-@lru_cache()
-def hashjid(jid):
-  '''
-  return a representation of the jid with least conflict but still keep
-  confidential
-  '''
-  m = hashlib.md5()
-  if isinstance(jid, str):
-    username, domain = jid.split('@')
-  else:
-    username, domain = jid.local, jid.domain
-  bare = '%s/%s' % (username, domain)
-  m.update(bare.encode())
-  m.update(config.salt)
-  domain = m.hexdigest()[:6]
-  return '%s@%s' % (username[:config.nick_maxwidth-7], domain)
 
 escape_map = {}
 

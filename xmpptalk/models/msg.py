@@ -23,6 +23,18 @@ from .dbconn import get_db
 
 _colname = 'log'
 
+def initialize(log_size=None):
+  if log_size == 0:
+    # unlimited
+    return
+
+  db = get_db()
+  db.create_collection(
+    _colname,
+    capped=True,
+    size=log_size or 512 * 1024
+  )
+
 def logmsg(jid, msg, now=None):
   '''
   save a message log to database

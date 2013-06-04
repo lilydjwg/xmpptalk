@@ -31,28 +31,6 @@ import config
 
 logger = logging.getLogger(__name__)
 
-def validate_jid(jid):
-  if not re_jid.match(jid):
-    raise ValidationError(_('wrong jid format: %s') % jid)
-  return True
-
-def validate_nick(nick):
-  '''`nick` should be already stripped if you only allow spaces in between'''
-  if not nick:
-    raise ValidationError(_('no nickname provided'))
-  l = width(nick)
-  if l > config.nick_maxwidth:
-    raise ValidationError(_('nickname too long (%d-character width), max is %d') \
-                         % (l, config.nick_maxwidth))
-  for i in nick:
-    cat = unicodedata.category(i)
-    # Lt & Lm are special chars
-    if (not (cat.startswith('L') or cat.startswith('N')) or cat in ('Lm', 'Lt')) \
-       and i not in config.nick_allowed_symbol:
-      raise ValidationError(_("nickname `%s' contains disallowed character: '%c'") \
-                            % (nick, i))
-  return True
-
 class Document(Doc):
   __database__ = config.database
   use_dot_notation = True
@@ -104,14 +82,6 @@ class User(Document):
     'nick_changes': int,
     'nick_lastchange': datetime.datetime,
   }
-  indexes = [{
-    'fields': 'jid',
-    'unique': True,
-  }, {
-    'fields': 'nick',
-    # we can have a lot of users without nicknames
-    'unique': False,
-  }]
   default_values = {
     'flag': PERM_USER,
     'allow_pm': True,
@@ -129,14 +99,6 @@ class User(Document):
     'nick': validate_nick,
   }
 
-class Group(Document):
-  __collection__ = collection_prefix + 'group'
-  use_schemaless = True
-  structure = {
-    'welcome': str,
-    'status': str,
-  }
-
 def init():
   if getattr(config, 'database_auth', None):
     logger.info('authenticating...')
@@ -146,4 +108,3 @@ def init():
   except OperationFailure:
     logger.error('database authentication failed')
     raise
-  connection.register([User, Log, Group])
