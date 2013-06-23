@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-01 15:55+0800\n"
+"POT-Creation-Date: 2013-06-23 18:06+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -21,49 +21,49 @@ msgstr ""
 msgid "Sorry, this is a private group, and you are not invited."
 msgstr "抱歉，这是个私有群，而你未收到邀请。"
 
-#: main.py:559
+#: main.py:560
 #, python-format
 msgid "error: another process with pid %d is already run."
 msgstr "错误：另一个进程（pid %d）已经在运行。"
 
-#: models.py:37
-#, python-format
-msgid "wrong jid format: %s"
-msgstr "错误的 JID 格式: %s"
-
-#: models.py:43
-msgid "no nickname provided"
-msgstr "没有给出昵称"
-
-#: models.py:46
-#, python-format
-msgid "nickname too long (%d-character width), max is %d"
-msgstr "昵称太长（%d 字符宽度），最大允许值是 %d"
-
-#: models.py:53
-#, python-format
-msgid "nickname `%s' contains disallowed character: '%c'"
-msgstr "昵称“%s”包含非法字符: “%c”"
-
-#: user.py:115
+#: user.py:114
 #, python-format
 msgid "you can't change your nick too often; only once in %s is allowed."
 msgstr "昵称更改不能太频繁；只允许在每 %s 内更改一次"
 
-#: user.py:119
+#: user.py:118
 #, python-format
 msgid "duplicate nick name: %s"
 msgstr "重复的昵称: %s"
 
-#: user.py:200
+#: user.py:197
 #, python-format
 msgid "(muted until %s) "
 msgstr "（在 %s 前被禁言）"
 
-#: user.py:205
+#: user.py:202
 #, python-format
 msgid "(stopped until %s) "
 msgstr "（在 %s 前暂停）"
+
+#: xmpptalk/util/strings.py:28
+#, python-format
+msgid "wrong jid format: %s"
+msgstr "错误的 JID 格式: %s"
+
+#: xmpptalk/util/strings.py:34
+msgid "no nickname provided"
+msgstr "没有给出昵称"
+
+#: xmpptalk/util/strings.py:38
+#, python-format
+msgid "nickname too long (%d-character width), max is %d"
+msgstr "昵称太长（%d 字符宽度），最大允许值是 %d"
+
+#: xmpptalk/util/strings.py:46
+#, python-format
+msgid "nickname `%s' contains disallowed character: '%c'"
+msgstr "昵称“%s”包含非法字符: “%c”"
 
 #: messages.py:67
 msgid ""
@@ -77,11 +77,11 @@ msgstr "在被邀请前你不能向本群发送消息"
 #: messages.py:89
 msgid ""
 "You are currently not joined in this group, message ignored. Your client "
-"should prompt you if you want add this bot to your buddylist. If not, this "
-"is a bug, contact the admin please."
+"should prompt you if you want add this bot to your buddylist. If not, "
+"something may be wrong, contact the admin please."
 msgstr ""
 "你还没有加入本群，此消息被忽略。你的客户端应该会提示你是否要将本机器人加到好"
-"友列表。如果不是这样，那就是一个 bug，请联系管理员。"
+"友列表。如果不是这样，可能某个地方出错了，请联系管理员。"
 
 #: messages.py:106 commands.py:491
 #, python-format
@@ -92,67 +92,67 @@ msgstr "在 %s 之前你不允许发言。"
 msgid "Messages while you lost the connection:"
 msgstr "你掉线期间的消息："
 
-#: misc.py:40
+#: misc.py:37
 msgid "Welcome to join this group!"
 msgstr "欢迎加入本群！"
 
-#: misc.py:43
+#: misc.py:39
 msgid "%m-%d %H:%M:%S"
 msgstr "%m月%d日 %H:%M:%S"
 
-#: misc.py:44
+#: misc.py:40
 msgid "%Y-%m-%d %H:%M:%S"
 msgstr "%Y年%m月%d日 %H时%M分%S秒"
 
-#: misc.py:45
+#: misc.py:41
 msgid "%H:%M:%S"
 msgstr "%H:%M:%S"
 
-#: misc.py:46
+#: misc.py:42
 msgid "(N/A)"
 msgstr "(无)"
 
-#: misc.py:50
+#: misc.py:46
 msgid "away"
 msgstr "离开"
 
-#: misc.py:51
+#: misc.py:47
 msgid "far away"
 msgstr "远远离开"
 
-#: misc.py:52
+#: misc.py:48
 msgid "dnd"
 msgstr "忙碌"
 
-#: misc.py:53
+#: misc.py:49
 msgid "online"
 msgstr "在线"
 
-#: misc.py:54
+#: misc.py:50
 msgid "chatty"
 msgstr "和我说话吧"
 
-#: misc.py:55
+#: misc.py:51
 msgid "offline"
 msgstr "离线"
 
-#: misc.py:56
+#: misc.py:52
 msgid "unavailable"
 msgstr "无法使用"
 
-#: misc.py:76
+#: misc.py:72
 msgid "member"
 msgstr "成员"
 
-#: misc.py:78
+#: misc.py:74
 msgid "group_admin"
 msgstr "群管理员"
 
-#: misc.py:80
+#: misc.py:76
 msgid "sys_admin"
 msgstr "系统管理员"
 
-#: misc.py:86
+#: misc.py:82
 #, python-format
 msgid ""
 "Nick: %s\n"
@@ -175,15 +175,15 @@ msgstr ""
 "坏人: [%s]\n"
 "权限: %s"
 
-#: misc.py:102
+#: misc.py:98
 msgid "yes"
 msgstr "是"
 
-#: misc.py:102
+#: misc.py:98
 msgid "no"
 msgstr "否"
 
-#: misc.py:108
+#: misc.py:104
 #, python-format
 msgid ""
 "\n"
@@ -192,11 +192,11 @@ msgstr ""
 "\n"
 "在线资源： [%s]"
 
-#: misc.py:116
+#: misc.py:112
 msgid "(Never)"
 msgstr "(从来没有)"
 
-#: misc.py:117
+#: misc.py:113
 #, python-format
 msgid ""
 "\n"
@@ -205,31 +205,31 @@ msgstr ""
 "\n"
 "最后在线时间：%s"
 
-#: misc.py:315
+#: misc.py:278
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d天"
 
-#: misc.py:318
+#: misc.py:281
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] "%d小时"
 
-#: misc.py:321
+#: misc.py:284
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d分"
 
-#: misc.py:323
+#: misc.py:286
 #, python-format
 msgid "%d second"
 msgid_plural "%d seconds"
 msgstr[0] "%d秒"
 
-#: misc.py:324
+#: misc.py:287
 msgid "  "
 msgstr " "
 
