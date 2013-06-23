@@ -7,6 +7,7 @@ import logging
 
 # TODO: your bot's JID
 jid = 'somebot@jabber.org/bot'
+# NOTE: private=True won't work yet!
 private = False
 # TODO: your JID
 root = 'mail@example.com'

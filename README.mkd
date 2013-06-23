@@ -12,7 +12,7 @@ DEPENDENCES
 * Python 3.2+
 * pyxmpp2
   * dnspython
-* (modified?) mongokit
+* mongokit
   * pymongo
     * mongodb
 

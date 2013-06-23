@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-03 21:40+0800\n"
+"POT-Creation-Date: 2013-06-23 17:42+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: main.py:233
+#: main.py:240
 msgid "Sorry, this is a private group, and you are not invited."
 msgstr ""
 
@@ -51,12 +51,12 @@ msgstr ""
 msgid "duplicate nick name: %s"
 msgstr ""
 
-#: user.py:200
+#: user.py:198
 #, python-format
 msgid "(muted until %s) "
 msgstr ""
 
-#: user.py:205
+#: user.py:203
 #, python-format
 msgid "(stopped until %s) "
 msgstr ""
@@ -73,8 +73,8 @@ msgstr ""
 #: messages.py:89
 msgid ""
 "You are currently not joined in this group, message ignored. Your client "
-"should prompt you if you want add this bot to your buddylist. If not, this "
-"is a bug, contact the admin please."
+"should prompt you if you want add this bot to your buddylist. If not, "
+"something may be wrong, contact the admin please."
 msgstr ""
 
 #: messages.py:106 commands.py:491

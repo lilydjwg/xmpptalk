@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xmpptalk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-03 21:40+0800\n"
+"POT-Creation-Date: 2013-06-23 17:42+0800\n"
 "PO-Revision-Date: 2011-12-07 22:57+0800\n"
 "Last-Translator:  <lilydjwg@gmail.com>\n"
 "Language-Team: Chinese (simplified)\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: main.py:233
+#: main.py:240
 msgid "Sorry, this is a private group, and you are not invited."
 msgstr "抱歉，这是个私有群，而你未收到邀请。"
 
@@ -50,12 +50,12 @@ msgstr "昵称更改不能太频繁；只允许在每 %s 内更改一次"
 msgid "duplicate nick name: %s"
 msgstr "重复的昵称: %s"
 
-#: user.py:200
+#: user.py:198
 #, python-format
 msgid "(muted until %s) "
 msgstr "（在 %s 前被禁言）"
 
-#: user.py:205
+#: user.py:203
 #, python-format
 msgid "(stopped until %s) "
 msgstr "（在 %s 前暂停）"
@@ -72,11 +72,11 @@ msgstr "在被邀请前你不能向本群发送消息"
 #: messages.py:89
 msgid ""
 "You are currently not joined in this group, message ignored. Your client "
-"should prompt you if you want add this bot to your buddylist. If not, this "
-"is a bug, contact the admin please."
+"should prompt you if you want add this bot to your buddylist. If not, "
+"something may be wrong, contact the admin please."
 msgstr ""
 "你还没有加入本群，此消息被忽略。你的客户端应该会提示你是否要将本机器人加到好"
-"友列表。如果不是这样，那就是一个 bug，请联系管理员。"
+"友列表。如果不是这样，可能某个地方出错了，请联系管理员。"
 
 #: messages.py:106 commands.py:491
 #, python-format

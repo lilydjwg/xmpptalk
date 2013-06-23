@@ -62,9 +62,9 @@ install_python3 () {
   which xz >/dev/null || install_xz
   save_pwd=$PWD
   cd soft
-  wget -c http://www.python.org/ftp/python/3.3.0/Python-3.3.0.tar.xz
-  xz -d < Python-3.3.0.tar.xz | tar x
-  cd Python-3.3.0
+  wget -c http://www.python.org/ftp/python/3.3.0/Python-3.3.2.tar.xz
+  xz -d < Python-3.3.2.tar.xz | tar x
+  cd Python-3.3.2
   save_lang=$LANG
   export LANG=en_US.UTF-8
   ./configure --enable-shared --with-threads --with-computed-gotos --enable-ipv6 --with-system-expat --with-system-ffi
@@ -85,9 +85,9 @@ ln_py3 () {
 install_distribute () {
   save_pwd=$PWD
   cd soft
-  wget -c 'http://pypi.python.org/packages/source/d/distribute/distribute-0.6.30.tar.gz#md5=17722b22141aba8235787f79800cc452'
-  tar xzf distribute-0.6.30.tar.gz
-  cd distribute-0.6.30
+  wget -c 'http://pypi.python.org/packages/source/d/distribute/distribute-0.6.45.tar.gz'
+  tar xzf distribute-0.6.45.tar.gz
+  cd distribute-0.6.45
   python3 setup.py install
   cd "$save_pwd"
 }
@@ -125,30 +125,30 @@ install_pyxmpp2 () {
 install_pymongo () {
   save_pwd=$PWD
   cd soft
-  wget -c http://pypi.python.org/packages/source/p/pymongo/pymongo-2.3.tar.gz
-  tar xzf pymongo-2.3.tar.gz
-  cd pymongo-2.3
+  wget -c http://pypi.python.org/packages/source/p/pymongo/pymongo-2.5.2.tar.gz
+  tar xzf pymongo-2.5.2.tar.gz
+  cd pymongo-2.5.2
   python3 setup.py install
   cd "$save_pwd"
 }
 
-# install_hg () {
-#   {
-#     which python >/dev/null && python -c 'import sys; sys.exit(sys.version_info < (2, 4))';
-#   } || install_python27
-#   save_pwd=$PWD
-#   cd soft
-#   wget -c http://mercurial.selenic.com/release/mercurial-2.2.3.tar.gz
-#   tar xzf mercurial-2.2.3.tar.gz
-#   cd mercurial-2.2.3
-#   make install-bin
-#   cd "$save_pwd"
-# }
+install_hg () {
+  {
+    which python >/dev/null && python -c 'import sys; sys.exit(sys.version_info < (2, 4))';
+  } || install_python27
+  save_pwd=$PWD
+  cd soft
+  wget -c http://mercurial.selenic.com/release/mercurial-2.2.3.tar.gz
+  tar xzf mercurial-2.2.3.tar.gz
+  cd mercurial-2.2.3
+  make install-bin
+  cd "$save_pwd"
+}
 
 install_mongo () {
   save_pwd=$PWD
   cd soft
-  name=mongodb-linux-$(uname -m)-2.4.3
+  name=mongodb-linux-$(uname -m)-2.4.4
   wget -c http://fastdl.mongodb.org/linux/$name.tgz
   tar xzf $name.tgz
   cd $name

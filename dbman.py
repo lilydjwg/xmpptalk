@@ -38,7 +38,7 @@ def setup_log_collection():
 
 def setup_group_collection():
   col = connection[Group.__database__][Group.__collection__]
-  col.insert({'welcome': '', 'status': ''})
+  col.update({}, {'$set': {'welcome': '', 'status': ''}}, upsert=True)
 
 if __name__ == '__main__':
   setup_user_collection()
