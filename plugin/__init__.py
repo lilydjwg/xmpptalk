@@ -27,7 +27,7 @@ import config
 logger = logging.getLogger(__name__)
 
 re_youren = re.compile(r'有人在?吗.{,3}')
-re_link = re.compile(r' [(<]https?://(?!i.imgur.com/)[^>]+[>)]')
+re_link = re.compile(r' [(<]https?://(?!i.imgur.com/)[^>)]+[>)]')
 re_link_js = re.compile(r' <javascript:[^>]+>')
 
 filtered_message_func = (
