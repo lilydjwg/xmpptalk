@@ -34,6 +34,7 @@ filtered_message_func = (
   lambda s: s.startswith("I'm currently away and will reply as soon as I return to eBuddy on my "),
 )
 filtered_message = {
+  '自动回复： 当前无法回复你的讯息，我将稍后留言给你',
   'This is an autoreply: I am currently not available. Please leave your message, and I will get back to you as soon as possible.',
   '你好，我现在有事情不在，一会再和您联系',
   'A music messaging session has been requested. Please click the MM icon to accept.',
