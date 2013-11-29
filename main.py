@@ -188,10 +188,6 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   def get_xmpp_status(self, jid):
     return sorted(self.presence[str(jid)].values(), key=lambda x: x['priority'], reverse=True)[0]
 
-  def xmpp_add_user(self, jid):
-    presence = Presence(to_jid=jid, stanza_type='subscribe')
-    self.send(presence)
-
   def xmpp_setstatus(self, status, to_jid=None):
     if isinstance(to_jid, str):
       to_jid = JID(to_jid)

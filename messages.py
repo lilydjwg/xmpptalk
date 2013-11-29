@@ -87,7 +87,7 @@ def check_auth(self, msg):
     self.reply(_('You are not allowed to send messages to this group until invited'))
   else:
     self.reply(_('You are currently not joined in this group, message ignored. Your client should prompt you if you want add this bot to your buddylist. If not, something may be wrong, contact the admin please.'))
-    self.xmpp_add_user(bare)
+    self.subscribe(bare)
   return True
 
 class MessageMixin:
