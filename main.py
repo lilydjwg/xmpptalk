@@ -280,7 +280,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
                         stanza_type='unsubscribe')
     return [stanza.make_accept_response(), presence]
 
-  presence_stanza_handler('unsubscribed')
+  @presence_stanza_handler('unsubscribed')
   def handle_presence_unsubscribed(self, stanza):
     # use the same function
     logging.info('%s unsubscribed', stanza.from_jid)
