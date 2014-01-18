@@ -44,6 +44,11 @@ from pyxmpp2.ext.version import VersionProvider
 from pyxmpp2.expdict import ExpiringDictionary
 from pyxmpp2.iq import Iq
 
+try:
+  from xmpp_receipt import ReceiptSender
+except ImportError:
+  ReceiptSender = None
+
 from misc import *
 import config
 import models
@@ -59,6 +64,7 @@ else:
 class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
   got_roster = False
   message_queue = None
+  receipt_sender = None
   ignore = set()
 
   def __init__(self, jid, settings, botsettings=None):
@@ -67,7 +73,15 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     if 'software_version' not in settings:
       settings['software_version'] = __version__
     version_provider = VersionProvider(settings)
-    self.client = Client(jid, [self, version_provider], settings)
+
+    handlers = []
+    if ReceiptSender:
+      self.receipt_sender = rs = ReceiptSender()
+      handlers.append(rs)
+
+    handlers.extend([self, version_provider])
+    self.client = Client(jid, handlers, settings)
+
     self.presence = defaultdict(dict)
     self.subscribes = ExpiringDictionary(default_timeout=5)
     self.invited = {}
@@ -79,6 +93,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.jid = self.client.jid.bare()
     logger.info('self jid: %r', self.jid)
     self.update_on_setstatus = set()
+
+    self.receipt_sender.stream = self.client.stream
     self.client.run()
 
   def disconnect(self):
