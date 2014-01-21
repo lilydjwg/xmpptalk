@@ -94,7 +94,8 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     logger.info('self jid: %r', self.jid)
     self.update_on_setstatus = set()
 
-    self.receipt_sender.stream = self.client.stream
+    if self.receipt_sender:
+      self.receipt_sender.stream = self.client.stream
     self.client.run()
 
   def disconnect(self):
