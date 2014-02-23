@@ -133,9 +133,13 @@ class MessageMixin:
     return True
 
   def get_message_receivers(self):
-    allusers = {u['jid'] for u in models.connection.User.find({
-      'stop_until': {'$lte': self.now}
-    }, ['jid'])}
+    q = {
+      'stop_until': {'$lte': self.now},
+    }
+    if getattr(config, 'blockable', False):
+      q['badpeople'] = {'$ne': str(self.current_jid.bare())}
+    allusers = {u['jid'] for u in
+                models.connection.User.find(q, ['jid'])}
     return [u for u in self.get_online_users() if str(u) in allusers]
 
   def send_lost_message(self):

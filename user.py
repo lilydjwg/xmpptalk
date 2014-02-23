@@ -137,7 +137,7 @@ class UserMixin:
   @lru_cache()
   def user_get_nick(self, plainjid):
     '''get a user's nick
-    
+
     The result is cached so if any of the users's nicks change, call `cache_clear()`.
     Fallback to `self.get_name` if not found in database'''
     u = models.connection.User.one({'jid': plainjid}, ['nick'])

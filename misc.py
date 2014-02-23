@@ -105,7 +105,7 @@ def show_privileges(flag):
 
 def user_info(user, presence, show_jid=True, show_lastseen=False):
   now = datetime.datetime.utcnow()
-  ans= _(
+  ans = _(
     'Nick: %s\n'
     'Nick changed %d time(s), last at %s\n'
     '%d message(s), %d characters in total.\n'
@@ -113,7 +113,7 @@ def user_info(user, presence, show_jid=True, show_lastseen=False):
     'Muted Until: %s\n'
     'Joined At: %s\n'
     'Receive PM: %s\n'
-    'Bad People: [%s]\n'
+    # 'Bad People: [%s]\n'
     'Privileges: %s'
   ) % (
     user['nick'],
@@ -123,7 +123,7 @@ def user_info(user, presence, show_jid=True, show_lastseen=False):
     until_date(user['mute_until'], now),
     (user['join_date'] + config.timezoneoffset).strftime(longdateformat),
     user['allow_pm'] and _('yes') or _('no'),
-    ', '.join(user['badpeople']),
+    # ', '.join(x for x in user['badpeople']),
     show_privileges(user['flag']),
   )
 

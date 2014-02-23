@@ -105,6 +105,18 @@ def do_about(self, arg):
                 (secs % 3600) // 60
               ))
 
+if getattr(config, 'blockable', False):
+  @command('block', _('block messages from people you don\'t want to see'))
+  def do_block(self, arg):
+    nick = arg.strip()
+    u = self.get_user_by_nick(nick)
+    if u:
+      self.current_user['badpeople'].append(u.jid)
+      self.current_user.save()
+      self.reply(_('You are now blocking %s') % u['nick'])
+    else:
+      self.reply(_('Nobody with the nick "%s" found.') % nick)
+
 @command('debug', _('suspend and open debug console'), PERM_SYSADMIN)
 def do_debug(self, arg):
   if sys.stdin.isatty():
