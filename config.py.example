@@ -33,7 +33,7 @@ database = 'test'
 # 中文算两个英文字符宽度
 nick_maxwidth = 20
 nick_max_change = 0
-nick_allowed_symbol = '+-_@.™ '
+nick_allowed_symbol = '+-_@.™· '
 # command prefix
 prefix = '-'
 # how much log we preserve; in bytes
