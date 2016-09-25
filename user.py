@@ -21,6 +21,7 @@ from functools import lru_cache
 import datetime
 
 import pymongo.errors
+import mongokit
 
 import models
 import config
@@ -49,6 +50,8 @@ class UserMixin:
     # not in database
     if user is None:
       user = self.db_add_user(plainjid)
+      if not user:
+        return
       Welcome(self.current_jid, self)
 
     self._cached_jid = self.current_jid
@@ -71,7 +74,8 @@ class UserMixin:
       u.flag = PERM_USER | PERM_GPADMIN | PERM_SYSADMIN
     try:
       u.save()
-    except pymongo.errors.DuplicateKeyError:
+    except (pymongo.errors.DuplicateKeyError, mongokit.schema_document.ValidationError):
+      logger.exception('error while creating user: %r', u)
       return False
     return u
 

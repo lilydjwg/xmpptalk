@@ -314,11 +314,17 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       type = 'new'
       self.current_jid = jid
       self.user_update_presence(plainjid)
-      if conn_lost_interval and self.current_user.last_seen and \
+      if conn_lost_interval and self.current_user and self.current_user.last_seen and \
          self.now - self.current_user.last_seen < conn_lost_interval:
         type = 'reconnect'
         self.send_lost_message()
       logging.info('%s[%s] (%s)', jid, stanza.show or 'available', type)
+
+      if self.roster and jid.bare() not in self.roster:
+        presence = Presence(to_jid=jid.bare(), stanza_type='subscribe')
+        self.send(presence)
+        presence = Presence(to_jid=jid.bare(), stanza_type='subscribed')
+        self.send(presence)
     else:
       if jid.resource not in self.presence[plainjid]:
         self.user_update_presence(plainjid)

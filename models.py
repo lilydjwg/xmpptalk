@@ -34,7 +34,7 @@ collection_prefix = getattr(config, 'connection_prefix', '')
 
 def validate_jid(jid):
   if not re_jid.match(jid):
-    raise ValidationError(_('wrong jid format: %s') % jid)
+    raise ValidationError(_('[%%s] wrong jid format: %s') % jid)
   return True
 
 def validate_nick(nick):
