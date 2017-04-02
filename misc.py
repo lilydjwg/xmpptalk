@@ -62,7 +62,7 @@ PERM_SYSADMIN = 4
 
 DEFAULT_WELOME = _('Welcome to join this group!')
 
-re_jid = re.compile(r'[^@ ]+@(?:[\w-]+\.)+\w{2,4}')
+re_jid = re.compile(r'(?:[^@ ]+@)?(?:[\w-]+\.)+\w{2,4}')
 dateformat = _('%m-%d %H:%M:%S')
 longdateformat = _('%Y-%m-%d %H:%M:%S')
 timeformat = _('%H:%M:%S')
