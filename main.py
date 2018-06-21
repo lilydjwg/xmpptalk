@@ -153,6 +153,10 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
     self.now = datetime.datetime.utcnow()
 
     logging.info('[%s] %s', sender, stanza.body)
+    if '@' not in str(sender.bare()):
+      logging.info('(server messages ignored)')
+      return True
+
     if str(sender.bare()) in self.ignore:
       logging.info('(The above message is ignored on purpose)')
       return True
