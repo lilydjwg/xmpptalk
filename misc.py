@@ -381,3 +381,14 @@ def execution_timeout(timeout):
   signal.setitimer(signal.ITIMER_REAL, *old_itimer)
   signal.signal(signal.SIGALRM, old_hdl)
 
+def is_russian(s):
+  score = 0
+  for ch in s:
+    ch = ord(ch)
+    if 0x400 < ch < 0x4ff:
+      score += 20
+    elif ch < 0xff:
+      score -= 1
+    else:
+      score -= 5
+  return score > 0

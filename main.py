@@ -157,6 +157,14 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
       logging.info('(The above message is ignored on purpose)')
       return True
 
+    if getattr(config, 'ban_russian'):
+      if str(sender.bare()).endswith('.ru'):
+        logging.info('(Russian messager banned)')
+        return True
+      elif is_russian(body):
+        logging.info('(Russian message banned)')
+        return True
+
     if not self.got_roster:
       if not self.message_queue:
         self.message_queue = []

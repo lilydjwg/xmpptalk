@@ -20,6 +20,8 @@ timezoneoffset = datetime.timedelta(hours=8)
 conn_lost_interval_minutes = 10
 # should we warn about the unsecurity about unencrypted GTalk v105?
 warnv105 = True
+# ban Russian messages? There are a lot of Russian spammers
+ban_russian = False
 
 # TODO: select a database
 database = 'test'
