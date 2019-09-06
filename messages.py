@@ -19,6 +19,7 @@
 import logging
 from functools import wraps
 import datetime
+import re
 
 import commands
 import config
@@ -120,6 +121,8 @@ class MessageMixin:
       but = {self.current_user.jid}
 
     if timestamp:
+      # strip out milliseconds
+      timestamp = re.sub(r'\.\d+', '', timestamp)
       dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
       interval = self.now - dt
       if interval.days == 0:
