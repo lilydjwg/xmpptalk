@@ -229,7 +229,7 @@ def restart_if_failed(func, max_tries, args=(), kwargs={}, secs=60):
     else:
       break
 
-def setup_logging(level=config.logging_level, color=False):
+def setup_logging(level=config.logging_level):
   f = '/tmp/talkbot.%s' % config.jid.split('/', 1)[0]
   fd = lock_fd[0] = os.open(f, os.O_CREAT | os.O_WRONLY, 0o600)
   try:
@@ -239,7 +239,7 @@ def setup_logging(level=config.logging_level, color=False):
   except Exception:
     print('Error locking', f, file=sys.stderr)
     sys.exit(1)
-  enable_pretty_logging(level=level, color=color)
+  enable_pretty_logging(level=level)
   for handler, level, color in config.additional_logging:
     enable_pretty_logging(level=level, handler=handler, color=color)
 
