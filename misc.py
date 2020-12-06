@@ -28,9 +28,10 @@ from functools import lru_cache
 import builtins
 import datetime
 import logging
-import curses
 
 import config
+
+from nicelogger import enable_pretty_logging
 
 '''constants and simple functions'''
 
@@ -228,88 +229,19 @@ def restart_if_failed(func, max_tries, args=(), kwargs={}, secs=60):
     else:
       break
 
-class TornadoLogFormatter(logging.Formatter):
-  def __init__(self, color, *args, **kwargs):
-    super().__init__(self, *args, **kwargs)
-    self._color = color
-    if color:
-      import curses
-      curses.setupterm()
-      if sys.hexversion < 50463728:
-        fg_color = str(curses.tigetstr("setaf") or
-                   curses.tigetstr("setf") or "", "ascii")
-      else:
-        fg_color = curses.tigetstr("setaf") or curses.tigetstr("setf") or b""
-      self._colors = {
-        logging.DEBUG: str(curses.tparm(fg_color, 4), # Blue
-                     "ascii"),
-        logging.INFO: str(curses.tparm(fg_color, 2), # Green
-                    "ascii"),
-        logging.WARNING: str(curses.tparm(fg_color, 3), # Yellow
-                     "ascii"),
-        logging.ERROR: str(curses.tparm(fg_color, 1), # Red
-                     "ascii"),
-      }
-      self._normal = str(curses.tigetstr("sgr0"), "ascii")
-
-  def format(self, record):
-    try:
-      record.message = record.getMessage()
-    except Exception as e:
-      record.message = "Bad message (%r): %r" % (e, record.__dict__)
-    record.asctime = time.strftime(
-      "%m-%d %H:%M:%S", self.converter(record.created))
-    record.asctime += '.%03d' % ((record.created % 1) * 1000)
-    prefix = '[%(levelname)1.1s %(asctime)s %(module)s:%(lineno)d]' % \
-      record.__dict__
-    if self._color:
-      prefix = (self._colors.get(record.levelno, self._normal) +
-            prefix + self._normal)
-    formatted = prefix + " " + record.message
-    if record.exc_info:
-      if not record.exc_text:
-        record.exc_text = self.formatException(record.exc_info)
-    if record.exc_text:
-      formatted = formatted.rstrip() + "\n" + record.exc_text
-    return formatted.replace("\n", "\n    ")
-
-def _setup_logging(hdl=None, level=config.logging_level, color=False):
-  log = logging.getLogger()
-  if hdl is None:
-    if not getattr(config, 'stderr_logging', True) or '--fork' in sys.argv:
-      pid = os.fork()
-      if pid > 0:
-        try:
-          print('forked as pid %d' % pid)
-        finally:
-          os._exit(0)
-      return
-    hdl = logging.StreamHandler()
-    # if logging to stderr, determine color automatically
-    curses.setupterm()
-    color = getattr(config, 'color', False) or curses.tigetnum("colors") > 0
-
-  formatter = TornadoLogFormatter(color=color)
-
-  hdl.setLevel(level)
-  hdl.setFormatter(formatter)
-  log.setLevel(logging.DEBUG)
-  log.addHandler(hdl)
-  logging.info('logging setup')
-
-def setup_logging(hdl=None, level=config.logging_level, color=False):
+def setup_logging(level=config.logging_level, color=False):
   f = '/tmp/talkbot.%s' % config.jid.split('/', 1)[0]
   fd = lock_fd[0] = os.open(f, os.O_CREAT | os.O_WRONLY, 0o600)
   try:
     # FIXME: This works well on Linux and FreeBSD, but may not work well on
     # AIX and OpenBSD
     fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-  except:
+  except Exception:
     print('Error locking', f, file=sys.stderr)
     sys.exit(1)
-  _setup_logging()
-  for log in config.additional_logging:
-    _setup_logging(*log)
+  enable_pretty_logging(level=level, color=color)
+  for handler, level, color in config.additional_logging:
+    enable_pretty_logging(level=level, handler=handler, color=color)
 
 re_timeParser = re.compile(r'(\d+)([smhd]?)')
 TimeUnitMap = {
