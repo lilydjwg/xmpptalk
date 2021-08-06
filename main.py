@@ -37,7 +37,7 @@ from pyxmpp2.client import Client
 from pyxmpp2.settings import XMPPSettings
 from pyxmpp2.roster import RosterReceivedEvent
 from pyxmpp2.interfaces import EventHandler, event_handler, QUIT, NO_CHANGE
-from pyxmpp2.streamevents import AuthorizedEvent, DisconnectedEvent
+from pyxmpp2.streamevents import DisconnectedEvent
 from pyxmpp2.interfaces import XMPPFeatureHandler
 from pyxmpp2.interfaces import presence_stanza_handler, message_stanza_handler
 from pyxmpp2.ext.version import VersionProvider
@@ -210,7 +210,7 @@ class ChatBot(MessageMixin, UserMixin, EventHandler, XMPPFeatureHandler):
 
   def get_online_users(self):
     ret = [x.jid for x in self.roster if x.subscription == 'both' and \
-           str(x.jid) in self.presence]
+           str(x.jid) in self.presence and '@' in str(x.jid.bare())]
     logging.info('%d online buddies: %r', len(ret), ret)
     return ret
 
