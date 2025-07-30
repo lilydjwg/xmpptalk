@@ -54,6 +54,9 @@ settings = dict(
   software_os = 'Linux',
   # Which IP to connect?
   # server = '127.0.0.1',
+  # DON'T try SCRAM-SHA-1-PLUS as prosody 13+ wants tls-exporter but we only
+  # support tls-unique
+  sasl_mechanisms = ["SCRAM-SHA-1", "PLAIN"],
 )
 
 help_regex = re.compile(r'^\W{,3}help\s*$')
