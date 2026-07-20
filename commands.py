@@ -307,7 +307,7 @@ def do_old(self, arg):
         l.msg,
       )
     except AttributeError:
-      logger.warn('malformed log messages: %r', l)
+      logger.warning('malformed log messages: %r', l)
       continue
     text.append(m)
   self.reply('\n'.join(text))
@@ -343,7 +343,7 @@ def do_online(self, arg):
         line += ' (%s)' % xmpp_show_map[st['show']]
       except KeyError:
         line += _(' (unknown)')
-        logger.warn('unknown XMPP show: %s', st['show'])
+        logger.warning('unknown XMPP show: %s', st['show'])
     if st['status']:
       line += ' [%s]' % st['status'].strip()
     text.append(line)
