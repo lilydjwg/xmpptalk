@@ -249,7 +249,7 @@ class UserMixin:
     self._cached_jid = None
     u = self.db_add_user(plainjid)
     if u is False:
-      logger.warn('%s already in database', plainjid)
+      logger.warning('%s already in database', plainjid)
     else:
       Welcome(self.current_jid, self)
       logger.info('%s joined', plainjid)

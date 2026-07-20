@@ -104,7 +104,7 @@ def long_text_check(self, msg):
       msgbody += '\n' + firstline + '...'
       return msgbody
     else:
-      logger.warn('转贴代码失败，代码长度 %d' % len(msg))
+      logger.warning('转贴代码失败，代码长度 %d' % len(msg))
       self.reply('大段文本请贴 paste 网站。\n'
                  '如 http://paste.ubuntu.org.cn/ http://slexy.org/\n'
                  'PS: 自动转帖失败！')
