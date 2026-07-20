@@ -47,7 +47,7 @@ class Welcome:
     if self.use_roster_nick:
       nick = s.get_name(jid)
     elif stanza.stanza_type == 'error':
-      logger.warn('failed to get vCard')
+      logger.warning('failed to get vCard')
       nick = s.get_name(jid)
     else:
       for path in nick_paths:
@@ -58,7 +58,7 @@ class Welcome:
             break
       else:
         nick = s.get_name(jid)
-        logger.warn('failed to get nick from vCard')
+        logger.warning('failed to get nick from vCard')
 
     while s.nick_exists(nick):
       nick += '_'
