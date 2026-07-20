@@ -161,7 +161,7 @@ class MessageMixin:
           l.msg,
         )
       except AttributeError:
-        logger.warn('malformed log messages: %r', l)
+        logger.warning('malformed log messages: %r', l)
         continue
       text.append(m)
     self.reply('\n'.join(text))
